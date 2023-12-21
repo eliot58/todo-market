@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title %} Поставщики {% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<div class="d-flex flex-column" style="background-color: #282828; padding: 10px; border-radius: 16px;">
+    <div class="d-flex">
+        <img src="img/ads.png" width="72" height="72" style="border-radius: 8px;" alt="">
+        <div class="d-flex flex-column justify-content-around" style="margin: 10px;"> 
+            <p style="font-size: 20px; font-weight: 600; color: #E9E9E9;">Окна-Двери</p>
+            <p style="font-weight: 500; color: #00A550;">Сергиев-Посад</p>
+        </div>
+    </div>
+    <div style="line-height: 20px; color: #E9E9E9; margin: 20px 0px;">
+        Приветствуем вас в профиле нашей компании - вашего надежного партнера в мире оконных решений!
+
+        О нас: Мы - профессиональный поставщик оконных систем с многолетним опытом работы в отрасли. Наша компания специализируется на предоставлении клиентам инновационных и качественных оконных продуктов.
+
+        Наш ассортимент: Мы предлагаем широкий спектр оконных решений, включая энергосберегающие и шумоизоляционные окна, а также эксклюзивные дизайнерские варианты. Мы сотрудничаем с ведущими производителями и предлагаем нашим клиентам только лучшие товары.
+
+        Наши преимущества:
+        Качество: Мы гордимся нашей репутацией по предоставлению продуктов высшего качества.
+        Экспертиза: Наши специалисты всегда готовы консультировать вас и помогать выбрать оптимальное решение.
+        Клиентоориентированность: Мы ценим каждого клиента и стремимся предложить наилучший сервис.
+
+        Наши проекты: Мы успешно сотрудничаем с десятками клиентов, включая частных лиц и коммерческие предприятия. Наши оконные решения используются в жилых и коммерческих объектах по всей стране.
+    </div>
+    <div class="custom-accordion-item" onclick="toggleAccordion(this)">
+        <div class="custom-accordion-header">
+            <p style="font-size: 20px; font-weight: 500; color: #E9E9E9;">Крепежи</p>
+            <div class="triangle triangle-bottom"></div>
+        </div>
+        <div class="custom-accordion-content swiper-container" style="overflow: hidden;">
+            <div class="d-flex swiper-wrapper">
+            <div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+                <img src="img/ads.png" width="260" height="260" style="border-radius: 8px;" alt="">
+                <div class="d-flex justify-content-between" style="margin-top: 5px;">
+                    <button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+                    <div class="store-item__data-count d-flex justify-content-between">
+                        <span onclick="minus(this)">-</span>
+                        <input type="text" name="count" value="1">
+                        <span onclick="plus(this)">+</span>
+                    </div>
+                </div>
+                <div class="d-flex" style="margin: 10px 0px;">
+                    <p style="font-weight: 500; font-size: 24px; color: #00A550; margin-right: 10px;">1000 ₽</p>
+                    <p style="font-size: 12px; line-height: 16px; color: #616161; width: 100px;">1200 ₽ без TODOMARKET</p>
+                </div>
+                <p style="color: #E9E9E9; line-height: 24px;">Пена TITAN для окон и дверей, 182938 5000 шт</p>
+            </div>
+            <div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+                <img src="img/ads.png" width="260" height="260" style="border-radius: 8px;" alt="">
+                <div class="d-flex justify-content-between" style="margin-top: 5px;">
+                    <button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+                    <div class="store-item__data-count d-flex justify-content-between">
+                        <span onclick="minus(this)">-</span>
+                        <input type="text" name="count" value="1">
+                        <span onclick="plus(this)">+</span>
+                    </div>
+                </div>
+                <div class="d-flex" style="margin: 10px 0px;">
+                    <p style="font-weight: 500; font-size: 24px; color: #00A550; margin-right: 10px;">1000 ₽</p>
+                    <p style="font-size: 12px; line-height: 16px; color: #616161; width: 100px;">1200 ₽ без TODOMARKET</p>
+                </div>
+                <p style="color: #E9E9E9; line-height: 24px;">Пена TITAN для окон и дверей, 182938 5000 шт</p>
+            </div>
+            <div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+                <img src="img/ads.png" width="260" height="260" style="border-radius: 8px;" alt="">
+                <div class="d-flex justify-content-between" style="margin-top: 5px;">
+                    <button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+                    <div class="store-item__data-count d-flex justify-content-between">
+                        <span onclick="minus(this)">-</span>
+                        <input type="text" name="count" value="1">
+                        <span onclick="plus(this)">+</span>
+                    </div>
+                </div>
+                <div class="d-flex" style="margin: 10px 0px;">
+                    <p style="font-weight: 500; font-size: 24px; color: #00A550; margin-right: 10px;">1000 ₽</p>
+                    <p style="font-size: 12px; line-height: 16px; color: #616161; width: 100px;">1200 ₽ без TODOMARKET</p>
+                </div>
+                <p style="color: #E9E9E9; line-height: 24px;">Пена TITAN для окон и дверей, 182938 5000 шт</p>
+            </div>
+            <div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+                <img src="img/ads.png" width="260" height="260" style="border-radius: 8px;" alt="">
+                <div class="d-flex justify-content-between" style="margin-top: 5px;">
+                    <button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+                    <div class="store-item__data-count d-flex justify-content-between">
+                        <span onclick="minus(this)">-</span>
+                        <input type="text" name="count" value="1">
+                        <span onclick="plus(this)">+</span>
+                    </div>
+                </div>
+                <div class="d-flex" style="margin: 10px 0px;">
+                    <p style="font-weight: 500; font-size: 24px; color: #00A550; margin-right: 10px;">1000 ₽</p>
+                    <p style="font-size: 12px; line-height: 16px; color: #616161; width: 100px;">1200 ₽ без TODOMARKET</p>
+                </div>
+                <p style="color: #E9E9E9; line-height: 24px;">Пена TITAN для окон и дверей, 182938 5000 шт</p>
+            </div>
+            <div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+                <img src="img/ads.png" width="260" height="260" style="border-radius: 8px;" alt="">
+                <div class="d-flex justify-content-between" style="margin-top: 5px;">
+                    <button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+                    <div class="store-item__data-count d-flex justify-content-between">
+                        <span onclick="minus(this)">-</span>
+                        <input type="text" name="count" value="1">
+                        <span onclick="plus(this)">+</span>
+                    </div>
+                </div>
+                <div class="d-flex" style="margin: 10px 0px;">
+                    <p style="font-weight: 500; font-size: 24px; color: #00A550; margin-right: 10px;">1000 ₽</p>
+                    <p style="font-size: 12px; line-height: 16px; color: #616161; width: 100px;">1200 ₽ без TODOMARKET</p>
+                </div>
+                <p style="color: #E9E9E9; line-height: 24px;">Пена TITAN для окон и дверей, 182938 5000 шт</p>
+            </div>
+            <div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+                <img src="img/ads.png" width="260" height="260" style="border-radius: 8px;" alt="">
+                <div class="d-flex justify-content-between" style="margin-top: 5px;">
+                    <button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+                    <div class="store-item__data-count d-flex justify-content-between">
+                        <span onclick="minus(this)">-</span>
+                        <input type="text" name="count" value="1">
+                        <span onclick="plus(this)">+</span>
+                    </div>
+                </div>
+                <div class="d-flex" style="margin: 10px 0px;">
+                    <p style="font-weight: 500; font-size: 24px; color: #00A550; margin-right: 10px;">1000 ₽</p>
+                    <p style="font-size: 12px; line-height: 16px; color: #616161; width: 100px;">1200 ₽ без TODOMARKET</p>
+                </div>
+                <p style="color: #E9E9E9; line-height: 24px;">Пена TITAN для окон и дверей, 182938 5000 шт</p>
+            </div>
+            <div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+                <img src="img/ads.png" width="260" height="260" style="border-radius: 8px;" alt="">
+                <div class="d-flex justify-content-between" style="margin-top: 5px;">
+                    <button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+                    <div class="store-item__data-count d-flex justify-content-between">
+                        <span onclick="minus(this)">-</span>
+                        <input type="text" name="count" value="1">
+                        <span onclick="plus(this)">+</span>
+                    </div>
+                </div>
+                <div class="d-flex" style="margin: 10px 0px;">
+                    <p style="font-weight: 500; font-size: 24px; color: #00A550; margin-right: 10px;">1000 ₽</p>
+                    <p style="font-size: 12px; line-height: 16px; color: #616161; width: 100px;">1200 ₽ без TODOMARKET</p>
+                </div>
+                <p style="color: #E9E9E9; line-height: 24px;">Пена TITAN для окон и дверей, 182938 5000 шт</p>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    function toggleAccordion(element) {
+        element.classList.toggle("active");
+        
+        var accordionContent = element.querySelector(".custom-accordion-content");
+        var triangle = element.querySelector(".triangle")
+        if (triangle.classList.contains("triangle-bottom")) {
+            triangle.classList.remove("triangle-bottom")
+            triangle.classList.add("triangle-top")
+        } else {
+            triangle.classList.remove("triangle-top")
+            triangle.classList.add("triangle-bottom")
+        }
+    }
+</script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+    slidesPerView: 4,
+    spaceBetween: 10,
+    });
+</script>
+{% endblock script %}

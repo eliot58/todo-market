@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %} Профиль {% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between">
+	<h1 style="font-size: 32px; font-weight: 600; color: #E9E9E9;">Профиль компании</h1>
+	<button style="background-color: inherit; color: #00A550; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550;">Добавить магазин</button>
+</div>
+<p style="font-weight: 500; color: #E9E9E9; margin: 10px 0px;">Общая информация</p>
+<div style="background-color: #282828; border-radius: 16px; padding: 20px;">
+	<div class="d-flex">
+		<div style="min-width: 300px; min-height: 300px; border: 1px solid #00A550; background-color: #313131; text-align: center; border-radius: 16px; margin-right: 20px; position: relative;">
+			<img src="{% static 'img/upload.png' %}" style="position: absolute; top: 25%; left: 30%;" alt="">
+			<p style="font-weight: 500; color: #00A550; font-size: 20px; position: absolute; bottom: 10px; left: 20%;">Выбрать логотип</p>
+		</div>
+		<div>
+			<input type="text" class="filter__form">
+			<input type="text" class="filter__form">
+			<input type="text" class="filter__form">
+			<input type="text" class="filter__form">
+			<select name="" id="" class="filter__form">
+
+			</select>
+		</div>
+	</div>
+</div>
+<p style="font-weight: 500; color: #E9E9E9; margin: 20px 0px;">Условия сотрудничества (заполняются менеджеру сервиса)</p>
+<div class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px; margin-bottom: 20px;">
+	<div class="d-flex">
+		<select name="" id="" class="filter__form" style="width: 25%;">
+
+		</select>
+		<input type="text" class="filter__form" style="width: 75%; margin-left: 10px;">
+	</div>
+	<div class="d-flex">
+		<input type="text" class="filter__form" style="width: 40%;">
+		<input type="text" class="filter__form" style="width: 35%; margin-left: 10px;">
+		<input type="text" class="filter__form" style="width: 25%; margin-left: 10px;">
+	</div>
+	<div class="d-flex">
+		<input type="text" class="filter__form" style="width: 50%;">
+		<input type="text" class="filter__form" style="width: 50%; margin-left: 10px;">
+	</div>
+	<div class="d-flex">
+		<input type="text" class="filter__form" style="width: 50%;">
+		<input type="text" class="filter__form" style="width: 25%; margin-left: 10px;">
+		<input type="text" class="filter__form" style="width: 25%; margin-left: 10px;">
+	</div>
+	<div class="d-flex">
+		<div class="d-flex flex-column" style="width: 30%;">
+			<input type="text" class="filter__form">
+			<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%;">Сохранить</button>
+		</div>
+		<textarea name="" id="" rows="4" class="filter__form" style="width: 70%; margin-left: 10px;"></textarea>
+	</div>
+</div>
+<div class="d-flex align-items-end justify-content-between" style="padding: 20px; margin-bottom: 200px; border: 1px solid #00A550; border-radius: 16px;">
+	<p style="font-weight: 500; color: #00A550;line-height: 24px;">Для модерации, и заключении договора нам потребуется следующие документы: <br> Карта партнеров, ИНН, ОГРН, Карточка банка. <br> Приложите их копии, и нажмите отправить.</p>
+	<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Отправить</button>
+</div>
+{% endblock content %}

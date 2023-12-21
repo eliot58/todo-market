@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Корзина {% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<div class="d-flex justify-content-between" style="margin-bottom: 10px;">
+	<h1 style="font-size: 32px; font-weight: 600; color: #E9E9E9;">Поставщики</h1>
+	<div class="d-flex" style="background-color: #282828; padding: 5px 10px; border-radius: 8px;">
+		<input placeholder="Поиск поставщика" type="text" style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
+		<img src="{% static 'img/loop.svg' %}" alt="">
+	</div>
+</div>
+<a href="" style="display: block; padding: 10px; background-color: #282828; border-radius: 16px;" class="d-flex">
+	<img src="img/ads.png" width="144" height="144" style="border-radius: 8px;" alt="">
+	<div class="d-flex flex-column justify-content-around" style="margin-left: 10px;">
+		<div class="d-flex justify-content-between">
+			<p style="font-size: 20; font-weight: 600; color: #E9E9E9;">Окна-Двери</p>
+			<p style="font-size: 12px; color: #00A550;">Подробнее</p>
+		</div>
+		<p style="font-weight: 500; color: #00A550;">Сергиев-Посад</p>
+		<p style="color: #E9E9E9; line-height: 20px; max-height: 80px; overflow: hidden; text-overflow: ellipsis; ">Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium illum dignissimos harum maiores voluptas fugit quam quis dolorum impedit esse quaerat aliquam eaque, numquam quae laudantium vitae voluptatum magnam debitis eligendi temporibus nostrum exercitationem tempora. Aliquam accusantium rerum tempora repellendus, laborum molestiae voluptatum necessitatibus tempore, consequatur nostrum magni enim cupiditate minus. Quibusdam ullam nisi ea hic dolorem quisquam vel similique laborum at ipsam vitae voluptatem iste, molestiae minus incidunt maxime, obcaecati corporis quas asperiores sed. Aut eos fugiat commodi unde! Fuga totam quaerat accusantium adipisci voluptates quia modi quos odit, magnam tempore vero similique facere repudiandae aliquid quod laborum deserunt.</p>
+	</div>
+</a>
+             
+{% endblock content %}

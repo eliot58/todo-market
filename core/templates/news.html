@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} Новости {% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<h1 style="font-size: 32px; font-weight: 600; color: #E9E9E9;">Новости партнеров</h1>
+{% for new in news %}
+    <div class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px; margin: 10px 0px;">
+        <div class="d-flex align-items-center">
+            <img src="{{new.logo.url}}" style="border-radius: 8px;" width="48" height="48" alt="">
+            <p style="font-size: 24px; font-weight: 500; color: #E9E9E9; margin-left: 10px;">{{new.author}}</p>
+        </div>
+        <p style="color: #E9E9E9; margin-top: 10px; line-height: 24px;">{{new.text}}</p>
+    </div>
+{% endfor %}
+
+{% endblock content %}
