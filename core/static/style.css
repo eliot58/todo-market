@@ -261,13 +261,43 @@ h6 {
 	font-weight: 600;
 }
 
-.filter__form {
+.form-group {
+	position: relative;
+}
+
+label {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transition: 0.3s;
+	pointer-events: none;
+	display: none;
+}
+
+.input-field {
 	padding: 10px;
 	background-color: #313131;
 	border-radius: 8px;
 	margin: 10px 0px;
 	color: #616161;
 	width: 100%;
+}
+
+.input-field:focus+label {
+	display: block;
+	top: -5px;
+	left: 5px;
+	font-size: 12px;
+	color: #E9E9E9;
+}
+
+.input-field:focus::placeholder {
+	color: transparent;
+}
+
+.errorlist {
+	color: red;
+	margin-bottom: 0px;
 }
 
 table {
@@ -406,17 +436,17 @@ td {
 }
 
 .triangle-top {
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 16px solid #00A550;
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-bottom: 16px solid #00A550;
 }
 
 .triangle-bottom {
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 16px solid #E9E9E9;
+	width: 0;
+	height: 0;
+	border-left: 8px solid transparent;
+	border-right: 8px solid transparent;
+	border-top: 16px solid #E9E9E9;
 }

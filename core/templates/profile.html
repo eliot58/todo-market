@@ -7,58 +7,230 @@
 {% block content %}
 <div class="d-flex justify-content-between">
 	<h1 style="font-size: 32px; font-weight: 600; color: #E9E9E9;">Профиль компании</h1>
-	<button style="background-color: inherit; color: #00A550; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550;">Добавить магазин</button>
+	<button type="button" onclick="createStore(this)" style="{% if request.user.provider.company == null or request.user.provider.region == null or request.user.provider.logo == null %}display: none;{% endif %}background-color: inherit; color: #00A550; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550;">Добавить магазин</button>
 </div>
 <p style="font-weight: 500; color: #E9E9E9; margin: 10px 0px;">Общая информация</p>
-<div style="background-color: #282828; border-radius: 16px; padding: 20px;">
-	<div class="d-flex">
-		<div style="min-width: 300px; min-height: 300px; border: 1px solid #00A550; background-color: #313131; text-align: center; border-radius: 16px; margin-right: 20px; position: relative;">
-			<img src="{% static 'img/upload.png' %}" style="position: absolute; top: 25%; left: 30%;" alt="">
+<div class="main-profile" style="background-color: #282828; border-radius: 16px; padding: 20px;">
+	<form class="d-flex" method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="logo_preview" style="min-width: 300px; min-height: 300px; border: 1px solid #00A550; background-color: #313131; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer; {% if request.user.provider.logo %} background: url('{{ request.user.provider.logo.url }}') 0 0/100% 100%; {% endif %}" onclick="this.querySelector('input').click()">
+			<input type="file" id="logo_input" name="logo" style="position: absolute; bottom: 0; left: 0; z-index: -10;">
+			<img src="{% static 'img/upload.png' %}" style="position: absolute; top: 25%; left: 30%; {% if request.user.provider.logo %} display: none; {% endif %}" alt="">
 			<p style="font-weight: 500; color: #00A550; font-size: 20px; position: absolute; bottom: 10px; left: 20%;">Выбрать логотип</p>
 		</div>
-		<div>
-			<input type="text" class="filter__form">
-			<input type="text" class="filter__form">
-			<input type="text" class="filter__form">
-			<input type="text" class="filter__form">
-			<select name="" id="" class="filter__form">
-
-			</select>
+		<div class="d-flex flex-column" style="width: 100%;">
+			<div class="form-group">
+				<input type="text" name="company" value="{{request.user.provider.company}}" class="input-field" placeholder="Название компании" required>
+				<label for="company">Название компании</label>
+			</div>
+			<div class="form-group">
+				<input type="text" name="fullName" value="{{request.user.provider.fullName}}" class="input-field" placeholder="Контактное лицо" required>
+				<label for="fullName">Контактное лицо</label>
+			</div>
+			<div class="form-group">
+				<input type="text" name="phone" value="{{request.user.provider.phone}}" class="input-field" placeholder="Номер телефона" required>
+				<label for="phone">Номер телефона</label>
+			</div>
+			<div class="form-group">
+				<input type="text" name="email" value="{{request.user.provider.email}}" class="input-field" placeholder="E-mail" required>
+				<label for="email">E-mail</label>
+			</div>
+			<div class="d-flex align-items-center">
+				<select name="region" class="input-field" style="width: 70%; margin-right: 10px;" required>
+					<option value="" disabled {% if request.user.provider.region == null %} selected {% endif %}>Выберите регион</option>
+					{% for region in regions %}
+					<option value="{{ region.id }}" {% if region.name == request.user.provider.region.name %} selected {% endif %}>{{ region.name }}</option>
+					{% endfor %}
+				</select>
+				<button type="submit" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; width: 30%; height: 42px;">Сохранить</button>
+			</div>
 		</div>
-	</div>
+	</form>
 </div>
-<p style="font-weight: 500; color: #E9E9E9; margin: 20px 0px;">Условия сотрудничества (заполняются менеджеру сервиса)</p>
-<div class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px; margin-bottom: 20px;">
-	<div class="d-flex">
-		<select name="" id="" class="filter__form" style="width: 25%;">
-
-		</select>
-		<input type="text" class="filter__form" style="width: 75%; margin-left: 10px;">
-	</div>
-	<div class="d-flex">
-		<input type="text" class="filter__form" style="width: 40%;">
-		<input type="text" class="filter__form" style="width: 35%; margin-left: 10px;">
-		<input type="text" class="filter__form" style="width: 25%; margin-left: 10px;">
-	</div>
-	<div class="d-flex">
-		<input type="text" class="filter__form" style="width: 50%;">
-		<input type="text" class="filter__form" style="width: 50%; margin-left: 10px;">
-	</div>
-	<div class="d-flex">
-		<input type="text" class="filter__form" style="width: 50%;">
-		<input type="text" class="filter__form" style="width: 25%; margin-left: 10px;">
-		<input type="text" class="filter__form" style="width: 25%; margin-left: 10px;">
-	</div>
-	<div class="d-flex">
-		<div class="d-flex flex-column" style="width: 30%;">
-			<input type="text" class="filter__form">
-			<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%;">Сохранить</button>
+<!-- <p style="font-weight: 500; color: #E9E9E9; margin: 20px 0px;">Условия сотрудничества (заполняются менеджеру сервиса)</p> -->
+{% for store in stores %}
+	{% if store.contract != null %}
+		<div class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px; margin: 20px 0px;">
+			<div class="d-flex">
+				<select name="delivery_condition" class="input-field" style="width: 25%;" required>
+					{% for delivery_condition in delivery_conditions %}
+					<option value="{{ delivery_condition.id }}" {% if delivery_condition.name == store.delivery_condition %} selected {% endif %}>{{ delivery_condition.name }}</option>
+					{% endfor %}
+				</select>
+				<div class="form-group" style="width: 75%; margin-left: 10px;">
+					<input type="text" name="map_visor" value="{{store.map_visor}}" class="input-field" placeholder="Отображение на карте" required>
+					<label for="map_visor">Отображение на карте</label>
+				</div>
+			</div>
+			<div class="d-flex">
+				<div class="form-group" style="width: 40%;">
+					<input type="text" name="manager" value="{{store.manager}}" class="input-field" placeholder="Ваш менеджер" required>
+					<label for="manager">Ваш менеджер</label>
+				</div>
+				<div class="form-group" style="width: 35%; margin-left: 10px;">
+					<input type="text" name="contract" value="{{store.contract}}" class="input-field" placeholder="Договор"disabled>
+					<label for="contract">Договор</label>
+				</div>
+				<div class="form-group" style="width: 25%; margin-left: 10px;">
+					<input type="text" name="site" value="{{store.site}}" class="input-field" placeholder="Сайт" required>
+					<label for="site">Сайт</label>
+				</div>
+			</div>
+			<div class="d-flex">
+				<div class="form-group" style="width: 50%;">
+					<input type="text" name="address" value="{{store.address}}" class="input-field" placeholder="Адрес склада для самовывоза" required>
+					<label for="address">Адрес склада для самовывоза</label>
+				</div>
+				<div class="form-group" style="width: 50%; margin-left: 10px;">
+					<input type="text" name="phone" value="{{store.phone}}" class="input-field" placeholder="Контакты для заказа" required>
+					<label for="phone">Контакт для заказа</label>
+				</div>
+			</div>
+			<div class="d-flex">
+				<div class="form-group" style="width: 50%;">
+					<input type="text" name="email" value="{{store.email}}" class="input-field" placeholder="E-mail для выгрузок" required>
+					<label for="email">E-mail для выгрузок</label>
+				</div>
+				<div class="form-group" style="width: 50%; margin-left: 10px;">
+					<input type="text" name="slogan" value="{{store.slogan}}" class="input-field" placeholder="Слоган компании" required>
+					<label for="slogan">Слоган компании</label>
+				</div>
+			</div>
+			<div class="d-flex">
+				<div class="d-flex flex-column" style="width: 30%;">
+					<div class="form-group">
+						<input type="text" name="assembly_time" value="{{store.assembly_time}}" class="input-field" placeholder="Время сборки" required>
+						<label for="assembly_time">Время сборки</label>
+					</div>
+					<div class="form-group" style="width: 100%;">
+						<input type="text" name="work_time" value="{{store.work_time}}" class="input-field" placeholder="Часы работы" required>
+						<label for="work_time">Часы работы</label>
+					</div>
+				</div>
+				<textarea name="description" placeholder="Описание" rows="4" class="input-field" style="width: 70%; margin-left: 10px;" required>{{store.description}}</textarea>
+			</div>
+			{% for category in categories %}
+			<div class="custom-accordion-item">
+				<div class="custom-accordion-header" onclick="toggleAccordion(this)">
+					<p style="font-size: 20px; font-weight: 500; color: #E9E9E9;">{{category.name}}</p>
+					<div class="triangle triangle-bottom"></div>
+				</div>
+				<div class="custom-accordion-content swiper-container" style="overflow: hidden;">
+					<div class="d-flex swiper-wrapper store_{{store.id}}_{{category.id}}">
+						{% for product in products %}
+							{% if product.category == category and product.store == store %}
+								<div class="d-flex flex-column swiper-slide product_{{product.id}}" style="width: 256px; margin-right: 20px;">
+									<div style="position: relative;">
+										<img src="{{product.image.url}}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '{{store.id}}', false, '{{category.id}}', '{{product.name}}', '{{product.articul}}', '{{product.amount}}', '{{product.unit}}', '{{product.remainder}}', '{{product.image.url}}', '{{product.description}}', '{{product.id}}')" alt="">
+										<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '{{product.id}}')" style="position: absolute; top: 10px; right: 10px;" alt="">
+										<p style="color: #E9E9E9; line-height: 24px;">{{product.name}}, {{product.articul}} {{product.amount}} {{product.unit}}</p>
+									</div>
+								</div>
+							{% endif %}
+						{% endfor %}
+						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+							<div style="min-width: 260px; min-height: 260px; border: 1px solid #00A550; background-color: #313131; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '')">
+								<img src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
+							</div>
+						</div>
+						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+							<div style="min-width: 260px; min-height: 260px; border: 1px solid #00A550; background-color: #313131; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '')">
+								<img src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
+							</div>
+						</div>
+						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+							<div style="min-width: 260px; min-height: 260px; border: 1px solid #00A550; background-color: #313131; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '')">
+								<img src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
+							</div>
+						</div>
+						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+							<div style="min-width: 260px; min-height: 260px; border: 1px solid #00A550; background-color: #313131; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '')">
+								<img src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+			<div class="d-flex justify-content-between" style="margin-top: 10px;">
+				<button type="submit" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%;;">Сохранить</button>
+				<button type="submit" style="background-color: inherit; color: #FF0000; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; border: 1px solid #FF0000;">Удалить</button>
+			</div>
 		</div>
-		<textarea name="" id="" rows="4" class="filter__form" style="width: 70%; margin-left: 10px;"></textarea>
-	</div>
-</div>
-<div class="d-flex align-items-end justify-content-between" style="padding: 20px; margin-bottom: 200px; border: 1px solid #00A550; border-radius: 16px;">
+	{% endif %}
+{% endfor %}
+<form method="post" enctype="multipart/form-data" action="" class="d-flex align-items-end justify-content-between" style="padding: 20px; margin-bottom: 200px; border: 1px solid #00A550; border-radius: 16px;">
 	<p style="font-weight: 500; color: #00A550;line-height: 24px;">Для модерации, и заключении договора нам потребуется следующие документы: <br> Карта партнеров, ИНН, ОГРН, Карточка банка. <br> Приложите их копии, и нажмите отправить.</p>
-	<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Отправить</button>
+	<button type="button" onclick="this.nextElementSibling.click()" style="background-color: inherit; color: #00A550; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; border: 1px solid #00A550;">Приложить</button>
+	<input type="file" name="files" multiple hidden>
+	<button type="submit" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Отправить</button>
+</from>
+
+<div id="template" style="display: none;">
+	<form method="post" action="{% url 'create_store' %}" class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px; margin: 20px 0px;">
+		{% csrf_token %}
+		<div class="d-flex">
+			<select name="delivery_condition" class="input-field" style="width: 25%;" required>
+				<option value="" disabled selected >Условия доставки</option>
+				{% for delivery_condition in delivery_conditions %}
+				<option value="{{ delivery_condition.id }}">{{ delivery_condition.name }}</option>
+				{% endfor %}
+			</select>
+			<div class="form-group" style="width: 75%; margin-left: 10px;">
+				<input type="text" name="map_visor" class="input-field" placeholder="Отображение на карте" required>
+				<label for="map_visor">Отображение на карте</label>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="form-group" style="width: 40%;">
+				<input type="text" name="manager" class="input-field" placeholder="Ваш менеджер" required>
+				<label for="manager">Ваш менеджер</label>
+			</div>
+			<div class="form-group" style="width: 35%; margin-left: 10px;">
+				<input type="text" name="contract" class="input-field" placeholder="Договор"disabled>
+				<label for="contract">Договор</label>
+			</div>
+			<div class="form-group" style="width: 25%; margin-left: 10px;">
+				<input type="text" name="site" class="input-field" placeholder="Сайт" required>
+				<label for="site">Сайт</label>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="form-group" style="width: 50%;">
+				<input type="text" name="address" class="input-field" placeholder="Адрес склада для самовывоза" required>
+				<label for="address">Адрес склада для самовывоза</label>
+			</div>
+			<div class="form-group" style="width: 50%; margin-left: 10px;">
+				<input type="text" name="phone" class="input-field" placeholder="Контакты для заказа" required>
+				<label for="phone">Контакт для заказа</label>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="form-group" style="width: 50%;">
+				<input type="text" name="email" class="input-field" placeholder="E-mail для выгрузок" required>
+				<label for="email">E-mail для выгрузок</label>
+			</div>
+			<div class="form-group" style="width: 50%; margin-left: 10px;">
+				<input type="text" name="slogan" class="input-field" placeholder="Слоган компании" required>
+				<label for="slogan">Слоган компании</label>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="d-flex flex-column" style="width: 30%;">
+				<div class="form-group">
+					<input type="text" name="assembly_time" class="input-field" placeholder="Время сборки" required>
+					<label for="assembly_time">Время сборки</label>
+				</div>
+				<div class="form-group" style="width: 100%;">
+					<input type="text" name="work_time" class="input-field" placeholder="Часы работы" required>
+					<label for="work_time">Часы работы</label>
+				</div>
+			</div>
+			<textarea name="description" placeholder="Описание" rows="4" class="input-field" style="width: 70%; margin-left: 10px;" required></textarea>
+		</div>
+		<div style="width: 100%; height: 30px; position: relative;">
+			<button type="submit" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; position: absolute; right: 0px;">Создать</button>
+		</div>
+	</form>
 </div>
 {% endblock content %}

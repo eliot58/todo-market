@@ -27,8 +27,8 @@
 
         Наши проекты: Мы успешно сотрудничаем с десятками клиентов, включая частных лиц и коммерческие предприятия. Наши оконные решения используются в жилых и коммерческих объектах по всей стране.
     </div>
-    <div class="custom-accordion-item" onclick="toggleAccordion(this)">
-        <div class="custom-accordion-header">
+    <div class="custom-accordion-item">
+        <div class="custom-accordion-header" onclick="toggleAccordion(this)">
             <p style="font-size: 20px; font-weight: 500; color: #E9E9E9;">Крепежи</p>
             <div class="triangle triangle-bottom"></div>
         </div>
@@ -151,28 +151,3 @@
     </div>
 </div>
 {% endblock content %}
-
-{% block script %}
-<script>
-    function toggleAccordion(element) {
-        element.classList.toggle("active");
-        
-        var accordionContent = element.querySelector(".custom-accordion-content");
-        var triangle = element.querySelector(".triangle")
-        if (triangle.classList.contains("triangle-bottom")) {
-            triangle.classList.remove("triangle-bottom")
-            triangle.classList.add("triangle-top")
-        } else {
-            triangle.classList.remove("triangle-top")
-            triangle.classList.add("triangle-bottom")
-        }
-    }
-</script>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script>
-    var swiper = new Swiper('.swiper-container', {
-    slidesPerView: 4,
-    spaceBetween: 10,
-    });
-</script>
-{% endblock script %}

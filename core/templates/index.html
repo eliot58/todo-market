@@ -8,9 +8,9 @@
 
 <h1 style="font-size: 32px; font-weight: 600; color: #E9E9E9;">Главная страница</h1>
 <div class="d-flex">
-	<div style="width: 700px; background-color: #282828; padding: 20px; border-radius: 16px; margin-right: 10px;">
-		<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;">Пена Titan</p>
-		<div class="d-flex justify-content-between">
+	<div style="width: 700px; background-color: #282828; padding: 20px; border-radius: 16px; margin-right: 10px; margin-bottom: 300px;">
+		<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
+		<!-- <div class="d-flex justify-content-between">
 			<div class="d-flex">
 				<img src="img/ads.png" style="border-radius: 8px; margin-right: 10px;" alt="">
 				<div class="d-flex flex-column justify-content-between">
@@ -36,57 +36,23 @@
 					<button style="background-color: #00A550; color: #E9E9E9; padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
 				</div>
 			</div>
-		</div>
+		</div> -->
+		
 	</div>
 	<div class="d-flex flex-column" style="width: 275px; background-color: #282828; padding: 20px; border-radius: 16px; max-height: 480px;">
 		<p style="font-weight: 500; color: #E9E9E9; text-align: center;">Фильтр поиска</p>
-		<input class="filter__form" placeholder="Ключевое слово" type="text">
-		<select class="filter__form" name="" id="">
+		<input class="input-field" placeholder="Ключевое слово" type="text">
+		<select class="input-field" name="" id="">
 			<option value="">Москва</option>
 		</select>
-		<select class="filter__form" name="" id="">
+		<select class="input-field" name="" id="">
 			<option value="">Категория</option>
 		</select>
-		<input class="filter__form" placeholder="Название магазина" type="text">
-		<input class="filter__form" placeholder="Цена от" type="text">
-		<input class="filter__form" placeholder="Цена до" type="text">
+		<input class="input-field" placeholder="Название магазина" type="text">
+		<input class="input-field" placeholder="Цена от" type="text">
+		<input class="input-field" placeholder="Цена до" type="text">
 		<button style="background-color: #00A550; color: #E9E9E9; padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
 		<a href="" style="font-size: 12px; color: #00A550; text-align: center;">Поиск по карте</a>
 	</div>
 </div>
 {% endblock content %}
-
-{% block script %} 
-<script>
-	window.addEventListener('click', function(event) {
-		var popup = document.getElementById('popup');
-		if (event.target == popup) {
-			popup.style.display = 'none';
-		}
-	});
-
-	function openTab(element) {
-		if (element.textContent == 'Регистрация') {
-			element.classList.add("tab-button__active")
-			element.style.backgroundColor = "#00A550"
-			element.nextElementSibling.classList.remove("tab-button__active")
-			element.nextElementSibling.style.backgroundColor = "inherit"
-			document.querySelector(".signup").classList.add("d-flex")
-			document.querySelector(".signup").classList.add("flex-column")
-			document.querySelector(".signin").classList.remove("d-flex")
-			document.querySelector(".signin").classList.remove("flex-column")
-			document.querySelector('.signin').style.display = 'none';
-		} else {
-			element.classList.add("tab-button__active")
-			element.style.backgroundColor = "#00A550"
-			element.previousElementSibling.classList.remove("tab-button__active")
-			element.previousElementSibling.style.backgroundColor = "inherit"
-			document.querySelector(".signin").classList.add("d-flex")
-			document.querySelector(".signin").classList.add("flex-column")
-			document.querySelector(".signup").classList.remove("d-flex")
-			document.querySelector(".signup").classList.remove("flex-column")
-			document.querySelector('.signup').style.display = 'none';
-		}
-	}
-</script>
-{% endblock script %}

@@ -9,5 +9,11 @@ urlpatterns = [
     path("partner/", partner, name="partner"),
     path("delivery/", delivery, name="delivery"),
     path("news/", news, name="news"),
-    path("providers/", providers, name="providers")
+    path("providers/", providers, name="providers"),
+    path("profile/", profile, name="profile"),
+    path("create_store/", create_store, name="create_store"),
+    path("create_product/", create_product, name="create_product"),
+    path("update_product/<int:id>/", update_product, name="update_product"),
+    path("delete_product/<int:id>/", delete_product, name="delete_product"),
+    path("upload_files/", upload_files, name="upload_files"),
 ]

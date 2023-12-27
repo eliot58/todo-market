@@ -34,14 +34,3 @@
 </table>
 
 {% endblock content %}
-
-{% block script %} 
-<script>
-	window.addEventListener('click', function(event) {
-		var popup = document.getElementById('popup');
-		if (event.target == popup) {
-			popup.style.display = 'none';
-		}
-	});
-</script>
-{% endblock script %}
