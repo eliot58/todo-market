@@ -45,6 +45,14 @@ class ProviderFile(models.Model):
     file = models.FileField(upload_to="users/file")
 
 
+    class Meta:
+        verbose_name = "Файл"
+        verbose_name_plural = "Файлы"
+
+    def __str__(self):
+        return self.provider.company
+
+
 class Buyer(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, verbose_name = "Аккаунт")
     fullName = models.CharField(max_length = 256, verbose_name = "Контактное лицо")
@@ -104,6 +112,7 @@ class Product(models.Model):
         ("шт", "шт"),
         ("м2", "м2"),
     ]
+    price = models.PositiveIntegerField(verbose_name = "Цена")
     unit = models.CharField(max_length = 10, choices = ch, verbose_name = "Ед. изм")
     remainder = models.PositiveIntegerField(verbose_name = "Остаток")
     description = models.TextField(null = True, blank = True, verbose_name = "Описание")

@@ -50,7 +50,7 @@
 <!-- <p style="font-weight: 500; color: #E9E9E9; margin: 20px 0px;">Условия сотрудничества (заполняются менеджеру сервиса)</p> -->
 {% for store in stores %}
 	{% if store.contract != null %}
-		<div class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px; margin: 20px 0px;">
+		<form method="post" action="" class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px; margin: 20px 0px;">
 			<div class="d-flex">
 				<select name="delivery_condition" class="input-field" style="width: 25%;" required>
 					{% for delivery_condition in delivery_conditions %}
@@ -156,15 +156,16 @@
 				<button type="submit" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%;;">Сохранить</button>
 				<button type="submit" style="background-color: inherit; color: #FF0000; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; border: 1px solid #FF0000;">Удалить</button>
 			</div>
-		</div>
+		</form>
 	{% endif %}
 {% endfor %}
-<form method="post" enctype="multipart/form-data" action="" class="d-flex align-items-end justify-content-between" style="padding: 20px; margin-bottom: 200px; border: 1px solid #00A550; border-radius: 16px;">
+<form method="post" action="{% url 'upload_files' %}" enctype="multipart/form-data" class="d-flex align-items-end justify-content-between" style="padding: 20px; margin-bottom: 200px; border: 1px solid #00A550; border-radius: 16px;">
+	{% csrf_token %}
 	<p style="font-weight: 500; color: #00A550;line-height: 24px;">Для модерации, и заключении договора нам потребуется следующие документы: <br> Карта партнеров, ИНН, ОГРН, Карточка банка. <br> Приложите их копии, и нажмите отправить.</p>
 	<button type="button" onclick="this.nextElementSibling.click()" style="background-color: inherit; color: #00A550; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; border: 1px solid #00A550;">Приложить</button>
 	<input type="file" name="files" multiple hidden>
 	<button type="submit" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Отправить</button>
-</from>
+</form>
 
 <div id="template" style="display: none;">
 	<form method="post" action="{% url 'create_store' %}" class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px; margin: 20px 0px;">
@@ -234,3 +235,31 @@
 	</form>
 </div>
 {% endblock content %}
+
+{% block script %}
+<script>
+	const logoInput = document.getElementById("logo_input");
+	const logoPreview = document.querySelector(".logo_preview");
+	logoInput.onchange = (e) => {
+		const [file] = logoInput.files;
+		if (file) {
+		logoPreview.style.background =
+			"url(" + URL.createObjectURL(file) + ") 0 0/100% 100% no-repeat";
+		}
+
+		logoPreview.querySelector("img").style.display = 'none';
+	};
+
+	const productInput = document.getElementById("product_image_input");
+	const productPreview = document.querySelector(".product_image_preview");
+	productInput.onchange = (e) => {
+		const [file] = productInput.files;
+		if (file) {
+			productPreview.style.background =
+			"url(" + URL.createObjectURL(file) + ") 0 0/100% 100% no-repeat";
+		}
+
+		productPreview.querySelector("img").style.display = 'none';
+	};
+</script>
+{% endblock script %}

@@ -52,7 +52,8 @@ def logout_view(request):
 
 @login_required(login_url="/login/")
 def index(request):
-    return render(request, "index.html")
+    products = Product.objects.filter(name__icontains=request.GET.get("key", "")) & Product.objects.filter(price__range=(request.GET.get("price_from", 1), request.GET.get("price_to", 1000000)))
+    return render(request, "index.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.all(), "products": products})
 
 def delivery(request):
     return render(request, "map.html")
@@ -77,7 +78,10 @@ def profile(request):
         user.provider.phone = request.POST['phone']
         user.provider.email = request.POST['email']
         user.provider.company = request.POST['company']
-        user.provider.logo = request.FILES['logo']
+        try:
+            user.provider.logo = request.FILES['logo']
+        except KeyError:
+            pass
         user.provider.region_id = request.POST['region']
         user.provider.save()
         return redirect(profile)
@@ -113,10 +117,10 @@ def create_product(request):
     product.image = request.FILES['photo']
     product.unit = request.POST["unit"]
     product.amount = request.POST["amount"]
+    product.price = request.POST["price"]
     product.remainder = request.POST["remainder"]
     product.description = request.POST["description"]
     product.save()
-    print(product.image.url)
     return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount})
 
 @require_POST
@@ -131,6 +135,7 @@ def update_product(request, id):
             product.image = request.FILES['photo']
         except KeyError:
             pass
+        product.price = request.POST["price"]
         product.unit = request.POST["unit"]
         product.remainder = request.POST["remainder"]
         product.description = request.POST["description"]
@@ -147,4 +152,6 @@ def delete_product(request, id):
 
 @require_POST
 def upload_files(request):
-    pass
+    for file in request.FILES.getlist("files"):
+        ProviderFile.objects.create(provider=request.user.provider, file = file)
+    return redirect(profile)
