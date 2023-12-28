@@ -169,14 +169,33 @@
 					<a {% if request.path == '/delivery/' %} class="active" {% endif %} href="#">Доставка</a>
 					<a {% if request.path == '/providers/' %} class="active" {% endif %} href="#">Поставщики</a>
 				</div>
-				<div class="navbar-icons">
-					<button type="button">
-						<img src="{% static 'img/moon.svg' %}" alt="">
-					</button>
-					<button type="button" onclick="document.querySelector('.auth-popup').style.display = 'block';">
-						<img src="{% static 'img/user.svg' %}" alt="">
-					</button>
-				</div>
+				{% if request.user.is_authenticated %}
+					{% if request.user.provider %}
+						<div class="navbar-icons">
+							<button type="button">
+								<img src="{% static 'img/moon.svg' %}" alt="">
+							</button>
+						</div>
+					{% else %}
+						<div class="navbar-icons">
+							<button type="button">
+								<img src="{% static 'img/moon.svg' %}" alt="">
+							</button>
+							<button type="button">
+								<img src="{% static 'img/cart.svg' %}" alt="">
+							</button>
+						</div>
+					{% endif %}
+				{% else %}
+					<div class="navbar-icons">
+						<button type="button">
+							<img src="{% static 'img/moon.svg' %}" alt="">
+						</button>
+						<button type="button" onclick="document.querySelector('.auth-popup').style.display = 'block';">
+							<img src="{% static 'img/user.svg' %}" alt="">
+						</button>
+					</div>
+				{% endif %}
 			</div>
 		</header>
 	
