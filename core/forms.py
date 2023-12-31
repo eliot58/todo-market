@@ -16,7 +16,6 @@ class RegisterForm(forms.Form):
     spec = forms.ChoiceField(choices=ch, label="", widget=forms.Select(attrs={"class": "input-field"}))
     email = forms.EmailField(label="",widget=forms.TextInput(attrs={"placeholder": "Введите почту", "class": "input-field", "id": "email"}))
     phone = forms.CharField(label="",widget=forms.TextInput(attrs={"placeholder": "Введите номер телефона", "class": "input-field", "id": "phone"}))
-    password = forms.CharField(label="",widget=forms.TextInput(attrs={"placeholder": "Пароль", "class": "input-field", "type": "password", "id": "password"}))
 
     
     def clean_phone(self):

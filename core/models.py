@@ -25,11 +25,13 @@ class DeliveryCondition(models.Model):
 class Provider(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, verbose_name = "Аккаунт")
     logo = models.ImageField(upload_to="users/logo", null=True, blank=True)
-    company = models.CharField(max_length = 256, verbose_name = "Название компании", null = True, blank = True)
+    company = models.CharField(max_length = 256, default = "", verbose_name = "Название компании")
     fullName = models.CharField(max_length = 256, verbose_name = "Контактное лицо")
     phone = models.CharField(max_length = 256, unique = True, verbose_name = "Номер телефона")
     email = models.EmailField(unique = True, verbose_name = "Email")
-    region = models.ForeignKey(Region, on_delete = models.CASCADE, verbose_name = "Регион", null = True, blank = True)
+    slogan = models.CharField(max_length = 256, default = "", verbose_name = "Слоган")
+    site = models.URLField(default = "", verbose_name = "Сайт")
+    description = models.TextField(default = "", verbose_name = "Описание")
 
 
     class Meta:
@@ -37,7 +39,7 @@ class Provider(models.Model):
         verbose_name_plural = "Поставщики"
 
     def __str__(self):
-        return self.company
+        return self.fullName
 
 
 class ProviderFile(models.Model):
@@ -79,17 +81,15 @@ class Category(models.Model):
 class Store(models.Model):
     provider = models.ForeignKey(Provider, on_delete = models.CASCADE, verbose_name = "Продавец")
     manager = models.CharField(max_length = 256, verbose_name = "Менеджер")
-    delivery_condition = models.CharField(max_length = 256, verbose_name = "Условия доставки")
+    delivery_condition = models.ForeignKey(DeliveryCondition, on_delete = models.DO_NOTHING ,verbose_name = "Условия доставки")
     map_visor = models.CharField(max_length = 256, verbose_name = "Отображение на карте")
     contract = models.CharField(max_length = 256, null = True, blank = True, verbose_name = "Договор")
-    site = models.URLField(verbose_name = "Сайт")
     address = models.CharField(max_length = 256, verbose_name = "Адрес склада для самовывоза")
     phone = models.CharField(max_length = 256, verbose_name = "Контакты для заказа")
-    slogan = models.CharField(max_length = 256, verbose_name = "Слоган")
     email = models.EmailField(verbose_name = "Email для выгрузок")
     work_time = models.CharField(max_length = 256, verbose_name = "Часы работы")
+    region = models.ForeignKey(Region, on_delete = models.DO_NOTHING, verbose_name = "Регион")
     assembly_time = models.CharField(max_length = 256, verbose_name = "Время сборки")
-    description = models.TextField(verbose_name = "Описание")
 
 
     class Meta:

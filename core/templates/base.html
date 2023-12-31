@@ -39,11 +39,6 @@
 						<label for="email">E-mail</label>
 					</div>
                     {{ register_form.email.errors }}
-                    <div class="form-group">
-						{{ register_form.password }}
-						<label for="password">Пароль</label>
-					</div>
-                    {{ register_form.password.errors }}
 					<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px;" type="submit">Зарегистрироваться</button>
 				</form>
 				<form action="{% url 'login_view' %}" method="post" class="signin" {% if login_form.errors %} style="display: flex; flex-direction: column;" {% else %} style="display: none;" {% endif %}>
