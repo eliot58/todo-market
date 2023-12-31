@@ -46,9 +46,7 @@ def signup(request):
             
             msg = 'Вы зарегистрировались как ' + spec + '\n' + 'Ваш login: ' + request.POST['email'] + '\n' + 'Ваш password: ' + password
 
-            print(password)
-
-            # send_mail('Регистрация в todotodo', msg, settings.EMAIL_HOST_USER, [request.POST['email']], fail_silently=False)
+            send_mail('Регистрация в todotodo', msg, settings.EMAIL_HOST_USER, [request.POST['email']], fail_silently=False)
 
             user = authenticate(username=cd["email"], password=password)
             login(request, user)
