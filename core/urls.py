@@ -10,6 +10,7 @@ urlpatterns = [
     path("delivery/", delivery, name="delivery"),
     path("news/", news, name="news"),
     path("providers/", providers, name="providers"),
+    path("provider/<int:id>/", provider, name="provider"),
     path("profile/", profile, name="profile"),
     path("create_store/", create_store, name="create_store"),
     path("delete_store/<int:id>/", delete_store, name="delete_store"),

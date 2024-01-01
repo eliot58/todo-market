@@ -25,16 +25,19 @@
 			<img src="{{product.image.url}}" width="136" height="136" style="border-radius: 8px;" alt="">
 			<p style="position: absolute; top: 10px; right: 10px; color: #616161;">10 км от вас</p>
 			<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
-				<p style="color: #E9E9E9; margin-top: 20px;">{{product.name}}, {{product.articul}}</p>
+				<p style="color: #E9E9E9; margin-top: 20px;">{{product.name}}, {{product.articul}} <span style="font-size: 12px; color: #616161;">{{product.amount}} {{product.unit}}</span></p>
 				<div class="d-flex justify-content-between align-items-end">
 					<p style="font-size: 24px; font-weight: 500; color: #00A550;">{{product.price}} ₽</p>
 					<p style="font-size: 12px; color: #616161; width: 100px;">{{product.price}} ₽ без TODOMARKET</p>
+					{% if request.user.provider %}
+                    {% else %}
 					<div class="store-item__data-count d-flex justify-content-between">
 						<span onclick="minus(this)">-</span>
 						<input type="text" name="count" value="1">
 						<span onclick="plus(this)">+</span>
 					</div>
-					<button style="background-color: #00A550; color: #E9E9E9; padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
+					<button type="button" onclick="addToCart()" style="background-color: #00A550; color: #E9E9E9; padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
+					{% endif %}
 				</div>
 			</div>
 		</div>

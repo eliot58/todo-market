@@ -41,7 +41,7 @@
 <div class="d-flex" style="background-color: #282828; height: 170px; border-radius: 16px; position: relative; margin: 60px 0px 200px 0px;">
     <div class="d-flex flex-column justify-content-around" style="margin: 20px; width: 450px;">
         <p style="font-size: 20px; font-weight: 500; color: #E9E9E9;">Регистрируйтесь, и начните сотрудничество с нами прямо сейчас!</p>
-        <button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px;">Зарегистрироваться  сейчас</button>
+        <button type="button" onclick="document.querySelector('.auth-popup').style.display = 'block';" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px;">Зарегистрироваться  сейчас</button>
     </div>
     <img style="position: absolute; top: -80px; right: 40px;" src="{% static 'img/signup.png' %}" alt="">
 </div>

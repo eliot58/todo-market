@@ -66,19 +66,26 @@ def index(request):
     return render(request, "index.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.all(), "products": products})
 
 def delivery(request):
-    return render(request, "map.html")
+    return render(request, "map.html", {"login_form": LoginForm(), "register_form": RegisterForm()})
 
 def news(request):
-    return render(request, "news.html", {"news": News.objects.all()})
+    return render(request, "news.html", {"news": News.objects.all(), "login_form": LoginForm(), "register_form": RegisterForm()})
 
 def partner(request):
-    return render(request, "partner.html")
+    return render(request, "partner.html", {"login_form": LoginForm(), "register_form": RegisterForm()})
 
 def providers(request):
-    return render(request, "providers.html", {"providers": Provider.objects.all()[:6]})
+    return render(request, "providers.html", {"providers": Provider.objects.all()[:6], "login_form": LoginForm(), "register_form": RegisterForm()})
 
 def provider(request, id):
-    return render(request, "provider.html", {"provider": Provider.objects.get(id=id)})
+    items = {}
+    for product in Product.objects.filter(store__provider_id=id):
+        if product.category.name in items:
+            items[product.category.name].append(product)
+        else:
+            items[product.category.name] = []
+            items[product.category.name].append(product)
+    return render(request, "provider.html", {"provider": Provider.objects.get(id=id), "products": items.items(), "login_form": LoginForm(), "register_form": RegisterForm()})
 
 @login_required(login_url="/login/")
 def profile(request):
@@ -97,7 +104,6 @@ def profile(request):
         user.provider.description = request.POST['description']
         user.provider.save()
         return redirect(profile)
-    print(type(request.user.provider.logo))
     return render(request, "profile.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider)})
 
 @require_POST
@@ -188,3 +194,6 @@ def upload_files(request):
     for file in request.FILES.getlist("files"):
         ProviderFile.objects.create(provider=request.user.provider, file = file)
     return redirect(profile)
+
+def cart(request):
+    pass

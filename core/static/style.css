@@ -427,7 +427,7 @@ td {
 }
 
 .custom-accordion-content {
-	padding: 10px;
+	padding: 10px 0px;
 	display: none;
 }
 

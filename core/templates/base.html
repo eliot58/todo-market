@@ -155,25 +155,61 @@
 				</form>
 			</div>
 		</div>
+
+		<div id="popup" class="popup success_deal-popup">
+			<div class="popup-content popup-auth" style="width: 750px; height: 170px;">
+				<div class="d-flex" style="position: relative; height: 100%;">
+					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
+						<p style="font-weight: 500; line-height: 24px; color: #E9E9E9;">Ваш магазин отправлен на модерацию, ожидайте, мы пришлем вам уведомление на почту, и в разделе “Новости” на сайте.</p>
+						<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
+					</div>
+					<img src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
+				</div>
+			</div>
+		</div>
+
+		<div id="popup" class="popup store-delete-popup">
+			<div class="popup-content popup-auth" style="width: 522px;">
+				<div class="d-flex flex-column">
+					<p style="line-height: 24px; color: #E9E9E9; margin-bottom: 10px;">Вы действительно хотите удалить ваш магазин от Маркета?</p>
+					<div class="d-flex justify-content-between">
+						<button style="background-color: inherit; color: #FF0000;  border: 1px solid #FF0000; font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Удалить</button>
+						<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Не удалять</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="popup" class="popup success_reg-popup">
+			<div class="popup-content popup-auth" style="width: 750px; height: 170px;">
+				<div class="d-flex" style="position: relative; height: 100%;">
+					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
+						<p style="font-weight: 500; line-height: 24px; color: #E9E9E9;">Ваш пароль был отправлен на почту:kajsdjsdhuuw@gmail.com</p>
+						<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
+					</div>
+					<img src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
+				</div>
+			</div>
+		</div>
 		
 		<header class="navbar">
 			<div class="container">
 				<div class="navbar-links">
-					<a {% if request.path == '/' or request.path == '/login/' %} class="active" {% endif %} href="#">Главная</a>
-					<a {% if request.path == '/patner/' %} class="active" {% endif %} href="#">Стать партнером</a>
-					<a {% if request.path == '/delivery/' %} class="active" {% endif %} href="#">Доставка</a>
-					<a {% if request.path == '/providers/' %} class="active" {% endif %} href="#">Поставщики</a>
+					<a {% if request.path == '/' or request.path == '/login/' %} class="active" {% endif %} href="{% url 'index' %}">Главная</a>
+					<a {% if request.path == '/patner/' %} class="active" {% endif %} href="{% url 'partner' %}">Стать партнером</a>
+					<a {% if request.path == '/delivery/' %} class="active" {% endif %} href="{% url 'delivery' %}">Доставка</a>
+					<a {% if request.path == '/providers/' %} class="active" {% endif %} href="{% url 'providers' %}">Поставщики</a>
 				</div>
 				{% if request.user.is_authenticated %}
 					{% if request.user.provider %}
 						<div class="navbar-icons">
-							<button type="button">
+							<button type="button" onclick="themeChange()">
 								<img src="{% static 'img/moon.svg' %}" alt="">
 							</button>
 						</div>
 					{% else %}
 						<div class="navbar-icons">
-							<button type="button">
+							<button type="button" onclick="themeChange()">
 								<img src="{% static 'img/moon.svg' %}" alt="">
 							</button>
 							<button type="button">
@@ -265,11 +301,10 @@
 		<footer class="footer">
 			<p style="background-color: #00A550; color: #E9E9E9;">Реклама</p>
 			<div class="d-flex">
-				<img src="{% static 'img/ads.png' %}" alt="">
+				<img src="{{ads.img.url}}" width="56" height="56" alt="">
 				<div class="d-flex flex-column justify-content-around marquee" style="margin-left: 10px;">
-					<p style="font-size: 20px; color: #E9E9E9;">Delivery Club</p>
-					<p id="marqueeText">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Beatae pariatur in sint doloribus, ratione quae vero cumque distinctio, inventore officia provident neque odio consectetur iusto maiores recusandae quasi numquam ipsa nesciunt, quod praesentium animi. Hic dolor fugiat quam vel ratione est soluta odio, quidem, dolore nostrum nobis necessitatibus sint ab, autem neque molestiae quas repudiandae deserunt illum similique earum et. Totam dolorem facere facilis error soluta dolorum fuga vero dolore? Maiores, quis ipsum fugiat ab quae eligendi eaque. Sapiente, quae? Dolorum ut blanditiis assumenda officia est quam asperiores a at animi perferendis incidunt mollitia in tenetur iusto, repellat maxime illum.
-					</p>
+					<p style="font-size: 20px; color: #E9E9E9;">{{ads.title}}</p>
+					<p id="marqueeText">{{ads.text}}</p>
 				</div>
 			</div>
 		</footer>
@@ -277,6 +312,14 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<script>
+
+		function themeChange(){
+			if (localStorage.getItem('theme') === 'light') {
+				localStorage.removeItem("theme")
+			} else {
+				localStorage.setItem("theme", "light")
+			}
+		}
 
 		document.addEventListener('DOMContentLoaded', function () {
 			
@@ -404,7 +447,7 @@
 					<div style="position: relative;">
 						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}')" alt="">
 						<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-						<p style="color: #E9E9E9; line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} ${xhr.response["amount"]} ${xhr.response["unit"]}</p>
+						<p style="color: #E9E9E9; line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 					</div>
 				</div>`)
 				document.querySelector(".product-popup").style.display = "none"
@@ -427,7 +470,7 @@
 					target_element.insertAdjacentHTML("afterbegin", `<div style="position: relative;">
 						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}')" alt="">
 						<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-						<p style="color: #E9E9E9; line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} ${xhr.response["amount"]} ${xhr.response["unit"]}</p>
+						<p style="color: #E9E9E9; line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 					</div>`)
 				document.querySelector(".product-popup").style.display = "none"
 				}
@@ -445,6 +488,22 @@
 			};
 			xhr.send();
 		}
+
+
+		function addToCart(category_id, store_id){
+			let xhr = new XMLHttpRequest();
+			xhr.open('POST', '/create_product/');
+			xhr.responseType = 'json';
+			xhr.onload = function() {
+				if (xhr.status == 200) {
+					
+				}
+			};
+			xhr.send(formData);
+		}
+
+
+
 
 		var swiper = new Swiper('.swiper-container', {
 			slidesPerView: 4,

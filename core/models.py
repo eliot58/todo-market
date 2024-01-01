@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 class Region(models.Model):
     name = models.CharField(max_length = 256, unique = True, verbose_name = "Название региона")
 
@@ -21,6 +22,18 @@ class DeliveryCondition(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Ads(models.Model):
+    img = models.ImageField(upload_to="ads", default = "ads/market.png", verbose_name="Фото")
+    title = models.CharField(max_length = 256, default = "Todotodo Market", verbose_name="Заголовок")
+    text = models.TextField(default = "Здесь может быть ваша релама",verbose_name="Текст")
+
+    class Meta:
+        verbose_name = "Бегущая строка"
+        verbose_name_plural = "Поставщики"
+
+    def __str__(self):
+        return self.title
 
 class Provider(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, verbose_name = "Аккаунт")
