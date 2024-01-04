@@ -5,22 +5,22 @@
 {% load static %}
 
 {% block content %}
-<div class="d-flex flex-column" style="background-color: #282828; padding: 10px; border-radius: 16px;">
+<div class="d-flex flex-column card dark">
     <div class="d-flex">
         <img src="{{provider.logo.url}}" width="72" height="72" style="border-radius: 8px;" alt="">
         <div class="d-flex flex-column justify-content-around" style="margin: 10px;"> 
-            <p style="font-size: 20px; font-weight: 600; color: #E9E9E9;">{{provider.company}}</p>
-            <p style="font-weight: 500; color: #00A550;">{{provider.store_set.all.0.region.name}}</p>
+            <p class="providers__company dark">{{provider.company}}</p>
+            <p class="providers__region dark">{{provider.store_set.all.0.region.name}}</p>
         </div>
     </div>
-    <div style="line-height: 20px; color: #E9E9E9; margin: 20px 0px;">
+    <div class="provider__description dark">
         {{provider.description}}
     </div>
     {% for product in products %}
-    <div class="custom-accordion-item">
-        <div class="custom-accordion-header" onclick="toggleAccordion(this)">
-            <p style="font-size: 20px; font-weight: 500; color: #E9E9E9;">{{product.0}}</p>
-            <div class="triangle triangle-bottom"></div>
+    <div class="custom-accordion-item dark">
+        <div class="custom-accordion-header dark" onclick="toggleAccordion(this)">
+            <p style="font-size: 20px; font-weight: 500;">{{product.0}}</p>
+            <div class="triangle triangle-bottom dark"></div>
         </div>
         <div class="custom-accordion-content swiper-container" style="overflow: hidden;">
             <div class="d-flex swiper-wrapper">
@@ -31,7 +31,7 @@
                     {% else %}
                     <div class="d-flex justify-content-between" style="margin-top: 5px;">
                         <button type="button" onclick="addToCart()" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
-                        <div class="store-item__data-count d-flex justify-content-between">
+                        <div class="store-item__data-count dark d-flex justify-content-between">
                             <span onclick="minus(this)">-</span>
                             <input type="text" name="count" value="1">
                             <span onclick="plus(this)">+</span>
@@ -39,10 +39,10 @@
                     </div>
                     {% endif %}
                     <div class="d-flex align-items-center" style="margin: 10px 0px;">
-                        <p style="font-weight: 500; font-size: 24px; color: #00A550; margin-right: 10px;">{{item.price}} ₽</p>
-                        <p style="font-size: 12px; line-height: 16px; color: #616161; width: 100px;">{{item.price}} ₽ без TODOMARKET</p>
+                        <p class="product__price dark" style="margin-right: 10px;">{{item.price}} ₽</p>
+                        <p class="product__price-2">{{item.price}} ₽ без TODOMARKET</p>
                     </div>
-                    <p style="color: #E9E9E9; line-height: 24px;">{{item.name}}, {{item.articul}} <span style="font-size: 12px; color: #616161;">{{item.amount}} {{item.unit}}</span></p>
+                    <p class="product__title dark">{{item.name}}, {{item.articul}} <span style="font-size: 12px; color: #616161;">{{item.amount}} {{item.unit}}</span></p>
                 </div>
                 {% endfor %}
             </div>
@@ -51,3 +51,14 @@
     {% endfor %}
 </div>
 {% endblock content %}
+
+{% block script %}
+
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 4,
+        spaceBetween: 10,
+    });
+</script>
+
+{% endblock script %}

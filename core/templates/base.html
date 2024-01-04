@@ -13,12 +13,12 @@
 </head>
 
 <body>
-	<div class="wrapper">
+	<div class="wrapper dark">
 		<div id="popup" class="popup auth-popup" {% if login_form.errors or register_form.errors %} style="display: block;" {% endif %}>
-			<div class="popup-content popup-auth d-flex flex-column">
+			<div class="popup-content dark d-flex flex-column" style="width: 540px;">
 				<div class="d-flex justify-content-between" style="margin-bottom: 20px;">
-					<button {% if login_form.errors %} {% else %} class="tab-button__active" {% endif %} style="padding: 6px 24px; border-radius: 12px; color: #E9E9E9; font-weight: 500; font-size: 30px; {% if login_form.errors %} background-color: inherit; {% endif %}" onclick="openTab(this)">Регистрация</button>
-					<button {% if login_form.errors %} class="tab-button__active" {% endif %} style="{% if login_form.errors %} {% else %} background-color: inherit; {% endif %} padding: 6px 24px; border-radius: 12px; color: #E9E9E9; font-weight: 500; font-size: 30px;" onclick="openTab(this)">Войти</button>
+					<button {% if login_form.errors %} {% else %} class="tab-button__active dark" {% endif %} style="padding: 6px 24px; border-radius: 12px; color: #E9E9E9; font-weight: 500; font-size: 30px; {% if login_form.errors %} background-color: inherit; {% endif %}" onclick="openTab(this)">Регистрация</button>
+					<button {% if login_form.errors %} class="tab-button__active dark" {% endif %} style="{% if login_form.errors %} {% else %} background-color: inherit; {% endif %} padding: 6px 24px; border-radius: 12px; color: #E9E9E9; font-weight: 500; font-size: 30px;" onclick="openTab(this)">Войти</button>
 				</div>
 				<form action="{% url 'signup' %}" method="post" class="signup" {% if login_form.errors %} style="display: none;" {% else %} style="display: flex; flex-direction: column;" {% endif %}>
                     {% csrf_token %}
@@ -39,7 +39,7 @@
 						<label for="email">E-mail</label>
 					</div>
                     {{ register_form.email.errors }}
-					<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px;" type="submit">Зарегистрироваться</button>
+					<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;" type="submit">Зарегистрироваться</button>
 				</form>
 				<form action="{% url 'login_view' %}" method="post" class="signin" {% if login_form.errors %} style="display: flex; flex-direction: column;" {% else %} style="display: none;" {% endif %}>
                     {% csrf_token %}
@@ -52,12 +52,12 @@
 						<label for="password">Пароль</label>
 					</div>
                     {{ login_form.password.errors }}
-					<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px;" type="submit">Войти</button>
+					<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;" type="submit">Войти</button>
 				</form>
 			</div>
 		</div>
         <div id="popup" class="popup works-popup">
-			<div class="popup-content popup-auth d-flex flex-column" style="width: 1000px;">
+			<div class="popup-content dark d-flex flex-column" style="width: 1000px;">
 				<div class="d-flex justify-content-between align-items-start">
 					<div class="d-flex">
 						<img src="{% static 'img/location.svg' %}" alt="">
@@ -98,7 +98,7 @@
 				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px 0px 10px;">
 					<div class="d-flex align-items-center">
 						<p style="color: #E9E9E9;">22.09.23</p>
-						<button style="background-color: inherit; color: #00A550; font-weight: 600; border-radius: 8px; padding: 10px 20px; border: 1px solid #00A550; margin: 0px 20px;">Принять</button>
+						<button class="button-2 dark" style="background-color: inherit;font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 20px;">Принять</button>
 						<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
 					</div>
 					<p style="font-size: 12px; color: #FF0000; margin: 10px 0px;">Нажимая кнопку принять, Вы подтверждаете отгрузку в выбранную Вами дату</p>
@@ -108,18 +108,18 @@
 					<button style="background-color: inherit;">
 						<img src="{% static 'img/clip.svg' %}" alt="">
 					</button>
-					<button style="background-color: inherit; color: #00A550; font-weight: 600; border-radius: 8px; padding: 10px 20px; border: 1px solid #00A550; margin: 0px 10px;">Отправить счет</button>
+					<button class="button-2 dark" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 10px;">Отправить счет</button>
 					<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
 				</div>
 				<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
 				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;" class="d-flex align-items-center">
-					<button style="background-color: inherit; color: #00A550; font-weight: 600; border-radius: 8px; padding: 10px 20px; border: 1px solid #00A550; margin-right: 10px;">Заказ отгружен</button>
+					<button class="button-2 dark" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin-right: 10px;">Заказ отгружен</button>
 					<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
 				</div>
 			</div>
 		</div>
 		<div id="popup" class="popup product-popup">
-			<div class="popup-content popup-auth" style="width: 1000px;">
+			<div class="popup-content dark" style="width: 1000px;">
 				<form method="post" enctype="multipart/form-data" class="d-flex flex-column product-form">
 					{% csrf_token %}
 					<div class="d-flex">
@@ -131,11 +131,11 @@
 						<div class="d-flex flex-column justify-content-between">
 							<input type="text" name="category" hidden>
 							<input type="text" name="store" hidden>
-							<input type="text" name="articul" class="input-field" style="margin-top: 0px;" placeholder="Артикул (необязательно)" title="К вам поступят заявки, с четким указанием артикула товара, если Ваш товар не имеет артикула оставьте поле пустым" required>
-							<input type="text" name="name" class="input-field" placeholder="Название" required>
+							<input type="text" name="articul" class="input-field dark" style="margin-top: 0px;" placeholder="Артикул (необязательно)" title="К вам поступят заявки, с четким указанием артикула товара, если Ваш товар не имеет артикула оставьте поле пустым" required>
+							<input type="text" name="name" class="input-field dark" placeholder="Название" required>
 							<div class="d-flex">
-								<input type="number" name="amount" style="width: 70%; margin-right: 10px;" class="input-field" placeholder="Количество" required>
-								<select name="unit" style="width: 30%;" class="input-field" required>
+								<input type="number" name="amount" style="width: 70%; margin-right: 10px;" class="input-field dark" placeholder="Количество" required>
+								<select name="unit" style="width: 30%;" class="input-field dark" required>
 									<option disabled value="">Ед. изм</option>
 									<option value="шт">шт</option>
 									<option value="см">см</option>
@@ -143,11 +143,11 @@
 								</select>
 							</div>
 							<div class="d-flex">
-								<input type="number" name="price" style="margin-bottom: 0px; margin-right: 10px;" class="input-field" placeholder="Цена" required>
-								<input type="number" name="remainder" style="margin-bottom: 0px;" class="input-field" placeholder="Остаток" required>
+								<input type="number" name="price" style="margin-bottom: 0px; margin-right: 10px;" class="input-field dark" placeholder="Цена" required>
+								<input type="number" name="remainder" style="margin-bottom: 0px;" class="input-field dark" placeholder="Остаток" required>
 							</div>
 						</div>
-						<textarea name="description" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field" placeholder="Описание (необязательно)" cols="20" rows="5"></textarea>
+						<textarea name="description" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Описание (необязательно)" cols="20" rows="5"></textarea>
 					</div>
 					<div class="button-parent" style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
 						
@@ -157,7 +157,7 @@
 		</div>
 
 		<div id="popup" class="popup success_deal-popup">
-			<div class="popup-content popup-auth" style="width: 750px; height: 170px;">
+			<div class="popup-content dark" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
 						<p style="font-weight: 500; line-height: 24px; color: #E9E9E9;">Ваш магазин отправлен на модерацию, ожидайте, мы пришлем вам уведомление на почту, и в разделе “Новости” на сайте.</p>
@@ -169,7 +169,7 @@
 		</div>
 
 		<div id="popup" class="popup store-delete-popup">
-			<div class="popup-content popup-auth" style="width: 522px;">
+			<div class="popup-content dark" style="width: 522px;">
 				<div class="d-flex flex-column">
 					<p style="line-height: 24px; color: #E9E9E9; margin-bottom: 10px;">Вы действительно хотите удалить ваш магазин от Маркета?</p>
 					<div class="d-flex justify-content-between">
@@ -181,7 +181,7 @@
 		</div>
 
 		<div id="popup" class="popup success_reg-popup">
-			<div class="popup-content popup-auth" style="width: 750px; height: 170px;">
+			<div class="popup-content dark" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
 						<p style="font-weight: 500; line-height: 24px; color: #E9E9E9;">Ваш пароль был отправлен на почту:kajsdjsdhuuw@gmail.com</p>
@@ -192,11 +192,11 @@
 			</div>
 		</div>
 		
-		<header class="navbar">
+		<header class="navbar dark">
 			<div class="container">
-				<div class="navbar-links">
+				<div class="navbar-links dark">
 					<a {% if request.path == '/' or request.path == '/login/' %} class="active" {% endif %} href="{% url 'index' %}">Главная</a>
-					<a {% if request.path == '/patner/' %} class="active" {% endif %} href="{% url 'partner' %}">Стать партнером</a>
+					<a {% if request.path == '/partner/' %} class="active" {% endif %} href="{% url 'partner' %}">Стать партнером</a>
 					<a {% if request.path == '/delivery/' %} class="active" {% endif %} href="{% url 'delivery' %}">Доставка</a>
 					<a {% if request.path == '/providers/' %} class="active" {% endif %} href="{% url 'providers' %}">Поставщики</a>
 				</div>
@@ -204,86 +204,88 @@
 					{% if request.user.provider %}
 						<div class="navbar-icons">
 							<button type="button" onclick="themeChange()">
-								<img src="{% static 'img/moon.svg' %}" alt="">
+								<img class="moon-icon" src="{% static 'img/moon.svg' %}" alt="">
 							</button>
 						</div>
 					{% else %}
 						<div class="navbar-icons">
 							<button type="button" onclick="themeChange()">
-								<img src="{% static 'img/moon.svg' %}" alt="">
+								<img class="moon-icon" src="{% static 'img/moon.svg' %}" alt="">
 							</button>
 							<button type="button">
-								<img src="{% static 'img/cart.svg' %}" alt="">
+								<img class="cart-icon" src="{% static 'img/cart.svg' %}" alt="">
 							</button>
 						</div>
 					{% endif %}
 				{% else %}
 					<div class="navbar-icons">
-						<button type="button">
-							<img src="{% static 'img/moon.svg' %}" alt="">
+						<button type="button" onclick="themeChange()">
+							<img class="moon-icon" src="{% static 'img/moon.svg' %}" alt="">
 						</button>
 						<button type="button" onclick="document.querySelector('.auth-popup').style.display = 'block';">
-							<img src="{% static 'img/user.svg' %}" alt="">
+							<img class="user-icon" src="{% static 'img/user.svg' %}" alt="">
 						</button>
 					</div>
 				{% endif %}
 			</div>
 		</header>
 	
-		<div class="sidebar">
-			<div class="d-flex justify-content-around align-items-center" style="padding: 10px; background-color: #313131; margin: 0px 10px; border-radius: 12px;">
+		<div class="sidebar dark">
+			<div class="d-flex justify-content-around align-items-center sidebar__logo dark">
 				<img src="{% static 'img/logo.svg' %}" alt="">
 				<p style="font-size: 24px; font-weight: 600; color: #E9E9E9;">TODOMARKET</p>
 			</div>
 			<br>
 			<ul class="sidebar__links">
-				<li class="sidebar__link" {% if request.path == '/profile/' %} style="background-color: #313131; border-radius: 8px 0px 0px 8px;" {% endif %}>
+				<li class="sidebar__link dark {% if request.path == '/profile/' %} sidebar__link-active {% endif %}">
 					<div>
-						<img src="{% if request.path == '/profile/' %} {% static 'img/profile-active.svg' %} {% else %} {% static 'img/profile.svg' %} {% endif %}" alt="">
+						<img class="profile-icon" src="{% if request.path == '/profile/' %} {% static 'img/profile-active.svg' %} {% else %} {% static 'img/profile.svg' %} {% endif %}" alt="">
 						<a href="{% if request.user.provider %}{% url 'profile' %}{% else %}{% url 'partner' %}{% endif %}">Мой профиль</a>
 					</div>
 				</li>
-	
-				<li class="sidebar__link" {% if request.path == '/orders/' %} style="background-color: #313131; border-radius: 8px 0px 0px 8px;" {% endif %}>
+				{% if request.user.buyer %}
+				<li class="sidebar__link dark {% if request.path == '/archive/' %} sidebar__link-active {% endif %}">
 					<div>
-						<img src="{% if request.path == '/orders/' %} {% static 'img/orders-active.svg' %} {% else %} {% static 'img/orders.svg' %} {% endif %}" alt="">
+						<img class="orders-icon" src="{% if request.path == '/orders/' %} {% static 'img/orders-active.svg' %} {% else %} {% static 'img/orders.svg' %} {% endif %}" alt="">
 						<a href="">Мои заказы</a>
 					</div>
 				</li>
+				{% endif %}
 	
-				<li class="sidebar__link" {% if request.path == '/works/' %} style="background-color: #313131; border-radius: 8px 0px 0px 8px;" {% endif %}>
+				<li class="sidebar__link dark {% if request.path == '/archive/' %} sidebar__link-active {% endif %}">
 					<div>
-						<img src="{% if request.path == '/works/' %} {% static 'img/works-active.svg' %} {% else %} {% static 'img/works.svg' %} {% endif %}" alt="">
+						<img class="works-icon" src="{% if request.path == '/works/' %} {% static 'img/works-active.svg' %} {% else %} {% static 'img/works.svg' %} {% endif %}" alt="">
 						<a href="">Заказы в работе</a>
 					</div>
 				</li>
 	
-				<li class="sidebar__link" {% if request.path == '/archive/' %} style="background-color: #313131; border-radius: 8px 0px 0px 8px;" {% endif %}>
+				<li class="sidebar__link dark {% if request.path == '/archive/' %} sidebar__link-active {% endif %}">
 					<div>
-						<img src="{% if request.path == '/archive/' %} {% static 'img/store-active.svg' %} {% else %} {% static 'img/archive.svg' %} {% endif %}" alt="">
+						<img class="archive-icon" src="{% if request.path == '/archive/' %} {% static 'img/store-active.svg' %} {% else %} {% static 'img/archive.svg' %} {% endif %}" alt="">
 						<a href="">Архив</a>
 					</div>
 				</li>
 	
-				<li class="sidebar__link">
+				<li class="sidebar__link dark">
 					<div>
-						<img src="{% static 'img/help.svg' %}" alt="">
+						<img class="help-icon" src="{% static 'img/help.svg' %}" alt="">
 						<a href="https://t.me/todotodo_admin">Помощь</a>
 					</div>
 				</li>
 	
 				<br><br><br><br><br>
-				<li class="sidebar__link" style="padding: 0px; margin: 0px;">
+				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
 					<a href="https://t.me/chattodotodo_bot">Другие проекты</a>
 				</li>
-				<li class="sidebar__link" style="padding: 0px; margin: 0px;">
+				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
 					<a href="https://t.me/todotodo_admin">Вопрос-ответ</a>
 				</li>
-				<li class="sidebar__link" style="padding: 0px; margin: 0px;">
+				<li class="sidebar__link dark" style="padding: 0px; margin: 0px; position: relative;">
 					<a href="{% url 'news' %}">Новости</a>
+					<p class="news-count dark">0</p>
 				</li>
 				{% if request.user.is_authenticated %}
-					<li class="sidebar__link" style="padding: 0px; margin: 0px;">
+					<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
 						<a href="{% url 'logout_core_view' %}">Выйти</a>
 					</li>
 				{% endif %}
@@ -299,12 +301,12 @@
 		</div>
 	
 		<footer class="footer">
-			<p style="background-color: #00A550; color: #E9E9E9;">Реклама</p>
-			<div class="d-flex">
+			<p class="footer__title dark" style="padding-left: 5px;">Реклама</p>
+			<div class="d-flex footer__content dark">
 				<img src="{{ads.img.url}}" width="56" height="56" alt="">
-				<div class="d-flex flex-column justify-content-around marquee" style="margin-left: 10px;">
-					<p style="font-size: 20px; color: #E9E9E9;">{{ads.title}}</p>
-					<p id="marqueeText">{{ads.text}}</p>
+				<div class="d-flex flex-column justify-content-around marquee">
+					<p class="footer__content-title dark">{{ads.title}}</p>
+					<p id="marqueeText" class="dark">{{ads.text}}</p>
 				</div>
 			</div>
 		</footer>
@@ -314,17 +316,112 @@
 	<script>
 
 		function themeChange(){
-			if (localStorage.getItem('theme') === 'light') {
+			if (localStorage.getItem('theme') == 'light') {
 				localStorage.removeItem("theme")
+				const lights = document.querySelectorAll(".light")
+				for (let light of lights) {
+					light.classList.remove("light")
+					light.classList.add("dark")
+				}
+
+				document.querySelector('.profile-icon').src = '/static/img/profile.svg';
+				try {
+					document.querySelector('.orders-icon').src = '/static/img/orders.svg';
+				} catch (_) {
+					console.log("orders not fount")
+				}
+				document.querySelector('.works-icon').src = '/static/img/works.svg';
+				document.querySelector('.archive-icon').src = '/static/img/archive.svg';
+				document.querySelector('.help-icon').src = '/static/img/help.svg';
+
+				try {
+					document.querySelector('.moon-icon').src = '/static/img/moon.svg';
+				} catch (_) {
+					console.log("moon not found")
+				}
+				try {
+					document.querySelector('.user-icon').src = '/static/img/user.svg';
+				} catch (_) {
+					console.log("user not found")
+				}
+				try {
+					document.querySelector('.cart-icon').src = '/static/img/cart.svg';
+				} catch (_) {
+					console.log("cart not found")
+				}
+
 			} else {
+				const darks = document.querySelectorAll(".dark")
+				for (let dark of darks) {
+					dark.classList.remove("dark")
+					dark.classList.add("light")
+				}
+
+				document.querySelector('.profile-icon').src = '/static/img/light-profile.svg';
+				try {
+					document.querySelector('.orders-icon').src = '/static/img/light-orders.svg';
+				} catch (_) {
+					console.log("orders not found")
+				}
+				document.querySelector('.works-icon').src = '/static/img/light-works.svg';
+				document.querySelector('.archive-icon').src = '/static/img/light-archive.svg';
+				document.querySelector('.help-icon').src = '/static/img/light-help.svg';
+
+				try {
+					document.querySelector('.moon-icon').src = '/static/img/light-moon.svg';
+				} catch (_) {
+					console.log("moon not found")
+				}
+				try {
+					document.querySelector('.user-icon').src = '/static/img/light-user.svg';
+				} catch (_) {
+					console.log("user not found")
+				}
+				try {
+					document.querySelector('.cart-icon').src = '/static/img/light-cart.svg';
+				} catch (_) {
+					console.log("cart not found")
+				}
 				localStorage.setItem("theme", "light")
+
 			}
 		}
 
 		document.addEventListener('DOMContentLoaded', function () {
 			
-			if (localStorage.getItem('theme') === 'light') {
-				
+			if (localStorage.getItem('theme') == 'light') {
+				localStorage.removeItem("theme")
+				const darks = document.querySelectorAll(".dark")
+				for (let dark of darks) {
+					dark.classList.remove("dark")
+					dark.classList.add("light")
+				}
+
+				document.querySelector('.profile-icon').src = '/static/img/light-profile.svg';
+				try {
+					document.querySelector('.orders-icon').src = '/static/img/light-orders.svg';
+				} catch (error) {
+					console.log(error)
+				}
+				document.querySelector('.works-icon').src = '/static/img/light-works.svg';
+				document.querySelector('.archive-icon').src = '/static/img/light-archive.svg';
+				document.querySelector('.help-icon').src = '/static/img/light-help.svg';
+				try {
+					document.querySelector('.moon-icon').src = '/static/img/light-moon.svg';
+				} catch (_) {
+					console.log("moon not found")
+				}
+				try {
+					document.querySelector('.user-icon').src = '/static/img/light-user.svg';
+				} catch (_) {
+					console.log("user not found")
+				}
+				try {
+					document.querySelector('.cart-icon').src = '/static/img/light-cart.svg';
+				} catch (_) {
+					console.log("cart not found")
+				}
+				localStorage.setItem("theme", "light")
 			}
 
 		});
@@ -409,7 +506,7 @@
 
 				popup_product.querySelector("select").value = ""
 				popup_product.querySelector("textarea").value = ""
-				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" onclick="createProduct(${category}, ${store})" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
+				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 dark" onclick="createProduct(${category}, ${store})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
 			} else {
 				const name_input = popup_product.querySelector("input[name='name']")
 				const articul_input = popup_product.querySelector("input[name='articul']")
@@ -429,7 +526,7 @@
 				description_input.value = description
 				select_unit.value = unit
 
-				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" onclick="updateProduct(${store}, ${category}, ${id})" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
+				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 dark" onclick="updateProduct(${store}, ${category}, ${id})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
 			}
 			popup_product.style.display = 'block';
 		}
@@ -502,13 +599,6 @@
 			xhr.send(formData);
 		}
 
-
-
-
-		var swiper = new Swiper('.swiper-container', {
-			slidesPerView: 4,
-			spaceBetween: 10,
-		});
 	</script>
 	{% block script %}{% endblock script %}
 </body>

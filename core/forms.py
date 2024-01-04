@@ -7,15 +7,15 @@ from django.contrib.auth.hashers import check_password
 
 
 class RegisterForm(forms.Form):
-    fullName = forms.CharField(label="",widget=forms.TextInput(attrs={"placeholder": "Введите ФИО", "class": "input-field", "id": "fullName"}))
+    fullName = forms.CharField(label="",widget=forms.TextInput(attrs={"placeholder": "Введите ФИО", "class": "input-field dark", "id": "fullName"}))
     ch = [
         ("", "Выберите специализацию"),
         ("B", "Покупатель"),
         ("P", "Поставщик")
     ]
-    spec = forms.ChoiceField(choices=ch, label="", widget=forms.Select(attrs={"class": "input-field"}))
-    email = forms.EmailField(label="",widget=forms.TextInput(attrs={"placeholder": "Введите почту", "class": "input-field", "id": "email"}))
-    phone = forms.CharField(label="",widget=forms.TextInput(attrs={"placeholder": "Введите номер телефона", "class": "input-field", "id": "phone"}))
+    spec = forms.ChoiceField(choices=ch, label="", widget=forms.Select(attrs={"class": "input-field dark"}))
+    email = forms.EmailField(label="",widget=forms.TextInput(attrs={"placeholder": "Введите почту", "class": "input-field dark", "id": "email"}))
+    phone = forms.CharField(label="",widget=forms.TextInput(attrs={"placeholder": "Введите номер телефона", "class": "input-field dark", "id": "phone"}))
 
     
     def clean_phone(self):
@@ -53,8 +53,8 @@ class RegisterForm(forms.Form):
         return email
 
 class LoginForm(forms.Form):
-    username = forms.EmailField(label="",widget=forms.TextInput(attrs={"placeholder": "E-mail", "class": "input-field", "id": "username"}))
-    password = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Пароль", "class": "input-field", "type": "password", "id": "password"}), label="")
+    username = forms.EmailField(label="",widget=forms.TextInput(attrs={"placeholder": "E-mail", "class": "input-field dark", "id": "username"}))
+    password = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Пароль", "class": "input-field dark", "type": "password", "id": "password"}), label="")
 
     def clean_password(self):
         password = self.cleaned_data["password"]

@@ -5,43 +5,43 @@
 {% load static %}
 
 {% block content %}
-<h1 style="font-size: 32px; font-weight: 600; color: #E9E9E9;">Стать партнером</h1>
-<p style="color: #E9E9E9; line-height: 20px;">
-    <span style="font-weight: 500; color: #00A550;">Здравствуйте.</span><br>
+<h1 class="title dark">Стать партнером</h1>
+<p class="partner__subtitle dark">
+    <span>Здравствуйте.</span><br>
     Наш путь по созданию различных сервисов для профессионалов оконного рынка привел к созданию такого маркета.
     У нас в сервисах, регистрируются множество коллег, которые постоянно ищут 
     в наличии, и на заказ, крепеж, пену, фурнитуру, и Мы помогаем им чем можем. В процессе 
     собралось много контактов поставщиков материалов, которые ни раз выходили с предложением разместить рекламу у нас в каналах и на наших сайтах своих товаров. Поэтому Мы решили создать такой инструмент продаж как этот маркет плэйс.
 </p>
 <div style="width: 650px; margin-top: 40px;">
-    <p style="font-weight: 500; color: #00A550; text-align: center;">В чем преимущество и отличие от других известных маркетов?</p>
+    <p class="parner-content-title dark">В чем преимущество и отличие от других известных маркетов?</p>
     <div class="d-flex align-items-start" style="margin: 10px 0px;">
         <img src="{% static 'img/target.svg' %}" alt="">
-        <p style="line-height: 20px; color: #E9E9E9; margin-left: 10px;">Мы, как всегда, ориентирование на узкий круг профессионалов оконной отрасли, и как всегда хотим упростить работу монтажника, и дилера, а также помочь Вам сэкономить время, и деньги.</p>
+        <p class="partner__description dark">Мы, как всегда, ориентирование на узкий круг профессионалов оконной отрасли, и как всегда хотим упростить работу монтажника, и дилера, а также помочь Вам сэкономить время, и деньги.</p>
     </div>
     <div class="d-flex align-items-start" style="margin: 10px 0px;">
         <img src="{% static 'img/earth.svg' %}" alt="">
-        <p style="line-height: 20px; color: #E9E9E9; margin-left: 10px;">Мы размещаем продукт на карте, и любой пользователь сможет не только найти нужный материал, но и посмотреть на карте расстояние до места продажи.</p>
+        <p class="partner__description dark">Мы размещаем продукт на карте, и любой пользователь сможет не только найти нужный материал, но и посмотреть на карте расстояние до места продажи.</p>
     </div>
     <div class="d-flex align-items-start" style="margin: 10px 0px;">
         <img src="{% static 'img/search.svg' %}" alt="">
-        <p style="line-height: 20px; color: #E9E9E9; margin-left: 10px;">Мы делаем удобным поиск по Вашим магазинам, и можем собрать нужные товары в одном месте, на нашем складе, где покупатель сможет забрать все в одном месте.</p>
+        <p class="partner__description dark">Мы делаем удобным поиск по Вашим магазинам, и можем собрать нужные товары в одном месте, на нашем складе, где покупатель сможет забрать все в одном месте.</p>
     </div>
     <div class="d-flex align-items-start" style="margin: 10px 0px;">
         <img src="{% static 'img/truck.svg' %}" alt="">
-        <p style="line-height: 20px; color: #E9E9E9; margin-left: 10px;">Мы запускаем собственный сервис todo.доставка, которая может привезти сборный груз из нескольких магазинов прямо на адрес монтажа.</p>
+        <p class="partner__description dark">Мы запускаем собственный сервис todo.доставка, которая может привезти сборный груз из нескольких магазинов прямо на адрес монтажа.</p>
     </div>
     <div class="d-flex align-items-start" style="margin: 10px 0px;">
         <img src="{% static 'img/star.svg' %}" alt="">
-        <p style="line-height: 20px; color: #E9E9E9; margin-left: 10px;">Мы уверены, этот инструмент сможет помочь как поставщикам материалов, так и профессиональным покупателям сэкономить время, и деньги.</p>
+        <p class="partner__description dark">Мы уверены, этот инструмент сможет помочь как поставщикам материалов, так и профессиональным покупателям сэкономить время, и деньги.</p>
     </div>
-    <p style="font-weight: 500; color: #00A550; text-align: center;">Спасибо Вам за уделенное время, и надеемся на добрую дружбу!</p>
+    <p class="parner-content-title dark">Спасибо Вам за уделенное время, и надеемся на добрую дружбу!</p>
 </div>
 
-<div class="d-flex" style="background-color: #282828; height: 170px; border-radius: 16px; position: relative; margin: 60px 0px 200px 0px;">
-    <div class="d-flex flex-column justify-content-around" style="margin: 20px; width: 450px;">
+<div class="d-flex provider-card dark" style="height: 170px; position: relative; margin: 60px 0px 200px 0px; padding: 20px;">
+    <div class="d-flex flex-column justify-content-around" style="width: 450px;">
         <p style="font-size: 20px; font-weight: 500; color: #E9E9E9;">Регистрируйтесь, и начните сотрудничество с нами прямо сейчас!</p>
-        <button type="button" onclick="document.querySelector('.auth-popup').style.display = 'block';" style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px;">Зарегистрироваться  сейчас</button>
+        <button class="button-1 dark" type="button" onclick="document.querySelector('.auth-popup').style.display = 'block';" style=" font-weight: 600; border-radius: 8px; padding: 10px 0px;">Зарегистрироваться  сейчас</button>
     </div>
     <img style="position: absolute; top: -80px; right: 40px;" src="{% static 'img/signup.png' %}" alt="">
 </div>
