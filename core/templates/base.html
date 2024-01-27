@@ -288,7 +288,11 @@
 								<img class="moon-icon" src="{% static 'img/moon.svg' %}" alt="">
 							</button>
 							<button type="button" onclick="window.location.href = '/cart/'">
+								{% if request.path == '/cart/' %}
+								<img class="cart-icon" src="{% static 'img/cart-active.svg' %}" alt="">
+								{% else %}
 								<img class="cart-icon" src="{% static 'img/cart.svg' %}" alt="">
+								{% endif %}
 							</button>
 						</div>
 					{% endif %}
@@ -421,7 +425,12 @@
 					console.log("user not found")
 				}
 				try {
-					document.querySelector('.cart-icon').src = '/static/img/cart.svg';
+					if (window.location.pathname == '/cart/') {
+						document.querySelector('.cart-icon').src = '/static/img/cart-active.svg';
+					} else {
+						document.querySelector('.cart-icon').src = '/static/img/cart.svg';
+					}
+					
 				} catch (_) {
 					console.log("cart not found")
 				}
@@ -523,7 +532,11 @@
 					console.log("user not found")
 				}
 				try {
-					document.querySelector('.cart-icon').src = '/static/img/light-cart.svg';
+					if (window.location.pathname == '/cart/') {
+						document.querySelector('.cart-icon').src = '/static/img/light-cart-active.svg';
+					} else {
+						document.querySelector('.cart-icon').src = '/static/img/light-cart.svg';
+					}
 				} catch (_) {
 					console.log("cart not found")
 				}
@@ -631,7 +644,11 @@
 					console.log("user not found")
 				}
 				try {
-					document.querySelector('.cart-icon').src = '/static/img/light-cart.svg';
+					if (window.location.pathname == '/cart/') {
+						document.querySelector('.cart-icon').src = '/static/img/light-cart-active.svg';
+					} else {
+						document.querySelector('.cart-icon').src = '/static/img/light-cart.svg';
+					}
 				} catch (_) {
 					console.log("cart not found")
 				}
