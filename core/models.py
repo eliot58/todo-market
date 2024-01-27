@@ -73,6 +73,7 @@ class Buyer(models.Model):
     fullName = models.CharField(max_length = 256, verbose_name = "Контактное лицо")
     phone = models.CharField(max_length = 256, unique = True, verbose_name = "Номер телефона")
     cart = models.JSONField(default = dict(), blank = True)
+    total_price = models.PositiveIntegerField(default=0)
 
 
     class Meta:
@@ -93,7 +94,7 @@ class Category(models.Model):
 
 class Store(models.Model):
     provider = models.ForeignKey(Provider, on_delete = models.CASCADE, verbose_name = "Продавец")
-    manager = models.CharField(max_length = 256, verbose_name = "Менеджер")
+    store_name = models.CharField(max_length = 256, verbose_name = "Название магазина")
     delivery_condition = models.ForeignKey(DeliveryCondition, on_delete = models.DO_NOTHING ,verbose_name = "Условия доставки")
     map_visor = models.CharField(max_length = 256, verbose_name = "Отображение на карте")
     contract = models.CharField(max_length = 256, null = True, blank = True, verbose_name = "Договор")
@@ -110,7 +111,7 @@ class Store(models.Model):
         verbose_name_plural = "Магазины"
 
     def __str__(self):
-        return self.manager
+        return self.store_name
 
     
 class Product(models.Model):

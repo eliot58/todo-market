@@ -10,33 +10,28 @@
 <div class="d-flex">
 	<div class="card dark" style="width: 700px; margin-right: 10px; margin-bottom: 300px;">
 		<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
-		<!-- <div class="d-flex justify-content-between">
-			<div class="d-flex">
-				<img src="img/ads.png" style="border-radius: 8px; margin-right: 10px;" alt="">
-				<div class="d-flex flex-column justify-content-between">
-					<p style="font-weight: 600; color: #E9E9E9;">Окна петра</p>
-					<p style="font-size: 12px; color: #E9E9E9; width: 280px;">Адрес склада: Москва, Кутузовский пр-кт, д. 10 офис 3</p>
-				</div>
-			</div>
-			<a href="" style="font-size: 12px; color: #00A550;">Перейти  к поставщику</a>
-		</div> -->
 		{% for product in products %}
 		<div class="d-flex product dark">
 			<img src="{{product.image.url}}" width="136" height="136" style="border-radius: 8px;" alt="">
 			<p class="product__distance">10 км от вас</p>
 			<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
-				<p style="margin-top: 20px;" class="product__title dark">{{product.name}}, {{product.articul}} <span>{{product.amount}} {{product.unit}}</span></p>
+				<div style="margin-top: 20px;" class="d-flex justify-content-between">
+					<a href="{% url 'provider' product.store.provider.id %}" class="product__title dark" style="font-weight: 600;">{{product.store.provider.company}}</a>
+					<p class="product__title dark">{{product.store.address}}</p>
+				</div>
+				<p class="product__title dark">{{product.name}}, {{product.articul}} <span>{{product.amount}} {{product.unit}}</span></p>
 				<div class="d-flex {% if request.user.provider %} {% else %}justify-content-between{% endif %} align-items-end">
 					<p class="product__price dark">{{product.price}} ₽</p>
 					<p class="product__price-2" {% if request.user.provider %} style="margin-left: 10px;" {% endif %}>{{product.price}} ₽ без TODOMARKET</p>
 					{% if request.user.provider %}
                     {% else %}
-					<div class="store-item__data-count dark d-flex justify-content-between">
+					<form method="post" class="store-item__data-count dark d-flex justify-content-between">
+						{% csrf_token %}
 						<span onclick="minus(this)">-</span>
 						<input type="text" name="count" value="1">
 						<span onclick="plus(this)">+</span>
-					</div>
-					<button class="button-1 dark" type="button" onclick="addToCart()" style="padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
+					</form>
+					<button class="button-1 dark" type="button" onclick="addToCart('{{product.id}}', this.previousElementSibling)" style="padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
 					{% endif %}
 				</div>
 			</div>
@@ -45,7 +40,7 @@
 		
 	</div>
 	<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 480px;">
-		<p style="font-weight: 500; color: #E9E9E9; text-align: center;">Фильтр поиска</p>
+		<p class="filter_search-title dark">Фильтр поиска</p>
 		<input class="input-field dark" name="key" placeholder="Ключевое слово" type="text">
 		<select class="input-field dark" name="region">
 			<option value="" selected disabled>Регион</option>
@@ -68,7 +63,9 @@
 		<input class="input-field dark" name="price_from" placeholder="Цена от" type="text">
 		<input class="input-field dark" name="price_to" placeholder="Цена до" type="text">
 		<button class="button-1 dark" type="submit" style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
-		<a href="" style="font-size: 12px; color: #00A550; text-align: center;">Поиск по карте</a>
+		<a href="" class="search_by_map dark">Поиск по карте</a>
 	</form>
 </div>
 {% endblock content %}
+
+

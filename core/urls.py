@@ -19,4 +19,9 @@ urlpatterns = [
     path("update_product/<int:id>/", update_product, name="update_product"),
     path("delete_product/<int:id>/", delete_product, name="delete_product"),
     path("upload_files/", upload_files, name="upload_files"),
+    path('cart/', cart, name='cart'),
+    path('addtoCart/<int:id>/', addtoCart, name='addtoCart'),
+    path('cart_item_delete/<str:id>/', cart_item_delete, name="cart_item_delete"),
+    path('minus/<int:id>/', cart_item_minus),
+    path('plus/<int:id>/', cart_item_plus),
 ]

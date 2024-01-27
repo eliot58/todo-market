@@ -160,3 +160,4 @@ cython_debug/
 #.idea/
 /media/product
 /media/users
+.vscode/

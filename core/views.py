@@ -17,7 +17,7 @@ def login_view(request):
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
             cd = login_form.cleaned_data
-            user = authenticate(username=cd["username"], password=request.POST["password"])
+            user = authenticate(username = cd["username"], password = request.POST["password"])
             login(request, user)
             return redirect(index)
     else:
@@ -44,21 +44,20 @@ def signup(request):
             else:
                 Provider.objects.create(user=new_user, email = cd["email"], phone = cd["phone"], fullName = cd["fullName"])
             
-            msg = 'Вы зарегистрировались как ' + spec + '\n' + 'Ваш login: ' + request.POST['email'] + '\n' + 'Ваш password: ' + password
+            msg = "Вы зарегистрировались как " + spec + '\n' + "Ваш login: " + request.POST['email'] + '\n' + "Ваш password: " + password
 
-            send_mail('Регистрация в todotodo', msg, settings.EMAIL_HOST_USER, [request.POST['email']], fail_silently=False)
+            send_mail("Регистрация в todotodo", msg, settings.EMAIL_HOST_USER, [request.POST['email']], fail_silently = False)
 
             user = authenticate(username=cd["email"], password=password)
             login(request, user)
     else:
         return render(request, "index.html", {"login_form": LoginForm(), "register_form": RegisterForm()})
-    return render(request, "index.html", {"login_form": LoginForm(), "register_form": register_form})
+    return render(request, "index.html", {"login_form": LoginForm(), "register_form": register_form, "success_reg": True})
 
 def logout_view(request):
     logout(request)
     return redirect(login_view)
 
-# u7HsMJ4A
 
 @login_required(login_url="/login/")
 def index(request):
@@ -103,14 +102,14 @@ def profile(request):
         user.provider.site = request.POST['site']
         user.provider.description = request.POST['description']
         user.provider.save()
-        return redirect(profile)
+        return render(request, "profile.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider), "success_save": True})
     return render(request, "profile.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider)})
 
 @require_POST
 def create_store(request):
     store = Store()
     store.provider = request.user.provider
-    store.manager = request.POST["manager"]
+    store.store_name = request.POST["store_name"]
     store.delivery_condition_id = request.POST["delivery_condition"]
     store.map_visor = request.POST["map_visor"]
     store.address = request.POST["address"]
@@ -160,7 +159,7 @@ def create_product(request):
     product.remainder = request.POST["remainder"]
     product.description = request.POST["description"]
     product.save()
-    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount})
+    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
 
 @require_POST
 @csrf_exempt
@@ -179,7 +178,7 @@ def update_product(request, id):
         product.remainder = request.POST["remainder"]
         product.description = request.POST["description"]
         product.save()
-    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount})
+    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
 
 @require_GET
 @csrf_exempt
@@ -192,8 +191,61 @@ def delete_product(request, id):
 @require_POST
 def upload_files(request):
     for file in request.FILES.getlist("files"):
-        ProviderFile.objects.create(provider=request.user.provider, file = file)
+        ProviderFile.objects.create(provider = request.user.provider, file = file)
     return redirect(profile)
 
+@login_required(login_url='/login/')
 def cart(request):
-    pass
+    return render(request, 'cart.html', {'items': request.user.buyer.cart.items()})
+
+@require_POST
+@csrf_exempt
+@login_required(login_url='/login/')
+def addtoCart(request, id):
+    buyer = request.user.buyer
+    item = Product.objects.get(id=id)
+    if str(item.id) in buyer.cart:
+        buyer.cart[str(item.id)]['count'] += int(request.POST['count'])
+        buyer.cart[str(item.id)]['all_price'] += item.price * int(request.POST['count'])
+    else:
+        buyer.cart[item.id] = {
+            'photo': item.image.url,
+            'title': item.description,
+            'price': item.price,
+            'amount': item.amount,
+            'unit': item.unit,
+            'count': int(request.POST["count"]),
+            'all_price': item.price * int(request.POST['count'])
+        }
+    buyer.total_price += item.price * int(request.POST['count'])
+    buyer.save()
+    return JsonResponse({"success": True})
+    
+
+@login_required(login_url='/login/')
+def cart_item_delete(request, id):
+    buyer = request.user.buyer
+    buyer.total_price -= buyer.cart[id]["all_price"]
+    del buyer.cart[id]
+    buyer.save()
+    return redirect(cart)
+
+@login_required(login_url='/login/')
+@csrf_exempt
+def cart_item_minus(request, id):
+    buyer = request.user.buyer
+    buyer.cart[id]["all_price"] -= buyer.cart[id]["price"]
+    buyer.cart[id]["count"] -= 1
+    buyer.total_price -= buyer.cart[id]["price"]
+    buyer.save()
+    return JsonResponse({"success": True})
+
+@login_required(login_url='/login/')
+@csrf_exempt
+def cart_item_plus(request, id):
+    buyer = request.user.buyer
+    buyer.cart[id]["all_price"] += buyer.cart[id]["price"]
+    buyer.cart[id]["count"] += 1
+    buyer.total_price += buyer.cart[id]["price"]
+    buyer.save()
+    return JsonResponse({"success": True})

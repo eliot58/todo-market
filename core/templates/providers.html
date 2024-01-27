@@ -7,12 +7,13 @@
 {% block content %}
 <div class="d-flex justify-content-between" style="margin-bottom: 10px;">
 	<h1 class="title dark">Поставщики</h1>
-	<div class="d-flex" style="background-color: #282828; padding: 5px 10px; border-radius: 8px;">
+	<div class="d-flex search_providers dark">
 		<input placeholder="Поиск поставщика" type="text" style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
 		<img src="{% static 'img/loop.svg' %}" alt="">
 	</div>
 </div>
 {% for provider in providers %}
+	{% if provider.logo %}
 	<a href="{% url 'provider' provider.id %}" class="d-flex provider-card dark">
 		<img src="{{provider.logo.url}}" width="144" height="144" style="border-radius: 8px;" alt="">
 		<div class="d-flex flex-column justify-content-around" style="margin-left: 10px; width: 100%;">
@@ -24,6 +25,7 @@
 			<p class="providers__description dark">{{provider.description}}</p>
 		</div>
 	</a>
+	{% endif %}
 {% endfor %}
              
 {% endblock content %}
