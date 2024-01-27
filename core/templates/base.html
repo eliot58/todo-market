@@ -486,6 +486,12 @@
 					console.log("signup not found")
 				}
 
+				try {
+					document.querySelector('.delivery').src = '/static/img/delivery.png';
+				} catch (_) {
+					console.log("delivery not found")
+				}
+
 				document.querySelector('.logo').src = '/static/img/logo.svg';
 
 
@@ -580,6 +586,12 @@
 					document.querySelector('.signup-img').src = '/static/img/light-signup.png';
 				} catch (_) {
 					console.log("signup not found")
+				}
+
+				try {
+					document.querySelector('.delivery').src = '/static/img/delivery-light.png';
+				} catch (_) {
+					console.log("delivery not found")
 				}
 
 				document.querySelector('.logo').src = '/static/img/logo-light.png';
@@ -682,6 +694,12 @@
 					document.querySelector('.signup-img').src = '/static/img/light-signup.png';
 				} catch (_) {
 					console.log("signup not found")
+				}
+
+				try {
+					document.querySelector('.delivery').src = '/static/img/delivery-light.png';
+				} catch (_) {
+					console.log("delivery not found")
 				}
 
 				document.querySelector('.logo').src = '/static/img/logo-light.png';
