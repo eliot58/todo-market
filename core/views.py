@@ -61,7 +61,7 @@ def logout_view(request):
 
 @login_required(login_url="/login/")
 def index(request):
-    products = Product.objects.filter(name__icontains=request.GET.get("key", "")) & Product.objects.filter(price__range=(request.GET.get("price_from", 1), request.GET.get("price_to", 1000000)))
+    products = Product.objects.filter(name__icontains=request.GET.get("key", "")) & Product.objects.filter(price__range=(1 if "price_from" not in request.POST else int(request.POST["price_from"]), 100000 if "price_from" not in request.POST else int(request.POST["price_from"]))
     return render(request, "index.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.all(), "products": products})
 
 def delivery(request):
