@@ -124,7 +124,7 @@ def create_store(request):
 @require_POST
 def update_store(request, id):
     store = Store.objects.get(id=id)
-    store.manager = request.POST["manager"]
+    store.store_name = request.POST["manager"]
     store.delivery_condition_id = request.POST["delivery_condition"]
     store.map_visor = request.POST["map_visor"]
     store.address = request.POST["address"]
