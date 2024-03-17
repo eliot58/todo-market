@@ -59,6 +59,7 @@
 		  to {bottom: 0; opacity: 0;}
 		}
 	</style>
+	{% block ascript %}{% endblock ascript %}
 	{% block style %} {% endblock style %}
     <title>{% block title %} {% endblock title %}</title>
 </head>
@@ -68,8 +69,8 @@
 		<div id="popup" class="popup auth-popup" {% if login_form.errors or register_form.errors %} style="display: block;" {% endif %}>
 			<div class="popup-content dark d-flex flex-column" style="width: 540px;">
 				<div class="d-flex justify-content-between" style="margin-bottom: 20px;">
-					<button class="auth_tab {% if login_form.errors %} {% else %} active dark {% endif %}" onclick="openTab(this)">Регистрация</button>
-					<button class="auth_tab {% if login_form.errors %} active dark {% endif %}" onclick="openTab(this)">Войти</button>
+					<button class="auth_tab {% if login_form.errors %} {% else %} active {% endif %} dark" onclick="openTab(this)">Регистрация</button>
+					<button class="auth_tab {% if login_form.errors %} active {% endif %} dark" onclick="openTab(this)">Войти</button>
 				</div>
 				<form action="{% url 'signup' %}" method="post" class="signup" {% if login_form.errors %} style="display: none;" {% else %} style="display: flex; flex-direction: column;" {% endif %}>
                     {% csrf_token %}
@@ -236,7 +237,7 @@
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
 						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш пароль был отправлен на почту: {{request.user.email}}</p>
-						<button onclick="document.querySelector('.success_reg-popup').style.display = 'none';document.querySelector('.success_reg2-popup').style.display = 'block';" class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
+						<button onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% endif %}" class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
 				</div>
@@ -249,6 +250,18 @@
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
 						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо за доверие! Теперь зайдите в cвой профиль и заполните данные о Вашем магазине и добавьте товар</p>
 						<button onclick="document.querySelector('.success_reg2-popup').style.display = 'none';" class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
+					</div>
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
+				</div>
+			</div>
+		</div>
+
+		<div id="popup" class="popup approve-popup">
+			<div class="popup-content dark" style="width: 750px; height: 170px;">
+				<div class="d-flex" style="position: relative; height: 100%;">
+					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Магазин отправлен на проверку ожидайте сообщения на вашу почту</p>
+						<button onclick="document.querySelector('.approve-popup').style.display = 'none';" class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
 				</div>
@@ -397,6 +410,7 @@
 
 		function themeChange(){
 			if (localStorage.getItem('theme') == 'light') {
+				document.querySelector(".auth_tab.active").style.backgroundColor = "#00A550"
 				localStorage.removeItem("theme")
 				const lights = document.querySelectorAll(".light")
 				for (let light of lights) {
@@ -505,6 +519,7 @@
 
 
 			} else {
+				document.querySelector(".auth_tab.active").style.backgroundColor = "#2094AD"
 				const darks = document.querySelectorAll(".dark")
 				for (let dark of darks) {
 					dark.classList.remove("dark")
@@ -804,7 +819,7 @@
 			targetBlock.parentNode.insertBefore(clonedBlock, targetBlock.nextSibling);
 		}
 
-		function openProduct(element, store, isCreate, category, name, articul, amount, unit, remainder, image, description, id, price){
+		function openProduct(element, store, isCreate, category, name, articul, amount, unit, remainder, image, description, id, price, is_first){
 			const popup_product = document.querySelector(".product-popup")
 			const button_parent = popup_product.querySelector(".button-parent")
 			for (const button of button_parent.querySelectorAll("button")) {
@@ -832,7 +847,7 @@
 
 				popup_product.querySelector("select").value = ""
 				popup_product.querySelector("textarea").value = ""
-				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="createProduct(${category}, ${store})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
+				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
 			} else {
 				const name_input = popup_product.querySelector("input[name='name']")
 				const articul_input = popup_product.querySelector("input[name='articul']")
@@ -854,12 +869,12 @@
 				select_unit.value = unit
 				price_input.value = price
 
-				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="updateProduct(${store}, ${category}, ${id})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
+				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="updateProduct(${store}, ${category}, ${id}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
 			}
 			popup_product.style.display = 'block';
 		}
 
-		function createProduct(category_id, store_id){
+		function createProduct(category_id, store_id, is_first){
 			const product_form = document.querySelector('.product-form')
 			let formData = new FormData(product_form);
 			let xhr = new XMLHttpRequest();
@@ -867,21 +882,33 @@
 			xhr.responseType = 'json';
 			xhr.onload = function() {
 				if (xhr.status == 200) {
-					const target_element = document.querySelector(`.store_${store_id}_${category_id}`)
-					target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-					<div style="position: relative;">
-						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}', '${xhr.response["price"]}')" alt="">
-						<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-						<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
-					</div>
-				</div>`)
+					if (is_first) {
+						const target_element = document.querySelector(`#template category_${category_id}`)
+						target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+						<div style="position: relative;">
+							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', true)" alt="">
+							<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
+							<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+						</div>
+					</div>`)
+					} else {
+						const target_element = document.querySelector(`.store_${store_id}_${category_id}`)
+						target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+						<div style="position: relative;">
+							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
+							<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
+							<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+						</div>
+					</div>`)
+					}
+					
 				document.querySelector(".product-popup").style.display = "none"
 				}
 			};
 			xhr.send(formData);
 		}
 
-		function updateProduct(store_id, category_id, id){
+		function updateProduct(store_id, category_id, id, is_first){
 			let formData = new FormData(document.querySelector('.product-form'));
 			let xhr = new XMLHttpRequest();
 			xhr.open('POST', `/update_product/${id}/`);
@@ -893,7 +920,7 @@
 						div.remove()
 					}
 					target_element.insertAdjacentHTML("afterbegin", `<div style="position: relative;">
-						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}', '${xhr.response["price"]}')" alt="">
+						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
 						<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
 						<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 					</div>`)

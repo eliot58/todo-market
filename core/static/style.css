@@ -975,9 +975,15 @@ td {
 	font-weight: 500; 
 	font-size: 30px;
 	background-color: inherit;
+}
+
+.auth_tab.dark {
 	color: #E9E9E9;
 }
 
+.auth_tab.light {
+	color: #323232;
+}
 
 .auth_tab.active.dark {
 	background-color: #00A550;
@@ -1024,7 +1030,7 @@ td {
 }
 
 .custom-accordion-item {
-	padding: 10px 15px;
+	padding: 10px;
 	margin-bottom: 5px;
 	border-radius: 8px;
 }

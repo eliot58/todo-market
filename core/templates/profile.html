@@ -58,115 +58,113 @@
 </div>
 <!-- <p style="font-weight: 500; color: #E9E9E9; margin: 20px 0px;">Условия сотрудничества (заполняются менеджеру сервиса)</p> -->
 {% for store in stores %}
-	{% if store.contract != null %}
-		<div class="d-flex flex-column">
-			<p class="profile-info dark" style="font-weight: 500; margin-top: 10px;">Информация о магазине</p>
-			<form method="post" action="{% url 'update_store' store.id %}" class="d-flex flex-column card dark" style="margin: 10px 0px;">
-				{% csrf_token %}
-				<div class="d-flex">
-					<div class="form-group" style="width: 50%;">
-						<input type="text" name="address" class="input-field dark" value="{{store.address}}" placeholder="Адрес склада для самовывоза" required>
-						<label for="address">Адрес склада для самовывоза</label>
-					</div>
-					<div class="form-group" style="width: 50%; margin-left: 10px;">
-						<input type="text" name="phone" class="input-field dark" value="{{store.phone}}" placeholder="Контакты для заказа" required>
-						<label for="phone">Контакт для заказа</label>
-					</div>
+	<div class="d-flex flex-column">
+		<p class="profile-info dark" style="font-weight: 500; margin-top: 10px;">Информация о магазине</p>
+		<form method="post" action="{% url 'update_store' store.id %}" class="d-flex flex-column card dark" style="margin: 10px 0px;">
+			{% csrf_token %}
+			<div class="d-flex">
+				<div class="form-group" style="width: 50%;">
+					<input type="text" name="address" class="input-field dark" value="{{store.address}}" placeholder="Адрес склада для самовывоза" required>
+					<label for="address">Адрес склада для самовывоза</label>
 				</div>
-				<div class="d-flex">
-					<div class="form-group" style="width: 50%;">
-						<input type="text" name="email" class="input-field dark" value="{{store.email}}" placeholder="E-mail для выгрузок" required>
-						<label for="email">E-mail для выгрузок</label>
-					</div>
-					<div class="form-group" style="width: 50%; margin-left: 10px;">
-						<input type="text" name="map_visor" class="input-field dark" value="{{store.map_visor}}" placeholder="координаты для отображения на карте" required>
-						<label for="map_visor">координаты для отображения на карте</label>
-					</div>
+				<div class="form-group" style="width: 50%; margin-left: 10px;">
+					<input type="text" name="phone" class="input-field dark" value="{{store.phone}}" placeholder="Контакты для заказа" required>
+					<label for="phone">Контакт для заказа</label>
 				</div>
-				<div class="d-flex">
-					<div class="form-group" style="width: 50%;">
-						<input type="text" name="store_name" class="input-field dark" value="{{store.store_name}}" placeholder="Название магазина" required>
-						<label for="store_name">Название магазина</label>
-					</div>
-					<div class="form-group" style="width: 50%; margin-left: 10px;">
-						<input type="text" name="contract" class="input-field dark" value="{{store.contract}}" placeholder="Договор" disabled>
-						<label for="contract">Договор</label>
-					</div>
+			</div>
+			<div class="d-flex">
+				<div class="form-group" style="width: 50%;">
+					<input type="text" name="email" class="input-field dark" value="{{store.email}}" placeholder="E-mail для выгрузок" required>
+					<label for="email">E-mail для выгрузок</label>
 				</div>
-				<div class="d-flex">
-					<div class="form-group" style="width: 50%;">
-						<input type="text" name="assembly_time" class="input-field dark" value="{{store.assembly_time}}" placeholder="время сборки товара, в мин" required>
-						<label for="assembly_time">время сборки товара, в мин</label>
-					</div>
-					<div class="form-group" style="width: 50%; margin-left: 10px;">
-						<input type="text" name="work_time" class="input-field dark" value="{{store.work_time}}" placeholder="Часы работы" required>
-						<label for="work_time">Часы работы</label>
-					</div>
+				<div class="form-group" style="width: 50%; margin-left: 10px;">
+					<input type="text" name="map_visor" class="input-field dark" value="{{store.map_visor}}" placeholder="координаты для отображения на карте" required>
+					<label for="map_visor">координаты для отображения на карте</label>
 				</div>
-				<div class="d-flex">
-					<select name="delivery_condition" class="input-field dark" style="width: 50%;" required>
-						<option value="" disabled selected >Условия доставки</option>
-						{% for delivery_condition in delivery_conditions %}
-						<option value="{{ delivery_condition.id }}" {% if delivery_condition == store.delivery_condition %} selected {% endif %}>{{ delivery_condition.name }}</option>
-						{% endfor %}
-					</select>
-					<select name="region" class="input-field dark" style="width: 50%; margin-left: 10px;" required>
-						<option value="" disabled selected >Регион</option>
-						{% for region in regions %}
-						<option value="{{ region.id }}" {% if region == store.region %} selected {% endif %}>{{ region.name }}</option>
-						{% endfor %}
-					</select>
-				</div>	
-				{% for category in categories %}
-				<div class="custom-accordion-item dark">
-					<div class="custom-accordion-header dark" onclick="toggleAccordion(this)">
-						<p class="profile-info dark" style="font-size: 20px; font-weight: 500;">{{category.name}}</p>
-						<div class="triangle triangle-bottom dark"></div>
-					</div>
-					<div class="custom-accordion-content swiper-container" style="overflow: hidden;">
-						<div class="d-flex swiper-wrapper store_{{store.id}}_{{category.id}}">
-							{% for product in products %}
-								{% if product.category == category and product.store == store %}
-									<div class="d-flex flex-column swiper-slide product_{{product.id}}" style="width: 256px; margin-right: 20px;">
-										<div style="position: relative;">
-											<img src="{{product.image.url}}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '{{store.id}}', false, '{{category.id}}', '{{product.name}}', '{{product.articul}}', '{{product.amount}}', '{{product.unit}}', '{{product.remainder}}', '{{product.image.url}}', '{{product.description}}', '{{product.id}}', '{{product.price}}')" alt="">
-											<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '{{product.id}}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-											<p class="product-subtitle dark" style="line-height: 24px;">{{product.name}}, {{product.articul}} <span style="font-size: 12px; color: #616161;">{{product.amount}} {{product.unit}}</span></p>
-										</div>
+			</div>
+			<div class="d-flex">
+				<div class="form-group" style="width: 50%;">
+					<input type="text" name="store_name" class="input-field dark" value="{{store.store_name}}" placeholder="Название магазина" required>
+					<label for="store_name">Название магазина</label>
+				</div>
+				<div class="form-group" style="width: 50%; margin-left: 10px;">
+					<input type="text" name="contract" class="input-field dark" value="{{store.contract}}" placeholder="Договор" disabled>
+					<label for="contract">Договор</label>
+				</div>
+			</div>
+			<div class="d-flex">
+				<div class="form-group" style="width: 50%;">
+					<input type="text" name="assembly_time" class="input-field dark" value="{{store.assembly_time}}" placeholder="время сборки товара, в мин" required>
+					<label for="assembly_time">время сборки товара, в мин</label>
+				</div>
+				<div class="form-group" style="width: 50%; margin-left: 10px;">
+					<input type="text" name="work_time" class="input-field dark" value="{{store.work_time}}" placeholder="Часы работы" required>
+					<label for="work_time">Часы работы</label>
+				</div>
+			</div>
+			<div class="d-flex">
+				<select name="delivery_condition" class="input-field dark" style="width: 50%;" required>
+					<option value="" disabled selected >Условия доставки</option>
+					{% for delivery_condition in delivery_conditions %}
+					<option value="{{ delivery_condition.id }}" {% if delivery_condition == store.delivery_condition %} selected {% endif %}>{{ delivery_condition.name }}</option>
+					{% endfor %}
+				</select>
+				<select name="region" class="input-field dark" style="width: 50%; margin-left: 10px;" required>
+					<option value="" disabled selected >Регион</option>
+					{% for region in regions %}
+					<option value="{{ region.id }}" {% if region == store.region %} selected {% endif %}>{{ region.name }}</option>
+					{% endfor %}
+				</select>
+			</div>	
+			{% for category in categories %}
+			<div class="custom-accordion-item dark">
+				<div class="custom-accordion-header dark" onclick="toggleAccordion(this)">
+					<p class="profile-info dark" style="font-size: 20px; font-weight: 500;">{{category.name}}</p>
+					<div class="triangle triangle-bottom dark"></div>
+				</div>
+				<div class="custom-accordion-content swiper-container" style="overflow: hidden;">
+					<div class="d-flex swiper-wrapper store_{{store.id}}_{{category.id}}">
+						{% for product in products %}
+							{% if product.category == category and product.store == store %}
+								<div class="d-flex flex-column swiper-slide product_{{product.id}}" style="width: 256px; margin-right: 20px;">
+									<div style="position: relative;">
+										<img src="{{product.image.url}}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '{{store.id}}', false, '{{category.id}}', '{{product.name}}', '{{product.articul}}', '{{product.amount}}', '{{product.unit}}', '{{product.remainder}}', '{{product.image.url}}', '{{product.description}}', '{{product.id}}', '{{product.price}}', false)" alt="">
+										<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '{{product.id}}')" style="position: absolute; top: 10px; right: 10px;" alt="">
+										<p class="product-subtitle dark" style="line-height: 24px;">{{product.name}}, {{product.articul}} <span style="font-size: 12px; color: #616161;">{{product.amount}} {{product.unit}}</span></p>
 									</div>
-								{% endif %}
-							{% endfor %}
-							<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-								<div class="upload-product dark" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '')">
-									<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 								</div>
+							{% endif %}
+						{% endfor %}
+						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+							<div class="upload-product dark" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', false)">
+								<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 							</div>
-							<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-								<div class="upload-product dark" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '')">
-									<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
-								</div>
+						</div>
+						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+							<div class="upload-product dark" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', false)">
+								<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 							</div>
-							<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-								<div class="upload-product dark" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '')">
-									<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
-								</div>
+						</div>
+						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+							<div class="upload-product dark" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', false)">
+								<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 							</div>
-							<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-								<div class="upload-product dark" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '')">
-									<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
-								</div>
+						</div>
+						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+							<div class="upload-product dark" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', false)">
+								<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 							</div>
 						</div>
 					</div>
 				</div>
-				{% endfor %}
-				<div class="d-flex justify-content-between" style="margin-top: 10px;">
-					<button class="button-1 dark" type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%;;">Сохранить</button>
-					<a href="{% url 'delete_store' store.id %}" style="background-color: inherit; color: #FF0000; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; border: 1px solid #FF0000; text-align: center;">Удалить</a>
-				</div>
-			</form>
-		</div>
-	{% endif %}
+			</div>
+			{% endfor %}
+			<div class="d-flex justify-content-between" style="margin-top: 10px;">
+				<button class="button-1 dark" type="button" onclick="document.querySelector('.approve-popup').style.display = 'block'; this.parentNode.parentNode.submit()" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%;;">На проверку</button>
+				<a href="{% url 'delete_store' store.id %}" style="background-color: inherit; color: #FF0000; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; border: 1px solid #FF0000; text-align: center;">Удалить</a>
+			</div>
+		</form>
+	</div>
 {% endfor %}
 <form method="post" action="{% url 'upload_files' %}" enctype="multipart/form-data" class="d-flex align-items-end justify-content-between upload_files dark">
 	{% csrf_token %}
@@ -232,7 +230,7 @@
 				</select>
 			</div>
 
-			<div style="width: 100%; height: 30px; position: relative;">
+			<div style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
 				<button class="button-1 dark" type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; position: absolute; right: 0px;">Создать</button>
 			</div>
 		</form>

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 class Region(models.Model):
@@ -104,6 +105,7 @@ class Store(models.Model):
     work_time = models.CharField(max_length = 256, verbose_name = "Часы работы")
     region = models.ForeignKey(Region, on_delete = models.DO_NOTHING, verbose_name = "Регион")
     assembly_time = models.CharField(max_length = 256, verbose_name = "Время сборки")
+    approve = models.BooleanField(default = False)
 
 
     class Meta:
@@ -112,13 +114,19 @@ class Store(models.Model):
 
     def __str__(self):
         return self.store_name
+    
+    def save(self):
+        if self.approve == True:
+            send_mail(f"Магазин {self.store_name}", f"Ваш магазин {self.store_name} прошел проверку", settings.EMAIL_HOST_USER, [self.email], fail_silently = False)
+
+        super().save()
 
     
 class Product(models.Model):
     store = models.ForeignKey(Store, on_delete = models.CASCADE, verbose_name = "Магазин")
     category = models.ForeignKey(Category, on_delete = models.CASCADE, verbose_name = "Категория")
     articul = models.CharField(max_length = 256, null = True, blank = True, verbose_name = "Артикул")
-    name = models.CharField(max_length = 256, verbose_name = "Название товара")
+    name = models.CharField(max_length = 500, verbose_name = "Название товара")
     image = models.ImageField(upload_to="product", verbose_name="Фото")
     amount = models.PositiveIntegerField(verbose_name = "Количество")
     ch = [
