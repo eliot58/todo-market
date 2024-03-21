@@ -99,7 +99,7 @@
 						<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;">{{product.store.address}}</div>
 					</div>
 				</div>
-				<a href="" class="provider_link dark">Перейти поставщику</a>
+				<a href="{% url 'provider' product.store.provider.id %}" class="provider_link dark">Перейти поставщику</a>
 			</div>
 			<div class="d-flex product dark">
 				<img src="{{product.image.url}}" width="136" height="136" style="border-radius: 8px;" alt="">
