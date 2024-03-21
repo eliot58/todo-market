@@ -4,6 +4,8 @@
 
 {% load static %}
 
+{% load custom_tags %}
+
 {% block content %}
 <h1 class="title dark">Корзина</h1>
 {% for item in items %}
@@ -16,12 +18,12 @@
 		<p class="product__title dark" style="margin-top: 20px; width: 365px; line-height: 24px;">{{ item.1.title }} {{ item.1.articul }} {{ item.1.description }}<span style="font-size: 12px; color: #616161;">{{ item.1.amount }} {{ item.1.unit }}</span></p>
 		<div class="d-flex justify-content-end align-items-center">
 			<div class="store-item__data-count dark d-flex justify-content-between">
-				<span onclick="minus(this, '{{item.0}}')">-</span>
+				<span onclick="minus(this, '{{item.0}}', '{{item.1.price}}')">-</span>
 				<input type="text" value="{{ item.1.count }}">
-				<span onclick="plus(this, '{{item.0}}')">+</span>
+				<span onclick="plus(this, '{{item.0}}', '{{item.1.price}}')">+</span>
 			</div>
-			<p class="product__price dark" style="margin: 0px 15px;">{{ item.1.price }} ₽</p>
-			<p style="font-size: 12px; color: #616161; width: 100px;">{{ item.1.price }} ₽ без TODOMARKET</p>
+			<p class="product__price dark" style="margin: 0px 15px;"><span>{{ item.1.price|multiply:item.1.count }}</span> ₽</p>
+			<p style="font-size: 12px; color: #616161; width: 100px;"><span>{{ item.1.price|multiply:item.1.count }}</span> ₽ без TODOMARKET</p>
 		</div>
 	</div>
 </div>
@@ -119,7 +121,7 @@
 {% block script %}
 
 <script>
-    function minus(element, id){
+    function minus(element, id, price){
         i = element.nextElementSibling;
         if (i.value != 1){
             const xhr = new XMLHttpRequest();
@@ -131,12 +133,14 @@
                     if (xhr.response['success']) {
                         i.value = Number(i.value) - 1
                     }
+					element.parentNode.nextElementSibling.querySelector("span").textContent = i.value * Number(price)
+					element.parentNode.nextElementSibling.nextElementSibling.querySelector("span").textContent = i.value * Number(price)
                 }
             }
         }
     }
 
-    function plus(element, id){
+    function plus(element, id, price){
         i = element.previousElementSibling;
         const xhr = new XMLHttpRequest();
         xhr.open("GET", "/plus/" + id + "/");
@@ -147,6 +151,8 @@
                 if (xhr.response['success']) {
                     i.value = Number(i.value) + 1
                 }
+				element.parentNode.nextElementSibling.querySelector("span").textContent = i.value * Number(price)
+				element.parentNode.nextElementSibling.nextElementSibling.querySelector("span").textContent = i.value * Number(price)
             }
         }
     }

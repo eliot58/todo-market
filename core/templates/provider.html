@@ -29,14 +29,15 @@
                     <img src="{{item.image.url}}" width="260" height="260" style="border-radius: 8px;" alt="">
                     {% if request.user.provider %}
                     {% else %}
-                    <div class="d-flex justify-content-between" style="margin-top: 5px;">
-                        <button class="button-1 dark" type="button" onclick="addToCart()" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+                    <form method="post" class="d-flex justify-content-between" style="margin-top: 5px;">
+                        {% csrf_token %}
+                        <button class="button-1 dark" type="button" onclick="addToCart('{{item.id}}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
                         <div class="store-item__data-count dark d-flex justify-content-between">
                             <span onclick="minus(this)">-</span>
                             <input type="text" name="count" value="1">
                             <span onclick="plus(this)">+</span>
                         </div>
-                    </div>
+                    </form>
                     {% endif %}
                     <div class="d-flex align-items-center" style="margin: 10px 0px;">
                         <p class="product__price dark" style="margin-right: 10px;">{{item.price}} ₽</p>

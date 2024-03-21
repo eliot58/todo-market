@@ -231,8 +231,8 @@ def addtoCart(request, id):
 @login_required(login_url='/login/')
 def cart_item_delete(request, id):
     buyer = request.user.buyer
-    buyer.total_price -= buyer.cart[id]["all_price"]
-    del buyer.cart[id]
+    buyer.total_price -= buyer.cart[str(id)]["all_price"]
+    del buyer.cart[str(id)]
     buyer.save()
     return redirect(cart)
 
@@ -240,9 +240,9 @@ def cart_item_delete(request, id):
 @csrf_exempt
 def cart_item_minus(request, id):
     buyer = request.user.buyer
-    buyer.cart[id]["all_price"] -= buyer.cart[id]["price"]
-    buyer.cart[id]["count"] -= 1
-    buyer.total_price -= buyer.cart[id]["price"]
+    buyer.cart[str(id)]["all_price"] -= buyer.cart[str(id)]["price"]
+    buyer.cart[str(id)]["count"] -= 1
+    buyer.total_price -= buyer.cart[str(id)]["price"]
     buyer.save()
     return JsonResponse({"success": True})
 
@@ -250,9 +250,9 @@ def cart_item_minus(request, id):
 @csrf_exempt
 def cart_item_plus(request, id):
     buyer = request.user.buyer
-    buyer.cart[id]["all_price"] += buyer.cart[id]["price"]
-    buyer.cart[id]["count"] += 1
-    buyer.total_price += buyer.cart[id]["price"]
+    buyer.cart[str(id)]["all_price"] += buyer.cart[str(id)]["price"]
+    buyer.cart[str(id)]["count"] += 1
+    buyer.total_price += buyer.cart[str(id)]["price"]
     buyer.save()
     return JsonResponse({"success": True})
 
