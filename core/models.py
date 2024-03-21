@@ -138,6 +138,7 @@ class Product(models.Model):
     unit = models.CharField(max_length = 10, choices = ch, verbose_name = "Ед. изм")
     remainder = models.PositiveIntegerField(verbose_name = "Остаток")
     description = models.TextField(null = True, blank = True, verbose_name = "Описание")
+    tags = models.TextField()
 
 
     class Meta:

@@ -22,6 +22,48 @@
 
 			var myPlacemark = new ymaps.Placemark([{{store.map_visor}}]);
 
+			myPlacemark.events.add('click', function () {
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', `/storeProducts/{{store.id}}/`);
+				xhr.responseType = 'json';
+				xhr.onload = function() {
+					if (xhr.status == 200) {
+						const provider = JSON.parse(xhr.response["provider"])
+						const store = JSON.parse(xhr.response["store"])
+						const products = JSON.parse(xhr.response["products"])
+						const storeProducts = document.querySelector(".store_products-popup")
+						const product_subtitle = storeProducts.querySelectorAll(".product-subtitle")
+						const img_provider = storeProducts.querySelector(".img-provider")
+						const target_element = storeProducts.querySelector(`.products-list`)
+						product_subtitle[0].textContent = provider[0]["fields"]["company"]
+						product_subtitle[2].textContent = store[0]["fields"]["address"]
+						img_provider.src = "/media/" + provider[0]["fields"]["logo"]
+						for (const product of products) {
+							target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="max-width: 256px; margin-right: 20px;">
+								<img src="${'/media/' + product['fields']['image']}" width="260" height="260" style="border-radius: 8px;" alt="">
+								{% if not request.user.provider %}
+								<div class="d-flex justify-content-between" style="margin-top: 5px;">
+									<button class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" type="button" onclick="addToCart()" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;" type="submit">В корзину</button>
+									<div class="store-item__data-count ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'} d-flex justify-content-between">
+										<span onclick="minus(this)">-</span>
+										<input type="text" name="count" value="1">
+										<span onclick="plus(this)">+</span>
+									</div>
+								</div>
+								{% endif %}
+								<div class="d-flex align-items-center" style="margin: 10px 0px;">
+									<p class="product__price ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="margin-right: 10px;">${product['fields']['price']} ₽</p>
+									<p class="product__price-2">${product['fields']['price']} ₽ без TODOMARKET</p>
+								</div>
+								<p class="product__title ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}">${product['fields']['name']}, ${product['fields']['articul']} <span style="font-size: 12px; color: #616161;">${product['fields']['amount']} ${product['fields']['unit']}</span></p>
+							</div>`)
+						}
+						storeProducts.style.display = 'block'
+					}
+				};
+				xhr.send();
+			});
+
 			myMap.geoObjects.add(myPlacemark); 
 
 			{% endif %}
@@ -36,69 +78,86 @@
 {% block content %}
 
 <h1 class="title dark">Главная страница</h1>
-<div class="d-flex">
-	<div class="card dark products" style="width: 700px; margin-right: 10px; margin-bottom: 300px;">
-		<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
-		{% for product in products %}
-		<div class="d-flex product dark">
-			<img src="{{product.image.url}}" width="136" height="136" style="border-radius: 8px;" alt="">
-			<p class="product__distance">10 км от вас</p>
-			<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
-				<div style="margin-top: 20px;" class="d-flex justify-content-between">
-					<a href="{% url 'provider' product.store.provider.id %}" class="product__title dark" style="font-weight: 600;">{{product.store.provider.company}}</a>
-					<p class="product__title dark">{{product.store.address}}</p>
+<div class="d-flex flex-column">
+	<div style="width: 700px;">
+		<div class="d-flex justify-content-around" style="margin: 10px auto;">
+			<button class="auth_tab dark" onclick="document.querySelector('.products').style.display = 'block'; document.querySelector('#map').style.display = 'none'">Обычный</button>
+			<button class="auth_tab dark" onclick="document.querySelector('.products').style.display = 'none'; document.querySelector('#map').style.display = 'block'">Карта</button>
+		</div>
+	</div>
+	<div class="d-flex">
+		<div class="card dark products" style="width: 700px; margin-right: 10px; margin-bottom: 300px;">
+			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
+			<div class="d-flex justify-content-between">
+				<div class="d-flex" style="margin-bottom: 10px;">
+					<img class="img-provider" src="{{product.store.provider.logo.url}}" width="56" height="56" style="margin-right: 10px; border-radius: 8px;" alt="">
+					<div>
+						<div class="product-subtitle dark" style="font-weight: 600; line-height: 16px;">{{product.store.provider.company}}</div>
+						<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;">Адрес склада</div>
+						<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;">{{product.store.address}}</div>
+					</div>
 				</div>
-				<p class="product__title dark">{{product.name}}, {{product.articul}} <span>{{product.amount}} {{product.unit}}</span></p>
-				<div class="d-flex {% if request.user.provider %} {% else %}justify-content-between{% endif %} align-items-end">
-					<p class="product__price dark">{{product.price}} ₽</p>
-					<p class="product__price-2" {% if request.user.provider %} style="margin-left: 10px;" {% endif %}>{{product.price}} ₽ без TODOMARKET</p>
-					{% if request.user.provider %}
-                    {% else %}
-					<form method="post" class="store-item__data-count dark d-flex justify-content-between">
-						{% csrf_token %}
-						<span onclick="minus(this)">-</span>
-						<input type="text" name="count" value="1">
-						<span onclick="plus(this)">+</span>
-					</form>
-					<button class="button-1 dark" type="button" onclick="addToCart('{{product.id}}', this.previousElementSibling)" style="padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
-					{% endif %}
+				<a href="" class="provider_link dark">Перейти поставщику</a>
+			</div>
+			<div class="d-flex product dark">
+				<img src="{{product.image.url}}" width="136" height="136" style="border-radius: 8px;" alt="">
+				<p class="product__distance">10 км от вас</p>
+				<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
+					<div style="margin-top: 20px;" class="d-flex justify-content-between">
+						<a href="{% url 'provider' product.store.provider.id %}" class="product__title dark" style="font-weight: 600;">{{product.store.provider.company}}</a>
+						<p class="product__title dark">{{product.store.address}}</p>
+					</div>
+					<p class="product__title dark">{{product.name}}, {{product.articul}} <span>{{product.amount}} {{product.unit}}</span></p>
+					<div class="d-flex {% if request.user.provider %} {% else %}justify-content-between{% endif %} align-items-end">
+						<p class="product__price dark">{{product.price}} ₽</p>
+						<p class="product__price-2" {% if request.user.provider %} style="margin-left: 10px;" {% endif %}>{{product.price}} ₽ без TODOMARKET</p>
+						{% if request.user.provider %}
+						{% else %}
+						<form method="post" class="store-item__data-count dark d-flex justify-content-between">
+							{% csrf_token %}
+							<span onclick="minus(this)">-</span>
+							<input type="text" name="count" value="1">
+							<span onclick="plus(this)">+</span>
+						</form>
+						<button class="button-1 dark" type="button" onclick="addToCart('{{product.id}}', this.previousElementSibling)" style="padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
+						{% endif %}
+					</div>
 				</div>
 			</div>
+			{% endfor %}
+			
 		</div>
-		{% endfor %}
-		
+		<div class="card dark" id="map" style="display: none; width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
+			
+		</div>
+		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 460px;">
+			<p class="filter_search-title dark">Фильтр поиска</p>
+			<input class="input-field dark" name="key" placeholder="Ключевое слово" type="text">
+			<select class="input-field dark" name="region">
+				<option value="" selected disabled>Регион</option>
+				{% for region in regions %}
+					<option value="{{ region.id }}">{{ region.name }}</option>
+				{% endfor %}
+			</select>
+			<select class="input-field dark" name="category">
+				<option value="" selected disabled>Категория</option>
+				{% for category in categories %}
+					<option value="{{ category.id }}">{{ category.name }}</option>
+				{% endfor %}
+			</select>
+			<select class="input-field dark" name="store">
+				<option value="" selected disabled>Магазин</option>
+				{% for store in stores %}
+					{% if store.approve %}
+						<option value="{{ store.id }}">{{ store.provider.company }}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+			<input class="input-field dark" name="price_from" placeholder="Цена от" type="text">
+			<input class="input-field dark" name="price_to" placeholder="Цена до" type="text">
+			<button class="button-1 dark" type="submit" style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
+		</form>
 	</div>
-	<div class="card dark" id="map" style="display: none; width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
-		
-	</div>
-	<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 480px;">
-		<p class="filter_search-title dark">Фильтр поиска</p>
-		<input class="input-field dark" name="key" placeholder="Ключевое слово" type="text">
-		<select class="input-field dark" name="region">
-			<option value="" selected disabled>Регион</option>
-			{% for region in regions %}
-				<option value="{{ region.id }}">{{ region.name }}</option>
-			{% endfor %}
-		</select>
-		<select class="input-field dark" name="category">
-			<option value="" selected disabled>Категория</option>
-			{% for category in categories %}
-				<option value="{{ category.id }}">{{ category.name }}</option>
-			{% endfor %}
-		</select>
-		<select class="input-field dark" name="store">
-			<option value="" selected disabled>Магазин</option>
-			{% for store in stores %}
-				{% if store.approve %}
-					<option value="{{ store.id }}">{{ store.provider.company }}</option>
-				{% endif %}
-			{% endfor %}
-		</select>
-		<input class="input-field dark" name="price_from" placeholder="Цена от" type="text">
-		<input class="input-field dark" name="price_to" placeholder="Цена до" type="text">
-		<button class="button-1 dark" type="submit" style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
-		<a href="#" class="search_by_map dark" onclick="this.parentNode.style.display = 'none'; document.querySelector('.products').style.display = 'none'; document.querySelector('#map').style.display = 'block'">Поиск по карте</a>
-	</form>
 </div>
 {% endblock content %}
 

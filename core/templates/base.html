@@ -199,12 +199,36 @@
 								<input type="number" name="remainder" style="margin-bottom: 0px;" class="input-field dark" placeholder="Остаток" required>
 							</div>
 						</div>
-						<textarea name="description" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Описание (необязательно)" cols="20" rows="5"></textarea>
+						<div class="d-flex flex-column justify-content-between">
+							<textarea name="description" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Описание" required cols="20" rows="5"></textarea>
+							<textarea name="tags" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Введите тэги товара через пробел" required cols="20" rows="5"></textarea>
+						</div>
 					</div>
 					<div class="button-parent" style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
 						
 					</div>
 				</form>
+			</div>
+		</div>
+
+		<div id="popup" class="popup store_products-popup">
+			<div class="popup-content dark d-flex flex-column" style="width: 1000px;">
+				<div class="d-flex justify-content-between align-items-center">
+					<div class="d-flex" style="margin-bottom: 10px;">
+						<img class="img-provider" src="" width="56" height="56" style="margin-right: 10px; border-radius: 8px;" alt="">
+						<div>
+							<div class="product-subtitle dark" style="font-weight: 600; line-height: 16px;"></div>
+							<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;">Адрес склада</div>
+							<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;"></div>
+						</div>
+					</div>
+					<div class="d-flex search_products dark">
+						<input placeholder="Поиск поставщика" type="text" style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
+						<img src="{% static 'img/loop.svg' %}" alt="">
+					</div>
+				</div>
+				<div class="d-flex swiper-wrapper products-list">
+				</div>
 			</div>
 		</div>
 
@@ -819,7 +843,7 @@
 			targetBlock.parentNode.insertBefore(clonedBlock, targetBlock.nextSibling);
 		}
 
-		function openProduct(element, store, isCreate, category, name, articul, amount, unit, remainder, image, description, id, price, is_first){
+		function openProduct(element, store, isCreate, category, name, articul, amount, unit, remainder, image, description, tags, id, price, is_first){
 			const popup_product = document.querySelector(".product-popup")
 			const button_parent = popup_product.querySelector(".button-parent")
 			for (const button of button_parent.querySelectorAll("button")) {
@@ -846,7 +870,9 @@
 				productPreview.querySelector("img").style.display = 'block';
 
 				popup_product.querySelector("select").value = ""
-				popup_product.querySelector("textarea").value = ""
+				const textarea = popup_product.querySelectorAll("textarea")
+				textarea[0].value = ""
+				textarea[1].value = ""
 				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
 			} else {
 				const name_input = popup_product.querySelector("input[name='name']")
@@ -854,7 +880,8 @@
 				const amount_input = popup_product.querySelector("input[name='amount']")
 				const remainder_input = popup_product.querySelector("input[name='remainder']")
 				const price_input = popup_product.querySelector("input[name='price']")
-				const description_input = popup_product.querySelector("textarea")
+				const description_input = popup_product.querySelectorAll("textarea")[0]
+				const tags_input = popup_product.querySelectorAll("textarea")[1]
 				const select_unit = popup_product.querySelector("select")
 
 				productPreview.style.background = `url("${image}") 0 0/100% 100% no-repeat`;
@@ -866,6 +893,7 @@
 				amount_input.value = amount
 				remainder_input.value = remainder
 				description_input.value = description
+				tags_input.value = tags
 				select_unit.value = unit
 				price_input.value = price
 
@@ -886,18 +914,18 @@
 						const target_element = document.querySelector(`#template category_${category_id}`)
 						target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
 						<div style="position: relative;">
-							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', true)" alt="">
+							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', true)" alt="">
 							<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-							<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+							<p class="product-subtitle ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 						</div>
 					</div>`)
 					} else {
 						const target_element = document.querySelector(`.store_${store_id}_${category_id}`)
 						target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
 						<div style="position: relative;">
-							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
+							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
 							<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-							<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+							<p class="product-subtitle ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 						</div>
 					</div>`)
 					}
@@ -920,9 +948,9 @@
 						div.remove()
 					}
 					target_element.insertAdjacentHTML("afterbegin", `<div style="position: relative;">
-						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
+						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
 						<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-						<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+						<p class="product-subtitle ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 					</div>`)
 				document.querySelector(".product-popup").style.display = "none"
 				}

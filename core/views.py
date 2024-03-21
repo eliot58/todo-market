@@ -10,6 +10,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import *
 from .utils import generator
+import json
+from django.core.serializers import serialize
 
 
 def login_view(request):
@@ -160,8 +162,9 @@ def create_product(request):
     product.price = request.POST["price"]
     product.remainder = request.POST["remainder"]
     product.description = request.POST["description"]
+    product.tags = request.POST["tags"]
     product.save()
-    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
+    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id, "tags": product.tags})
 
 @require_POST
 @csrf_exempt
@@ -179,8 +182,9 @@ def update_product(request, id):
         product.unit = request.POST["unit"]
         product.remainder = request.POST["remainder"]
         product.description = request.POST["description"]
+        product.tags = request.POST["tags"]
         product.save()
-    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
+    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id, "tags": product.tags})
 
 @require_GET
 @csrf_exempt
@@ -251,3 +255,8 @@ def cart_item_plus(request, id):
     buyer.total_price += buyer.cart[id]["price"]
     buyer.save()
     return JsonResponse({"success": True})
+
+@login_required(login_url='/login/')
+@csrf_exempt
+def storeProducts(request, id):
+    return JsonResponse({"store": serialize('json', Store.objects.filter(id = id)),"provider": serialize('json', [Store.objects.filter(id = id)[0].provider]), "products": serialize('json', Product.objects.filter(store_id = id))})

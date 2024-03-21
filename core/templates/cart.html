@@ -13,7 +13,7 @@
 		<img class="close-icon" src="{% static 'img/close.svg' %}" alt="">
 	</a>
 	<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
-		<p class="product__title dark" style="margin-top: 20px; width: 365px; line-height: 24px;">{{ item.1.title }} <span style="font-size: 12px; color: #616161;">{{ item.1.amount }} {{ item.1.unit }}</span></p>
+		<p class="product__title dark" style="margin-top: 20px; width: 365px; line-height: 24px;">{{ item.1.title }} {{ item.1.articul }} {{ item.1.description }}<span style="font-size: 12px; color: #616161;">{{ item.1.amount }} {{ item.1.unit }}</span></p>
 		<div class="d-flex justify-content-end align-items-center">
 			<div class="store-item__data-count dark d-flex justify-content-between">
 				<span onclick="minus(this, '{{item.0}}')">-</span>

@@ -543,6 +543,19 @@ h1.title.light {
 	background-color: #F1F1F1;
 }
 
+.search_products {
+	padding: 5px 10px; 
+	border-radius: 8px;
+}
+
+.search_products.dark {
+	background-color: #313131;
+}
+
+.search_products.light {
+	background-color: #F8F8F8;
+}
+
 .details {
 	font-size: 12px;
 }
@@ -772,16 +785,15 @@ select.input-field.light {
 	color: #323232; 
 }
 
-.search_by_map {
+.provider_link {
 	font-size: 12px;
-	text-align: center;
 }
 
-.search_by_map.dark {
+.provider_link.dark {
 	color: #00A550; 
 }
 
-.search_by_map.light {
+.provider_link.light {
 	color: #2094AD; 
 }
 
