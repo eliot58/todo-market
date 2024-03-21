@@ -88,6 +88,7 @@
 	<div class="d-flex">
 		<div class="card dark products" style="width: 700px; margin-right: 10px; margin-bottom: 300px;">
 			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
+			{% for product in products %}
 			<div class="d-flex justify-content-between">
 				<div class="d-flex" style="margin-bottom: 10px;">
 					<img class="img-provider" src="{{product.store.provider.logo.url}}" width="56" height="56" style="margin-right: 10px; border-radius: 8px;" alt="">
