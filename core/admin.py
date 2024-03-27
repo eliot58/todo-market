@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from django.forms import CheckboxSelectMultiple
 
 class ProviderFileInline(admin.StackedInline):
     model = ProviderFile
@@ -24,6 +25,9 @@ class BuyerAdmin(admin.ModelAdmin):
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
+    formfield_overrides = {
+        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
+    }
     inlines = [ProductInline]
     list_display = ['provider', 'store_name', 'address', 'phone', 'email']
 
