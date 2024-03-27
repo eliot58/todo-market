@@ -63,14 +63,22 @@ def logout_view(request):
 
 @login_required(login_url="/login/")
 def index(request):
-    products = Product.objects.filter(name__icontains=request.GET.get("key", "")) & Product.objects.filter(store__approve=True) & Product.objects.filter(price__range=(1 if "price_from" not in request.POST else int(request.POST["price_from"]), 100000 if "price_from" not in request.POST else int(request.POST["price_from"])))
 
-    if request.GET.get("key", "") != "":
-        Query.objects.create(user=request.user, query=request.GET["key"])
+    # products = Product.objects.filter(price__range=(1 if "price_from" not in request.GET else int(request.GET.get("price_from", 1)), 100000 if "price_from" not in request.GET else int(request.GET.get("price_to", 100000))))
 
-    tags = Tag.objects.filter(id__in=request.GET.getlist("tags"))
-    products = products.filter(tags__in=tags)
-    return render(request, "index.html", {"regions": Region.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.all(), "products": products})
+    # if request.GET.get("key", "") != "":
+    #     Query.objects.create(user=request.user, query=request.GET["key"])
+
+    products = None
+    flag = False
+    if "tags" in request.GET:
+        flag = True
+        products = Product.objects.filter(price__range=(1 if request.GET["price_from"] == "" else int(request.GET["price_from"]), 100000 if request.GET["price_to"] == "" else int(request.GET["price_to"])))
+
+        tags = Tag.objects.filter(id__in=request.GET.getlist("tags"))
+        products = products.filter(tags__in=tags)
+
+    return render(request, "index.html", {"tags": Tag.objects.all(), "products": products, "stores": Store.objects.all(), "flag": flag})
 
 def delivery(request):
     return render(request, "map.html", {"login_form": LoginForm(), "register_form": RegisterForm()})

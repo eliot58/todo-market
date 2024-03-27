@@ -8,14 +8,8 @@
 
 <h1 class="title dark">Главная страница</h1>
 <div class="d-flex flex-column">
-	<div style="width: 700px;">
-		<div class="d-flex justify-content-around" style="margin: 10px auto;">
-			<button class="auth_tab dark" onclick="document.querySelector('.products').style.display = 'block'; document.querySelector('#map').style.display = 'none'">Обычный</button>
-			<button class="auth_tab dark" onclick="document.querySelector('.products').style.display = 'none'; document.querySelector('#map').style.display = 'block'">Карта</button>
-		</div>
-	</div>
 	<div class="d-flex">
-		<div class="card dark products" style="width: 700px; margin-right: 10px; margin-bottom: 300px;">
+		<div class="card dark products" style="width: 700px; margin-right: 10px; margin-bottom: 300px; {% if flag %} display: block; {% else %} display: none; {% endif %}">
 			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
 			{% for product in products %}
 			<div class="d-flex justify-content-between">
@@ -57,39 +51,18 @@
 			{% endfor %}
 			
 		</div>
-		<div class="card dark" id="map" style="display: none; width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
+		<div class="card dark" id="map" style="{% if flag %} display: none; {% endif %}width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
 			
 		</div>
-		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 500px;">
-			<p class="filter_search-title dark">Фильтр поиска</p>
-			<input class="input-field dark" name="key" placeholder="Ключевое слово" type="text">
+		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 260px;">
+			<p class="filter_search-title dark" style="margin-bottom: 10px;">Фильтр поиска</p>
 			<select name="tags" id="tags_search" multiple>
 				{% for tag in tags %}
 				<option value="{{ tag.id }}">{{ tag.name }}</option>
 				{% endfor %}
 			</select>
-			<select class="input-field dark" name="region" style="margin: 10px 0px 0px;">
-				<option value="" selected disabled>Регион</option>
-				{% for region in regions %}
-					<option value="{{ region.id }}">{{ region.name }}</option>
-				{% endfor %}
-			</select>
-			<select class="input-field dark" name="category">
-				<option value="" selected disabled>Категория</option>
-				{% for category in categories %}
-					<option value="{{ category.id }}">{{ category.name }}</option>
-				{% endfor %}
-			</select>
-			<select class="input-field dark" name="store">
-				<option value="" selected disabled>Магазин</option>
-				{% for store in stores %}
-					{% if store.approve %}
-						<option value="{{ store.id }}">{{ store.provider.company }}</option>
-					{% endif %}
-				{% endfor %}
-			</select>
 			<input class="input-field dark" name="price_from" placeholder="Цена от" type="text">
-			<input class="input-field dark" name="price_to" placeholder="Цена до" type="text">
+			<input class="input-field dark" name="price_to" style="margin-top: 0px;" placeholder="Цена до" type="text">
 			<button class="button-1 dark" {% if request.user.is_authenticated %} type="submit" {% else %} type="button" {% endif %} style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
 		</form>
 	</div>
@@ -137,6 +110,9 @@
 						const img_provider = storeProducts.querySelector(".img-provider")
 						const provider_link = storeProducts.querySelector("a")
 						const target_element = storeProducts.querySelector(`.products-list`)
+						for (const div of target_element.querySelectorAll("div")) {
+							div.remove()
+						}
 						provider_link.href = `/provider/${provider[0]["pk"]}`
 						product_subtitle[0].textContent = provider[0]["fields"]["company"]
 						product_subtitle[2].textContent = store[0]["fields"]["address"]

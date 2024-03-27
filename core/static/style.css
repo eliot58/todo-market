@@ -1166,7 +1166,7 @@ td {
 }
 
 .mult-select-tag .input-body {
-	display: none;
+	display: flex;
 	width: 100%
 }
 
@@ -1176,9 +1176,15 @@ td {
 	border-radius: .25rem;
 	padding: .45rem;
 	margin: 10px;
-	color: #2d3748;
 	outline: 0;
-	/* border: 1px solid var(--border-color) */
+}
+
+.mult-select-tag.dark .input {
+	color: #F8F8F8;
+}
+
+.mult-select-tag.light .input {
+	color: #323232;
 }
 
 .mult-select-tag .btn-container {
