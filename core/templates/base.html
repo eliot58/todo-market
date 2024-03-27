@@ -10,91 +10,125 @@
 	<link rel="shortcut icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
 	<style>
 		#snackbar {
-		  visibility: hidden;
-		  min-width: 250px;
-		  margin-left: -125px;
-		  text-align: center;
-		  border-radius: 2px;
-		  padding: 16px;
-		  position: fixed;
-		  z-index: 1;
-		  left: 50%;
-		  bottom: 80px;
-		  font-size: 17px;
+			visibility: hidden;
+			min-width: 250px;
+			margin-left: -125px;
+			text-align: center;
+			border-radius: 2px;
+			padding: 16px;
+			position: fixed;
+			z-index: 1;
+			left: 50%;
+			bottom: 80px;
+			font-size: 17px;
 		}
 
 		#snackbar.dark {
 			background-color: #F1F1F1;
-		  	color: #323232;
+			color: #323232;
 		}
 
 		#snackbar.light {
 			background-color: #242424;
-		  	color: #E9E9E9;
+			color: #E9E9E9;
 		}
-		
+
 		#snackbar.show {
-		  visibility: visible;
-		  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-		  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			visibility: visible;
+			-webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+			animation: fadein 0.5s, fadeout 0.5s 2.5s;
 		}
-		
+
 		@-webkit-keyframes fadein {
-		  from {bottom: 0; opacity: 0;} 
-		  to {bottom: 30px; opacity: 1;}
+			from {
+				bottom: 0;
+				opacity: 0;
+			}
+
+			to {
+				bottom: 30px;
+				opacity: 1;
+			}
 		}
-		
+
 		@keyframes fadein {
-		  from {bottom: 0; opacity: 0;}
-		  to {bottom: 30px; opacity: 1;}
+			from {
+				bottom: 0;
+				opacity: 0;
+			}
+
+			to {
+				bottom: 30px;
+				opacity: 1;
+			}
 		}
-		
+
 		@-webkit-keyframes fadeout {
-		  from {bottom: 30px; opacity: 1;} 
-		  to {bottom: 0; opacity: 0;}
+			from {
+				bottom: 30px;
+				opacity: 1;
+			}
+
+			to {
+				bottom: 0;
+				opacity: 0;
+			}
 		}
-		
+
 		@keyframes fadeout {
-		  from {bottom: 30px; opacity: 1;}
-		  to {bottom: 0; opacity: 0;}
+			from {
+				bottom: 30px;
+				opacity: 1;
+			}
+
+			to {
+				bottom: 0;
+				opacity: 0;
+			}
 		}
+
 	</style>
-	{% block ascript %}{% endblock ascript %}
 	{% block style %} {% endblock style %}
-    <title>{% block title %} {% endblock title %}</title>
+	<title>{% block title %} {% endblock title %}</title>
 </head>
 
 <body>
 	<div class="wrapper dark">
-		<div id="popup" class="popup auth-popup" {% if login_form.errors or register_form.errors %} style="display: block;" {% endif %}>
+		<div id="popup" class="popup auth-popup" {% if login_form.errors or register_form.errors %}
+			style="display: block;" {% endif %}>
 			<div class="popup-content dark d-flex flex-column" style="width: 540px;">
 				<div class="d-flex justify-content-between" style="margin-bottom: 20px;">
-					<button class="auth_tab {% if login_form.errors %} {% else %} active {% endif %} dark" onclick="openTab(this)">Регистрация</button>
-					<button class="auth_tab {% if login_form.errors %} active {% endif %} dark" onclick="openTab(this)">Войти</button>
+					<button class="auth_tab {% if login_form.errors %} {% else %} active {% endif %} dark"
+						onclick="openTab(this)">Регистрация</button>
+					<button class="auth_tab {% if login_form.errors %} active {% endif %} dark"
+						onclick="openTab(this)">Войти</button>
 				</div>
-				<form action="{% url 'signup' %}" method="post" class="signup" {% if login_form.errors %} style="display: none;" {% else %} style="display: flex; flex-direction: column;" {% endif %}>
-                    {% csrf_token %}
-                    {{ register_form.spec }}
-                    {{ register_form.spec.errors }}
-                    <div class="form-group">
+				<form action="{% url 'signup' %}" method="post" class="signup" {% if login_form.errors %}
+					style="display: none;" {% else %} style="display: flex; flex-direction: column;" {% endif %}>
+					{% csrf_token %}
+					{{ register_form.spec }}
+					{{ register_form.spec.errors }}
+					<div class="form-group">
 						{{ register_form.fullName }}
 						<label for="fullName">ФИО</label>
 					</div>
-                    {{ register_form.fullName.errors }}
-                    <div class="form-group">
+					{{ register_form.fullName.errors }}
+					<div class="form-group">
 						{{ register_form.phone }}
 						<label for="phone">Номер телефона</label>
 					</div>
-                    {{ register_form.phone.errors }}
-                    <div class="form-group">
+					{{ register_form.phone.errors }}
+					<div class="form-group">
 						{{ register_form.email }}
 						<label for="email">E-mail</label>
 					</div>
-                    {{ register_form.email.errors }}
-					<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;" type="submit">Зарегистрироваться</button>
+					{{ register_form.email.errors }}
+					<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
+						type="submit">Зарегистрироваться</button>
 				</form>
-				<form action="{% url 'login_view' %}" method="post" class="signin" {% if login_form.errors %} style="display: flex; flex-direction: column;" {% else %} style="display: none;" {% endif %}>
-                    {% csrf_token %}
+				<form action="{% url 'login_view' %}" method="post" class="signin" {% if login_form.errors %}
+					style="display: flex; flex-direction: column;" {% else %} style="display: none;" {% endif %}>
+					{% csrf_token %}
 					<div class="form-group">
 						{{ login_form.username }}
 						<label for="username">E-mail</label>
@@ -103,17 +137,19 @@
 						{{ login_form.password }}
 						<label for="password">Пароль</label>
 					</div>
-                    {{ login_form.password.errors }}
-					<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;" type="submit">Войти</button>
+					{{ login_form.password.errors }}
+					<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
+						type="submit">Войти</button>
 				</form>
 			</div>
 		</div>
-        <div id="popup" class="popup works-popup">
+		<div id="popup" class="popup works-popup">
 			<div class="popup-content dark d-flex flex-column" style="width: 1000px;">
 				<div class="d-flex justify-content-between align-items-start">
 					<div class="d-flex">
 						<img src="{% static 'img/location.svg' %}" alt="">
-						<p style="color: #E9E9E9; width: 300px; line-height: 24px; margin-left: 10px;">г. Москва, ул. Центральная, д. 10 Самовывоз, дата: 19.09.23, 12-14 ч.</p>
+						<p style="color: #E9E9E9; width: 300px; line-height: 24px; margin-left: 10px;">г. Москва, ул.
+							Центральная, д. 10 Самовывоз, дата: 19.09.23, 12-14 ч.</p>
 					</div>
 					<img src="{% static 'img/close.svg' %}" alt="">
 				</div>
@@ -131,9 +167,9 @@
 						<tbody>
 							<tr style="background-color: #313131;">
 								<td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+								<td></td>
+								<td></td>
+								<td></td>
 								<td></td>
 							</tr>
 							<tr style="background-color: #313131;">
@@ -150,43 +186,61 @@
 				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px 0px 10px;">
 					<div class="d-flex align-items-center">
 						<p style="color: #E9E9E9;">22.09.23</p>
-						<button class="button-2 dark" style="background-color: inherit;font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 20px;">Принять</button>
+						<button class="button-2 dark"
+							style="background-color: inherit;font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 20px;">Принять</button>
 						<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
 					</div>
-					<p style="font-size: 12px; color: #FF0000; margin: 10px 0px;">Нажимая кнопку принять, Вы подтверждаете отгрузку в выбранную Вами дату</p>
+					<p style="font-size: 12px; color: #FF0000; margin: 10px 0px;">Нажимая кнопку принять, Вы
+						подтверждаете отгрузку в выбранную Вами дату</p>
 				</div>
 				<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
-				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;" class="d-flex align-items-center">
+				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;"
+					class="d-flex align-items-center">
 					<button style="background-color: inherit;">
 						<img src="{% static 'img/clip.svg' %}" alt="">
 					</button>
-					<button class="button-2 dark" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 10px;">Отправить счет</button>
+					<button class="button-2 dark"
+						style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 10px;">Отправить
+						счет</button>
 					<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
 				</div>
 				<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
-				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;" class="d-flex align-items-center">
-					<button class="button-2 dark" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin-right: 10px;">Заказ отгружен</button>
+				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;"
+					class="d-flex align-items-center">
+					<button class="button-2 dark"
+						style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin-right: 10px;">Заказ
+						отгружен</button>
 					<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
 				</div>
 			</div>
 		</div>
 		<div id="popup" class="popup product-popup">
-			<div class="popup-content dark" style="width: 1000px;">
+			<div class="popup-content dark" style="width: 1000px; max-height: 320px;">
 				<form method="post" enctype="multipart/form-data" class="d-flex flex-column product-form">
 					{% csrf_token %}
 					<div class="d-flex">
-						<div class="product_image_preview upload-product dark" style="min-width: 233px; min-height: 233px; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer;" onclick="this.querySelector('input').click()">
-							<input type="file" id="product_image_input" name="photo" style="position: absolute; bottom: 0; left: 10px; z-index: -10;" hidden>
-							<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 20%; left: 23%;" alt="">
-							<p class="select_logo dark" style="font-weight: 500; font-size: 20px; position: absolute; bottom: 10px; left: 20%;">Выбрать фото</p>
+						<div class="product_image_preview upload-product dark"
+							style="min-width: 233px; min-height: 233px; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer;"
+							onclick="this.querySelector('input').click()">
+							<input type="file" id="product_image_input" name="photo"
+								style="position: absolute; bottom: 0; left: 10px; z-index: -10;" hidden>
+							<img class="upload-icon" src="{% static 'img/upload.png' %}"
+								style="position: absolute; top: 20%; left: 23%;" alt="">
+							<p class="select_logo dark"
+								style="font-weight: 500; font-size: 20px; position: absolute; bottom: 10px; left: 20%;">
+								Выбрать фото</p>
 						</div>
 						<div class="d-flex flex-column justify-content-between">
 							<input type="text" name="category" hidden>
 							<input type="text" name="store" hidden>
-							<input type="text" name="articul" class="input-field dark" style="margin-top: 0px;" placeholder="Артикул (необязательно)" title="К вам поступят заявки, с четким указанием артикула товара, если Ваш товар не имеет артикула оставьте поле пустым" required>
+							<input type="text" name="articul" class="input-field dark" style="margin-top: 0px;"
+								placeholder="Артикул (необязательно)"
+								title="К вам поступят заявки, с четким указанием артикула товара, если Ваш товар не имеет артикула оставьте поле пустым"
+								required>
 							<input type="text" name="name" class="input-field dark" placeholder="Название" required>
 							<div class="d-flex">
-								<input type="number" name="amount" style="width: 70%; margin-right: 10px;" class="input-field dark" placeholder="Количество" required>
+								<input type="number" name="amount" style="width: 70%; margin-right: 10px;"
+									class="input-field dark" placeholder="Количество" required>
 								<select name="unit" style="width: 30%;" class="input-field dark" required>
 									<option disabled value="">Ед. изм</option>
 									<option value="шт">шт</option>
@@ -195,40 +249,54 @@
 								</select>
 							</div>
 							<div class="d-flex">
-								<input type="number" name="price" style="margin-bottom: 0px; margin-right: 10px;" class="input-field dark" placeholder="Цена" required>
-								<input type="number" name="remainder" style="margin-bottom: 0px;" class="input-field dark" placeholder="Остаток" required>
+								<input type="number" name="price" style="margin-bottom: 0px; margin-right: 10px;"
+									class="input-field dark" placeholder="Цена" required>
+								<input type="number" name="remainder" style="margin-bottom: 0px; margin-right: 20px;"
+									class="input-field dark" placeholder="Остаток" required>
 							</div>
 						</div>
 						<div class="d-flex flex-column justify-content-between">
-							<textarea name="description" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Описание" required cols="20" rows="5"></textarea>
-							<textarea name="tags" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Введите тэги товара через пробел" required cols="20" rows="5"></textarea>
+							<textarea name="description" style="margin: 0px; width: 280px; margin-left: 10px;"
+								class="input-field dark" placeholder="Описание" required cols="40" rows="10"></textarea>
+							<!-- <textarea name="tags" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Введите тэги товара через пробел" required cols="20" rows="5"></textarea> -->
+							<select name="tags" id="tags" multiple>
+								{% for tag in tags %}
+								<option value="{{ tag.id }}">{{ tag.name }}</option>
+								{% endfor %}
+							</select>
 						</div>
 					</div>
 					<div class="button-parent" style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
-						
+
 					</div>
 				</form>
 			</div>
 		</div>
 
 		<div id="popup" class="popup store_products-popup">
-			<div class="popup-content dark d-flex flex-column" style="width: 1000px;">
+			<div class="popup-content dark d-flex flex-column" style="width: 1200px;">
 				<div class="d-flex justify-content-between align-items-center">
 					<div class="d-flex" style="margin-bottom: 10px;">
-						<img class="img-provider" src="" width="56" height="56" style="margin-right: 10px; border-radius: 8px;" alt="">
-						<div>
+						<img class="img-provider" src="" width="56" height="56"
+							style="margin-right: 10px; border-radius: 8px;" alt="">
+						<a href="">
 							<div class="product-subtitle dark" style="font-weight: 600; line-height: 16px;"></div>
-							<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;">Адрес склада</div>
+							<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;">Адрес склада
+							</div>
 							<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;"></div>
-						</div>
+						</a>
 					</div>
 					<div class="d-flex search_products dark">
-						<input placeholder="Поиск поставщика" type="text" style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
+						<input placeholder="Поиск поставщика" type="text"
+							style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
 						<img src="{% static 'img/loop.svg' %}" alt="">
 					</div>
 				</div>
-				<div class="d-flex swiper-wrapper products-list">
+				<div class="swiper-container" style="overflow: hidden;">
+					<div class="d-flex swiper-wrapper products-list">
+					</div>
 				</div>
+				
 			</div>
 		</div>
 
@@ -236,10 +304,14 @@
 			<div class="popup-content dark" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш магазин отправлен на модерацию, ожидайте, мы пришлем вам уведомление на почту, и в разделе “Новости” на сайте.</p>
-						<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш магазин отправлен
+							на модерацию, ожидайте, мы пришлем вам уведомление на почту, и в разделе “Новости” на сайте.
+						</p>
+						<button class="button-1 dark"
+							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
 					</div>
-					<img class="success_deal" src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
+						style="position: absolute; bottom: -20px; right: 20px;" alt="">
 				</div>
 			</div>
 		</div>
@@ -247,23 +319,33 @@
 		<div id="popup" class="popup store-delete-popup">
 			<div class="popup-content dark" style="width: 522px;">
 				<div class="d-flex flex-column">
-					<p class="profile-info dark" style="line-height: 24px; margin-bottom: 10px;">Вы действительно хотите удалить ваш магазин от Маркета?</p>
+					<p class="profile-info dark" style="line-height: 24px; margin-bottom: 10px;">Вы действительно хотите
+						удалить ваш магазин от Маркета?</p>
 					<div class="d-flex justify-content-between">
-						<button style="background-color: inherit; color: #FF0000;  border: 1px solid #FF0000; font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Удалить</button>
-						<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Не удалять</button>
+						<button
+							style="background-color: inherit; color: #FF0000;  border: 1px solid #FF0000; font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Удалить</button>
+						<button
+							style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Не
+							удалять</button>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div id="popup" class="popup success_reg-popup" {% if success_reg and not register_form.errors %} style="display: block;" {% endif %}>
+		<div id="popup" class="popup success_reg-popup" {% if success_reg and not register_form.errors %}
+			style="display: block;" {% endif %}>
 			<div class="popup-content dark" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш пароль был отправлен на почту: {{request.user.email}}</p>
-						<button onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% endif %}" class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш пароль был
+							отправлен на почту: {{request.user.email}}</p>
+						<button
+							onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% endif %}"
+							class="button-1 dark"
+							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
 					</div>
-					<img class="success_deal" src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
+						style="position: absolute; bottom: -20px; right: 20px;" alt="">
 				</div>
 			</div>
 		</div>
@@ -272,10 +354,15 @@
 			<div class="popup-content dark" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо за доверие! Теперь зайдите в cвой профиль и заполните данные о Вашем магазине и добавьте товар</p>
-						<button onclick="document.querySelector('.success_reg2-popup').style.display = 'none';" class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо
+							за доверие! Теперь зайдите в cвой профиль и заполните данные о Вашем магазине и добавьте
+							товар</p>
+						<button onclick="document.querySelector('.success_reg2-popup').style.display = 'none';"
+							class="button-1 dark"
+							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
-					<img class="success_deal" src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
+						style="position: absolute; bottom: -20px; right: 20px;" alt="">
 				</div>
 			</div>
 		</div>
@@ -284,10 +371,14 @@
 			<div class="popup-content dark" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Магазин отправлен на проверку ожидайте сообщения на вашу почту</p>
-						<button onclick="document.querySelector('.approve-popup').style.display = 'none';" class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Магазин отправлен на
+							проверку ожидайте сообщения на вашу почту</p>
+						<button onclick="document.querySelector('.approve-popup').style.display = 'none';"
+							class="button-1 dark"
+							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
-					<img class="success_deal" src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
+						style="position: absolute; bottom: -20px; right: 20px;" alt="">
 				</div>
 			</div>
 		</div>
@@ -296,14 +387,18 @@
 			<div class="popup-content dark" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Отлично, добавьте Ваш первый магазин! Для этого нажмите добавить магазин в правом верхнем углу.</p>
-						<button onclick="document.querySelector('.base_profile-popup').style.display = 'none';" class="button-1 dark" style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Отлично, добавьте Ваш
+							первый магазин! Для этого нажмите добавить магазин в правом верхнем углу.</p>
+						<button onclick="document.querySelector('.base_profile-popup').style.display = 'none';"
+							class="button-1 dark"
+							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
-					<img class="success_deal" src="{% static 'img/success_deal.png' %}" style="position: absolute; bottom: -20px; right: 20px;" alt="">
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
+						style="position: absolute; bottom: -20px; right: 20px;" alt="">
 				</div>
 			</div>
 		</div>
-		
+
 		<header class="navbar dark">
 			<div class="container">
 				<div class="navbar-links dark">
@@ -407,15 +502,15 @@
 				{% endif %}
 			</ul>
 		</div>
-	
+
 		<div class="content">
 			<div class="container">
 				{% block content %}
-        
-                {% endblock content %}
+
+				{% endblock content %}
 			</div>
 		</div>
-	
+
 		<footer class="footer">
 			<p class="footer__title dark" style="padding-left: 5px;">Реклама</p>
 			<div class="d-flex footer__content dark">
@@ -429,10 +524,14 @@
 		<div id="snackbar" class="dark">Товар добавлен в корзину</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="{% static 'multi-select.js' %}"></script>
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<script>
 
-		function themeChange(){
+		new MultiSelectTag('tags')
+
+
+		function themeChange() {
 			if (localStorage.getItem('theme') == 'light') {
 				document.querySelector(".auth_tab.active").style.backgroundColor = "#00A550"
 				localStorage.removeItem("theme")
@@ -468,7 +567,7 @@
 					} else {
 						document.querySelector('.cart-icon').src = '/static/img/cart.svg';
 					}
-					
+
 				} catch (_) {
 					console.log("cart not found")
 				}
@@ -654,7 +753,7 @@
 		}
 
 		document.addEventListener('DOMContentLoaded', function () {
-			
+
 			if (localStorage.getItem('theme') == 'light') {
 				localStorage.removeItem("theme")
 				const darks = document.querySelectorAll(".dark")
@@ -765,27 +864,27 @@
 
 		});
 
-		window.addEventListener('click', function(event) {
+		window.addEventListener('click', function (event) {
 			let popups = document.querySelectorAll('#popup');
 			for (let popup of popups) {
 				if (event.target == popup) {
 					popup.style.display = 'none';
 				}
 			}
-			
+
 		});
 
-		function minus(element){
+		function minus(element) {
 			i = element.nextElementSibling;
-			if (i.value != 1){
+			if (i.value != 1) {
 				i.value = Number(i.value) - 1
 			}
 		}
-		
-		function plus(element){
+
+		function plus(element) {
 			i = element.previousElementSibling;
 			i.value = Number(i.value) + 1
-    	}
+		}
 
 		function openTab(element) {
 			if (element.textContent == 'Регистрация') {
@@ -821,7 +920,7 @@
 
 		function toggleAccordion(element) {
 			element.parentNode.classList.toggle("active");
-			
+
 			var accordionContent = element.nextElementSibling;
 			var triangle = element.querySelector(".triangle")
 			if (triangle.classList.contains("triangle-bottom")) {
@@ -843,17 +942,17 @@
 			targetBlock.parentNode.insertBefore(clonedBlock, targetBlock.nextSibling);
 		}
 
-		function openProduct(element, store, isCreate, category, name, articul, amount, unit, remainder, image, description, tags, id, price, is_first){
+		function openProduct(element, store, isCreate, category, name, articul, amount, unit, remainder, image, description, tags, id, price, is_first) {
 			const popup_product = document.querySelector(".product-popup")
 			const button_parent = popup_product.querySelector(".button-parent")
 			for (const button of button_parent.querySelectorAll("button")) {
 				button.remove()
 			}
 			if (isCreate) {
-				for (const input of popup_product.querySelectorAll("input")){
+				for (const input of popup_product.querySelectorAll("input")) {
 					if (input.name == "category") {
 						input.value = category
-					} else if (input.name == "store"){
+					} else if (input.name == "store") {
 						input.value = store
 					} else {
 						input.value = ""
@@ -870,9 +969,16 @@
 				productPreview.querySelector("img").style.display = 'block';
 
 				popup_product.querySelector("select").value = ""
-				const textarea = popup_product.querySelectorAll("textarea")
-				textarea[0].value = ""
-				textarea[1].value = ""
+				const textarea = popup_product.querySelector("textarea")
+				textarea.value = ""
+				const tags_input = popup_product.querySelector("#tags")
+				tags_input.value = ""
+				tags_input.nextElementSibling.remove()
+				new MultiSelectTag('tags')
+
+				const remainder_input = popup_product.querySelector("input[name='remainder']")
+				remainder_input.style.marginRight = "10px"
+
 				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
 			} else {
 				const name_input = popup_product.querySelector("input[name='name']")
@@ -880,20 +986,21 @@
 				const amount_input = popup_product.querySelector("input[name='amount']")
 				const remainder_input = popup_product.querySelector("input[name='remainder']")
 				const price_input = popup_product.querySelector("input[name='price']")
-				const description_input = popup_product.querySelectorAll("textarea")[0]
-				const tags_input = popup_product.querySelectorAll("textarea")[1]
+				const description_input = popup_product.querySelector("textarea")
+				const tags_input = popup_product.querySelector("#tags")
 				const select_unit = popup_product.querySelector("select")
 
 				productPreview.style.background = `url("${image}") 0 0/100% 100% no-repeat`;
 				productPreview.querySelector("img").style.display = 'none';
-				
+
 
 				name_input.value = name
 				articul_input.value = articul
 				amount_input.value = amount
 				remainder_input.value = remainder
+				remainder_input.style.marginRight = "0px"
 				description_input.value = description
-				tags_input.value = tags
+				tags_input.nextElementSibling.style.display = 'none'
 				select_unit.value = unit
 				price_input.value = price
 
@@ -902,13 +1009,13 @@
 			popup_product.style.display = 'block';
 		}
 
-		function createProduct(category_id, store_id, is_first){
+		function createProduct(category_id, store_id, is_first) {
 			const product_form = document.querySelector('.product-form')
 			let formData = new FormData(product_form);
 			let xhr = new XMLHttpRequest();
 			xhr.open('POST', '/create_product/');
 			xhr.responseType = 'json';
-			xhr.onload = function() {
+			xhr.onload = function () {
 				if (xhr.status == 200) {
 					if (is_first) {
 						const target_element = document.querySelector(`#template category_${category_id}`)
@@ -929,22 +1036,22 @@
 						</div>
 					</div>`)
 					}
-					
-				document.querySelector(".product-popup").style.display = "none"
+
+					document.querySelector(".product-popup").style.display = "none"
 				}
 			};
 			xhr.send(formData);
 		}
 
-		function updateProduct(store_id, category_id, id, is_first){
+		function updateProduct(store_id, category_id, id, is_first) {
 			let formData = new FormData(document.querySelector('.product-form'));
 			let xhr = new XMLHttpRequest();
 			xhr.open('POST', `/update_product/${id}/`);
 			xhr.responseType = 'json';
-			xhr.onload = function() {
+			xhr.onload = function () {
 				if (xhr.status == 200) {
 					const target_element = document.querySelector(`.store_${store_id}_${category_id} .product_${id}`)
-					for (const div of target_element.querySelectorAll("div")){
+					for (const div of target_element.querySelectorAll("div")) {
 						div.remove()
 					}
 					target_element.insertAdjacentHTML("afterbegin", `<div style="position: relative;">
@@ -952,16 +1059,16 @@
 						<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
 						<p class="product-subtitle ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 					</div>`)
-				document.querySelector(".product-popup").style.display = "none"
+					document.querySelector(".product-popup").style.display = "none"
 				}
 			};
 			xhr.send(formData);
 		}
 
-		function deleteProduct(element, id){
+		function deleteProduct(element, id) {
 			let xhr = new XMLHttpRequest();
 			xhr.open('GET', `/delete_product/${id}/`);
-			xhr.onload = function() {
+			xhr.onload = function () {
 				if (xhr.status == 200) {
 					element.parentNode.parentNode.remove()
 				}
@@ -972,16 +1079,16 @@
 		function showSnack() {
 			var x = document.getElementById("snackbar");
 			x.classList.add("show")
-			setTimeout(function(){ x.className = x.classList.remove("show"); }, 3000);
+			setTimeout(function () { x.className = x.classList.remove("show"); }, 3000);
 		}
 
 
-		function addToCart(id, form){
+		function addToCart(id, form) {
 			let formData = new FormData(form);
 			let xhr = new XMLHttpRequest();
 			xhr.open('POST', `/addtoCart/${id}/`);
 			xhr.responseType = 'json';
-			xhr.onload = function() {
+			xhr.onload = function () {
 				if (xhr.status == 200) {
 					if (xhr.response['success']) {
 						showSnack()

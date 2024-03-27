@@ -64,7 +64,13 @@ def logout_view(request):
 @login_required(login_url="/login/")
 def index(request):
     products = Product.objects.filter(name__icontains=request.GET.get("key", "")) & Product.objects.filter(store__approve=True) & Product.objects.filter(price__range=(1 if "price_from" not in request.POST else int(request.POST["price_from"]), 100000 if "price_from" not in request.POST else int(request.POST["price_from"])))
-    return render(request, "index.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.all(), "products": products})
+
+    if request.GET.get("key", "") != "":
+        Query.objects.create(user=request.user, query=request.GET["key"])
+
+    tags = Tag.objects.filter(id__in=request.GET.getlist("tags"))
+    products = products.filter(tags__in=tags)
+    return render(request, "index.html", {"regions": Region.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.all(), "products": products})
 
 def delivery(request):
     return render(request, "map.html", {"login_form": LoginForm(), "register_form": RegisterForm()})
@@ -104,8 +110,8 @@ def profile(request):
         user.provider.site = request.POST['site']
         user.provider.description = request.POST['description']
         user.provider.save()
-        return render(request, "profile.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider), "success_save": True})
-    return render(request, "profile.html", {"regions": Region.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider)})
+        return render(request, "profile.html", {"regions": Region.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider), "success_save": True})
+    return render(request, "profile.html", {"regions": Region.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider)})
 
 @require_POST
 def create_store(request):
@@ -162,9 +168,10 @@ def create_product(request):
     product.price = request.POST["price"]
     product.remainder = request.POST["remainder"]
     product.description = request.POST["description"]
-    product.tags = request.POST["tags"]
     product.save()
-    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id, "tags": product.tags})
+    for tag in request.POST.getlist("tags"):
+        product.tags.add(Tag.objects.get(id = tag))
+    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
 
 @require_POST
 @csrf_exempt
@@ -182,9 +189,8 @@ def update_product(request, id):
         product.unit = request.POST["unit"]
         product.remainder = request.POST["remainder"]
         product.description = request.POST["description"]
-        product.tags = request.POST["tags"]
         product.save()
-    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id, "tags": product.tags})
+    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
 
 @require_GET
 @csrf_exempt

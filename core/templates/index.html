@@ -4,78 +4,6 @@
 
 {% load static %}
 
-
-{% block ascript %}
-<script src="https://api-maps.yandex.ru/2.1/?apikey=52427b0d-4b85-4b1a-828b-ad4cf6903c9f&lang=ru_RU" type="text/javascript">
-</script>
-<script type="text/javascript">
-	ymaps.ready(init);
-	function init(){
-		var myMap = new ymaps.Map("map", {
-			center: [55.76, 37.64],
-			zoom: 10
-		});
-
-		{% for store in stores %}
-
-			{% if store.approve %}
-
-			var myPlacemark = new ymaps.Placemark([{{store.map_visor}}]);
-
-			myPlacemark.events.add('click', function () {
-				let xhr = new XMLHttpRequest();
-				xhr.open('GET', `/storeProducts/{{store.id}}/`);
-				xhr.responseType = 'json';
-				xhr.onload = function() {
-					if (xhr.status == 200) {
-						const provider = JSON.parse(xhr.response["provider"])
-						const store = JSON.parse(xhr.response["store"])
-						const products = JSON.parse(xhr.response["products"])
-						const storeProducts = document.querySelector(".store_products-popup")
-						const product_subtitle = storeProducts.querySelectorAll(".product-subtitle")
-						const img_provider = storeProducts.querySelector(".img-provider")
-						const target_element = storeProducts.querySelector(`.products-list`)
-						product_subtitle[0].textContent = provider[0]["fields"]["company"]
-						product_subtitle[2].textContent = store[0]["fields"]["address"]
-						img_provider.src = "/media/" + provider[0]["fields"]["logo"]
-						for (const product of products) {
-							target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="max-width: 256px; margin-right: 20px;">
-								<img src="${'/media/' + product['fields']['image']}" width="260" height="260" style="border-radius: 8px;" alt="">
-								{% if not request.user.provider %}
-								<form method="post" class="d-flex justify-content-between" style="margin-top: 5px;">
-									{% csrf_token %}
-									<button class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" type="button" onclick="addToCart(addToCart('${product['pk']}', this.parentNode))" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
-									<div class="store-item__data-count ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'} d-flex justify-content-between">
-										<span onclick="minus(this)">-</span>
-										<input type="text" name="count" value="1">
-										<span onclick="plus(this)">+</span>
-									</div>
-								</form>
-								{% endif %}
-								<div class="d-flex align-items-center" style="margin: 10px 0px;">
-									<p class="product__price ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="margin-right: 10px;">${product['fields']['price']} ₽</p>
-									<p class="product__price-2">${product['fields']['price']} ₽ без TODOMARKET</p>
-								</div>
-								<p class="product__title ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}">${product['fields']['name']}, ${product['fields']['articul']} <span style="font-size: 12px; color: #616161;">${product['fields']['amount']} ${product['fields']['unit']}</span></p>
-							</div>`)
-						}
-						storeProducts.style.display = 'block'
-					}
-				};
-				xhr.send();
-			});
-
-			myMap.geoObjects.add(myPlacemark); 
-
-			{% endif %}
-		
-		{% endfor %}
-
-	}
-</script>
-{% endblock ascript %}
-
-
 {% block content %}
 
 <h1 class="title dark">Главная страница</h1>
@@ -132,10 +60,15 @@
 		<div class="card dark" id="map" style="display: none; width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
 			
 		</div>
-		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 460px;">
+		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 500px;">
 			<p class="filter_search-title dark">Фильтр поиска</p>
 			<input class="input-field dark" name="key" placeholder="Ключевое слово" type="text">
-			<select class="input-field dark" name="region">
+			<select name="tags" id="tags_search" multiple>
+				{% for tag in tags %}
+				<option value="{{ tag.id }}">{{ tag.name }}</option>
+				{% endfor %}
+			</select>
+			<select class="input-field dark" name="region" style="margin: 10px 0px 0px;">
 				<option value="" selected disabled>Регион</option>
 				{% for region in regions %}
 					<option value="{{ region.id }}">{{ region.name }}</option>
@@ -157,10 +90,93 @@
 			</select>
 			<input class="input-field dark" name="price_from" placeholder="Цена от" type="text">
 			<input class="input-field dark" name="price_to" placeholder="Цена до" type="text">
-			<button class="button-1 dark" type="submit" style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
+			<button class="button-1 dark" {% if request.user.is_authenticated %} type="submit" {% else %} type="button" {% endif %} style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
 		</form>
 	</div>
 </div>
 {% endblock content %}
 
+{% block script %}
+<script>
+	new MultiSelectTag('tags_search')
+
+	var swiper = new Swiper('.swiper-container', {
+		slidesPerView: 4,
+		spaceBetween: 20
+	});
+	
+</script>
+
+<script src="https://api-maps.yandex.ru/2.1/?apikey=52427b0d-4b85-4b1a-828b-ad4cf6903c9f&lang=ru_RU" type="text/javascript">
+</script>
+<script type="text/javascript">
+	ymaps.ready(init);
+	function init(){
+		var myMap = new ymaps.Map("map", {
+			center: [55.76, 37.64],
+			zoom: 10
+		});
+
+		{% for store in stores %}
+
+			{% if store.approve %}
+
+			var myPlacemark = new ymaps.Placemark([{{store.map_visor}}]);
+
+			myPlacemark.events.add('click', function () {
+				let xhr = new XMLHttpRequest();
+				xhr.open('GET', `/storeProducts/{{store.id}}/`);
+				xhr.responseType = 'json';
+				xhr.onload = function() {
+					if (xhr.status == 200) {
+						const provider = JSON.parse(xhr.response["provider"])
+						const store = JSON.parse(xhr.response["store"])
+						const products = JSON.parse(xhr.response["products"])
+						const storeProducts = document.querySelector(".store_products-popup")
+						const product_subtitle = storeProducts.querySelectorAll(".product-subtitle")
+						const img_provider = storeProducts.querySelector(".img-provider")
+						const provider_link = storeProducts.querySelector("a")
+						const target_element = storeProducts.querySelector(`.products-list`)
+						provider_link.href = `/provider/${provider[0]["pk"]}`
+						product_subtitle[0].textContent = provider[0]["fields"]["company"]
+						product_subtitle[2].textContent = store[0]["fields"]["address"]
+						img_provider.src = "/media/" + provider[0]["fields"]["logo"]
+						for (const product of products) {
+							target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="max-width: 256px; margin-right: 20px;">
+								<img src="${'/media/' + product['fields']['image']}" width="260" height="260" style="border-radius: 8px;" alt="">
+								{% if not request.user.provider %}
+								<form method="post" class="d-flex justify-content-between" style="margin-top: 5px;">
+									{% csrf_token %}
+									<button class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" type="button" onclick="addToCart(addToCart('${product['pk']}', this.parentNode))" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
+									<div class="store-item__data-count ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'} d-flex justify-content-between">
+										<span onclick="minus(this)">-</span>
+										<input type="text" name="count" value="1">
+										<span onclick="plus(this)">+</span>
+									</div>
+								</form>
+								{% endif %}
+								<div class="d-flex align-items-center" style="margin: 10px 0px; ">
+									<p class="product__price ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="margin-right: 10px;">${product['fields']['price']} ₽</p>
+									<p class="product__price-2">${product['fields']['price']} ₽ без TODOMARKET</p>
+								</div>
+								<p class="product__title ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}">${product['fields']['name']}, ${product['fields']['articul']} <span style="font-size: 12px; color: #616161;">${product['fields']['amount']} ${product['fields']['unit']}</span></p>
+							</div>`)
+						}
+						storeProducts.style.display = 'block'
+					}
+				};
+				xhr.send();
+			});
+
+			myMap.geoObjects.add(myPlacemark); 
+
+			{% endif %}
+		
+		{% endfor %}
+
+	}
+</script>
+
+
+{% endblock script %}
 

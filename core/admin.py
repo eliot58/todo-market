@@ -45,4 +45,14 @@ class DeliveryAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+
+@admin.register(Query)
+class QueryAdmin(admin.ModelAdmin):
+    list_display = ['user', "query", "date"]
+
+
 admin.site.register(Ads)

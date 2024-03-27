@@ -14,6 +14,17 @@ class Region(models.Model):
     def __str__(self):
         return self.name
     
+
+class Tag(models.Model):
+    name = models.CharField(max_length = 256, unique = True, verbose_name = "Название тэга")
+
+    class Meta:
+        verbose_name = "Тэг"
+        verbose_name_plural = "Тэги"
+
+    def __str__(self):
+        return self.name
+    
 class DeliveryCondition(models.Model):
     name = models.CharField(max_length = 256, unique = True, verbose_name = "Условия доставки")
 
@@ -138,7 +149,7 @@ class Product(models.Model):
     unit = models.CharField(max_length = 10, choices = ch, verbose_name = "Ед. изм")
     remainder = models.PositiveIntegerField(verbose_name = "Остаток")
     description = models.TextField(null = True, blank = True, verbose_name = "Описание")
-    tags = models.TextField()
+    tags = models.ManyToManyField(Tag)
 
 
     class Meta:
@@ -147,6 +158,18 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Query(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE, verbose_name = "Аккаунт")
+    query = models.TextField()
+    date = models.DateTimeField(auto_now_add = True)
+
+    class Meta:
+        verbose_name = "Запрос"
+        verbose_name_plural = "Запросы"
+
+    def __str__(self):
+        return self.query
 
 
 class News(models.Model):
