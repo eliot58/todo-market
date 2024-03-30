@@ -71,14 +71,17 @@ def index(request):
 
     products = None
     flag = False
-    if "tags" in request.GET:
+    if "query" in request.GET:
         flag = True
         products = Product.objects.filter(price__range=(1 if request.GET["price_from"] == "" else int(request.GET["price_from"]), 100000 if request.GET["price_to"] == "" else int(request.GET["price_to"])))
 
-        tags = Tag.objects.filter(id__in=request.GET.getlist("tags"))
+        tags = Tag.objects.filter(name__icontains=request.GET["query"])
         products = products.filter(tags__in=tags)
 
-    return render(request, "index.html", {"tags": Tag.objects.all(), "products": products, "stores": Store.objects.all(), "flag": flag})
+        
+        
+
+    return render(request, "index.html", {"products": products, "stores": Store.objects.all(), "flag": flag})
 
 def delivery(request):
     return render(request, "map.html", {"login_form": LoginForm(), "register_form": RegisterForm()})
@@ -273,4 +276,13 @@ def cart_item_plus(request, id):
 @login_required(login_url='/login/')
 @csrf_exempt
 def storeProducts(request, id):
-    return JsonResponse({"store": serialize('json', Store.objects.filter(id = id)),"provider": serialize('json', [Store.objects.filter(id = id)[0].provider]), "products": serialize('json', Product.objects.filter(store_id = id))})
+    return JsonResponse({"store": serialize('json', Store.objects.filter(id = id)), "provider": serialize('json', [Store.objects.filter(id = id)[0].provider]), "products": serialize('json', Product.objects.filter(store_id = id))})
+
+
+# @require_GET
+# @csrf_exempt
+# def search(request):
+#     query = request.GET["query"]
+#     tags = Tag.objects.filter(name__icontains = query)
+#     products = Product.objects.filter(tags__in = tags)
+#     return JsonResponse({"results": json.dumps(list(products.values("id", "name")))})

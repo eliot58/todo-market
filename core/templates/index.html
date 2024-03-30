@@ -11,6 +11,9 @@
 	<div class="d-flex">
 		<div class="card dark products" style="width: 700px; margin-right: 10px; margin-bottom: 300px; {% if flag %} display: block; {% else %} display: none; {% endif %}">
 			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
+			{% if products|length == 0 %}
+			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;">По вашему запросу ничего не найдено</p>
+			{% else %}
 			{% for product in products %}
 			<div class="d-flex justify-content-between">
 				<div class="d-flex" style="margin-bottom: 10px;">
@@ -49,20 +52,25 @@
 				</div>
 			</div>
 			{% endfor %}
+
+			{% endif %}
 			
 		</div>
-		<div class="card dark" id="map" style="{% if flag %} display: none; {% endif %}width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
+		<div class="card dark" id="map" style="{% if flag %} display: none; {% else %} display: block; {% endif %}width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
 			
 		</div>
-		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 260px;">
+		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 280px;">
 			<p class="filter_search-title dark" style="margin-bottom: 10px;">Фильтр поиска</p>
-			<select name="tags" id="tags_search" multiple>
-				{% for tag in tags %}
-				<option value="{{ tag.id }}">{{ tag.name }}</option>
-				{% endfor %}
-			</select>
+			<div class="dropdown-custom">
+				<input class="input-field dark" type="text" id="searchInput" name="query" placeholder="Поиск...">
+				<div class="dropdown-menu-custom" id="dropdownMenu">
+					<div class="dropdown-item-custom dark">Элемент 1</div>
+					<div class="dropdown-item-custom dark">Элемент 2</div>
+					<div class="dropdown-item-custom dark">Элемент 3</div>
+				</div>
+			</div>
 			<input class="input-field dark" name="price_from" placeholder="Цена от" type="text">
-			<input class="input-field dark" name="price_to" style="margin-top: 0px;" placeholder="Цена до" type="text">
+			<input class="input-field dark" name="price_to" placeholder="Цена до" type="text">
 			<button class="button-1 dark" {% if request.user.is_authenticated %} type="submit" {% else %} type="button" {% endif %} style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
 		</form>
 	</div>
@@ -71,12 +79,46 @@
 
 {% block script %}
 <script>
-	new MultiSelectTag('tags_search')
 
 	var swiper = new Swiper('.swiper-container', {
 		slidesPerView: 4,
 		spaceBetween: 20
 	});
+
+	const searchInput = document.getElementById('searchInput');
+
+	const dropdownMenu = document.getElementById('dropdownMenu');
+
+	function selectDropItem(name) {
+		searchInput.value = name
+		dropdownMenu.style.display = "none"
+	}
+
+	// document.addEventListener("DOMContentLoaded", function() {
+
+	// 	searchInput.addEventListener('input', function() {
+	// 		const searchTerm = searchInput.value.toLowerCase();
+	// 		let xhr = new XMLHttpRequest();
+	// 		xhr.open('GET', `/search/?query=${searchTerm}`);
+	// 		xhr.responseType = 'json';
+	// 		xhr.onload = function () {
+	// 			if (xhr.status == 200) {
+	// 				for (const dropItem of dropdownMenu.querySelectorAll("div")) {
+	// 					dropItem.remove()
+	// 				}
+	// 				const items = JSON.parse(xhr.response["results"])
+	// 				for (const item of items) {
+	// 					dropdownMenu.insertAdjacentHTML("afterbegin", `<div class="dropdown-item-custom ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="selectDropItem('${item["name"]}')">${item["name"]}</div>`)
+	// 				}
+	// 				dropdownMenu.style.display = "flex"
+	// 				dropdownMenu.style.flexDirection = "column"
+	// 			}
+	// 		};
+	// 		xhr.send();
+	// 	});
+
+	// });
+
 	
 </script>
 

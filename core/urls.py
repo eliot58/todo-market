@@ -25,4 +25,5 @@ urlpatterns = [
     path('minus/<int:id>/', cart_item_minus),
     path('plus/<int:id>/', cart_item_plus),
     path("storeProducts/<int:id>/", storeProducts, name="store_products"),
+    # path("search/", search, name="search"),
 ]

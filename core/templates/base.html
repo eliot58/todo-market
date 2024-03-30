@@ -866,11 +866,13 @@
 
 		window.addEventListener('click', function (event) {
 			let popups = document.querySelectorAll('#popup');
+			const dropdownMenu = document.getElementById('dropdownMenu');
 			for (let popup of popups) {
 				if (event.target == popup) {
 					popup.style.display = 'none';
 				}
 			}
+
 
 		});
 
