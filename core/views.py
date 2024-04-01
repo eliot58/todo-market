@@ -72,14 +72,9 @@ def index(request):
     if "query" in request.GET:
         flag = True
         tags = Tag.objects.filter(name__icontains = request.GET["query"])
+        products = Product.objects.filter(name__icontains = request.GET["query"]).distinct()
         providers = {}
-
-        for product in Product.objects.filter(name__icontains = request.GET["query"]).distinct():
-            if product.store.provider.company not in providers:
-                providers[product.store.provider.company] = {"provider_id": product.store.provider.id, "address": product.store.address, "products": [product], "logo": product.store.provider.logo.url}
-            else:
-                providers[product.store.provider.company]["products"].append(product)
-        for product in Product.objects.filter(tags__in = tags).distinct():
+        for product in products.union(Product.objects.filter(tags__in = tags).distinct()):
             if product.store.provider.company not in providers:
                 providers[product.store.provider.company] = {"provider_id": product.store.provider.id, "address": product.store.address, "products": [product], "logo": product.store.provider.logo.url}
             else:
