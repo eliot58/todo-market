@@ -59,7 +59,7 @@
 <!-- <p style="font-weight: 500; color: #E9E9E9; margin: 20px 0px;">Условия сотрудничества (заполняются менеджеру сервиса)</p> -->
 {% for store in stores %}
 	<div class="d-flex flex-column">
-		<p class="profile-info dark" style="font-weight: 500; margin-top: 10px;">Информация о магазине</p>
+		<p class="profile-info dark" style="font-weight: 500; margin: 10px 10px 0px;">Информация о магазине</p>
 		<form method="post" action="{% url 'update_store' store.id %}" class="d-flex flex-column card dark" style="margin: 10px 0px;">
 			{% csrf_token %}
 			<div class="d-flex">
@@ -115,7 +115,8 @@
 					<option value="{{ region.id }}" {% if region == store.region %} selected {% endif %}>{{ region.name }}</option>
 					{% endfor %}
 				</select>
-			</div>	
+			</div>
+			<p class="profile-info dark" style="font-weight: 500; margin: 10px; font-size: 18px;">Товары</p>
 			{% for category in categories %}
 			<div class="custom-accordion-item dark">
 				<div class="custom-accordion-header dark" onclick="toggleAccordion(this)">

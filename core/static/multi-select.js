@@ -20,6 +20,53 @@ function MultiSelectTag(e, t = { shadow: !1, rounded: !0 }) {
                 const n = document.createElement("li");
                 (n.innerHTML = t.label), (n.dataset.value = t.value), e && t.label.toLowerCase().startsWith(e.toLowerCase()) ? v.appendChild(n) : e || v.appendChild(n);
             }
+        const button = document.createElement("button");
+        button.textContent = "Свой вариант"
+        button.classList.add("button-1", "dark")
+        button.style.padding = "12px 0px"
+        button.style.borderRadius = "8px"
+        button.style.fontWeight = "600"
+        button.style.marginTop = "10px"
+        button.style.width = "100%"
+        button.type = "button"
+
+        button.addEventListener("click", function(){
+            
+            const inp = document.createElement("input");
+            inp.classList.add("input-field", "dark")
+            inp.placeholder = "Введите свой вариант"
+            inp.style.padding = "5px"
+            inp.style.border = `1px solid #${localStorage.getItem('theme') == 'light' ? '2094AD' : '00A550'}`
+            inp.addEventListener("keypress", function(event){
+                if (event.keyCode == 13) {
+                    const tags = document.querySelector("#tags")
+                    const t = document.createElement("div");
+                    t.classList.add("item-container");
+                    const n = document.createElement("div");
+                    n.classList.add("item-label"), (n.textContent = inp.value), (n.dataset.value = Number(v.querySelectorAll("li")[v.querySelectorAll("li").length -1].dataset.value) + 1);
+                    const d = new DOMParser().parseFromString(
+                        '<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="item-close-svg">\n                <line x1="18" y1="6" x2="6" y2="18"></line>\n                <line x1="6" y1="6" x2="18" y2="18"></line>\n                </svg>',
+                        "image/svg+xml"
+                    ).documentElement;
+                    d.addEventListener("click", (t) => {
+                        d.parentNode.remove()
+                        for (const option of tags.querySelectorAll("option")) {
+                            if (option.textContent == inp.value) {
+                                option.remove()
+                            }
+                        }
+                    }),
+                        t.appendChild(n),
+                        t.appendChild(d),
+                        o.append(t);
+                    tags.insertAdjacentHTML("beforeend", `<option selected value="${inp.value}">${inp.value}</option>`)
+                    
+                    inp.remove()
+                }
+            })
+            v.insertBefore(inp, button)
+        })
+        v.appendChild(button)
     }
     function g(e) {
         const t = document.createElement("div");
@@ -38,7 +85,7 @@ function MultiSelectTag(e, t = { shadow: !1, rounded: !0 }) {
             o.append(t);
     }
     function L() {
-        for (var e of v.children)
+        for (var e of v.querySelectorAll("li"))
             e.addEventListener("click", (e) => {
                 (l.find((t) => t.value == e.target.dataset.value).selected = !0), (c.value = null), f(), E(), c.focus();
             });
@@ -96,7 +143,7 @@ function MultiSelectTag(e, t = { shadow: !1, rounded: !0 }) {
         L(),
         E(!1),
         u.addEventListener("click", () => {
-            p.classList.contains("hidden") && (f(), L(), p.classList.remove("hidden"), c.focus());
+            (f(), L(), p.classList.toggle("hidden", p.classList.toggle("hidden")), c.focus());
         }),
         c.addEventListener("keyup", (e) => {
             f(e.target.value), L();

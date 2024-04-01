@@ -64,24 +64,25 @@ def logout_view(request):
 @login_required(login_url="/login/")
 def index(request):
 
-    # products = Product.objects.filter(price__range=(1 if "price_from" not in request.GET else int(request.GET.get("price_from", 1)), 100000 if "price_from" not in request.GET else int(request.GET.get("price_to", 100000))))
+    if request.GET.get("query", "") != "":
+        Query.objects.create(user = request.user, query = request.GET["query"])
 
-    # if request.GET.get("key", "") != "":
-    #     Query.objects.create(user=request.user, query=request.GET["key"])
-
-    products = None
+    providers = None
     flag = False
     if "query" in request.GET:
         flag = True
-        products = Product.objects.filter(price__range=(1 if request.GET["price_from"] == "" else int(request.GET["price_from"]), 100000 if request.GET["price_to"] == "" else int(request.GET["price_to"])))
-
         tags = Tag.objects.filter(name__icontains=request.GET["query"])
-        products = products.filter(tags__in=tags)
+        products = Product.objects.filter(name__icontains = request.GET["query"]).distinct()
+        providers = {}
+        for product in products.union(Product.objects.filter(tags__in = tags).distinct()):
+            if product.store.provider.company not in providers:
+                providers[product.store.provider.company] = {"provider_id": product.store.provider.id, "address": product.store.address, "products": [product], "logo": product.store.provider.logo.url}
+            else:
+                providers[product.store.provider.company]["products"].append(product)
 
-        
-        
+        providers = providers.items()
 
-    return render(request, "index.html", {"products": products, "stores": Store.objects.all(), "flag": flag})
+    return render(request, "index.html", {"providers": providers, "stores": Store.objects.all(), "flag": flag})
 
 def delivery(request):
     return render(request, "map.html", {"login_form": LoginForm(), "register_form": RegisterForm()})
@@ -181,7 +182,11 @@ def create_product(request):
     product.description = request.POST["description"]
     product.save()
     for tag in request.POST.getlist("tags"):
-        product.tags.add(Tag.objects.get(id = tag))
+        try:
+            product.tags.add(Tag.objects.get(id = tag))
+        except Tag.DoesNotExist:
+            tag = Tag.objects.create(name = tag)
+            product.tags.add(tag)
     return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
 
 @require_POST
