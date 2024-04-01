@@ -182,9 +182,9 @@ def create_product(request):
     product.description = request.POST["description"]
     product.save()
     for tag in request.POST.getlist("tags"):
-        try:
+        if tag.isdigit():
             product.tags.add(Tag.objects.get(id = tag))
-        except Tag.DoesNotExist:
+        else:
             tag = Tag.objects.create(name = tag)
             product.tags.add(tag)
     return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})

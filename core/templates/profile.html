@@ -14,7 +14,7 @@
 	<form class="d-flex flex-column" method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="d-flex">
-			<div class="logo_preview dark" style="min-width: 300px; min-height: 300px; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer; {% if request.user.provider.logo %} background: url('{{ request.user.provider.logo.url }}') 0 0/100% 100%; {% endif %}" onclick="this.querySelector('input').click()">
+			<div class="logo_preview dark" style="min-width: 270px; min-height: 270px; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer; {% if request.user.provider.logo %} background: url('{{ request.user.provider.logo.url }}') 0 0/100% 100%; {% endif %}" onclick="this.querySelector('input').click()">
 				<input type="file" id="logo_input" name="logo" style="position: absolute; bottom: 0; left: 0; z-index: -10;" required>
 				<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%); {% if request.user.provider.logo %} display: none; {% endif %}" alt="">
 				<p class="select_logo dark">Выбрать логотип</p>
