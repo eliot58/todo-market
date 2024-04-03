@@ -8,27 +8,44 @@
 
 {% block content %}
 <h1 class="title dark">Корзина</h1>
-{% for item in items %}
-<div class="d-flex cart dark" style="position: relative; margin: 10px 0px; padding: 10px; border-radius: 8px;">
-	<img src="{{item.1.photo}}" width="136" height="136" style="border-radius: 8px;" alt="">
-	<a href="{% url 'cart_item_delete' item.0 %}" style="position: absolute; top: 10px; right: 10px;">
-		<img class="close-icon" src="{% static 'img/close.svg' %}" alt="">
-	</a>
-	<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
-		<p class="product__title dark" style="margin-top: 20px; width: 365px; line-height: 24px;">{{ item.1.title }} {{ item.1.articul }} {{ item.1.description }}<span style="font-size: 12px; color: #616161;">{{ item.1.amount }} {{ item.1.unit }}</span></p>
-		<div class="d-flex justify-content-end align-items-center">
-			<div class="store-item__data-count dark d-flex justify-content-between">
-				<span onclick="minus(this, '{{item.0}}', '{{item.1.price}}')">-</span>
-				<input type="text" value="{{ item.1.count }}">
-				<span onclick="plus(this, '{{item.0}}', '{{item.1.price}}')">+</span>
+{% for provider in providers %}
+	<div class="d-flex card dark">
+		<div class="d-flex">
+			<img src="{{provider.1.photo}}" width="72" height="72" style="border-radius: 8px;" alt="">
+			<div class="d-flex flex-column justify-content-around" style="margin: 10px;"> 
+				<p class="providers__company dark">{{provider.1.company}}</p>
+				<p class="providers__region dark">{{provider.1.region}}</p>
 			</div>
-			<p class="product__price dark" style="margin: 0px 15px;"><span>{{ item.1.price|multiply:item.1.count }}</span> ₽</p>
-			<p style="font-size: 12px; color: #616161; width: 100px;"><span>{{ item.1.price|multiply:item.1.count }}</span> ₽ без TODOMARKET</p>
+		</div>
+		<div class="d-flex justify-content-between" style="margin-top: 20px;">
+			<p class="providers__company dark" style="font-size: 16px; font-weight: 400;">Адрес: {{provider.1.address}}</p>
+			<p class="providers__company dark" style="font-size: 16px; font-weight: 400;">Телефон: {{provider.1.phone}}</p>
+			<p class="providers__company dark" style="font-size: 16px; font-weight: 400;">Сайт: {{provider.1.site}}</p>
 		</div>
 	</div>
-</div>
+	{% for item in provider.1.items.items %}
+	<div class="d-flex cart dark" style="position: relative; margin: 10px 0px; padding: 10px; border-radius: 8px;">
+		<img src="{{item.1.photo}}" width="136" height="136" style="border-radius: 8px;" alt="">
+		<a href="{% url 'cart_item_delete' item.0 %}" style="position: absolute; top: 10px; right: 10px;">
+			<img class="close-icon" src="{% static 'img/close.svg' %}" alt="">
+		</a>
+		<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
+			<p class="product__title dark" style="margin-top: 20px; width: 365px; line-height: 24px;">{{ item.1.title }} <span style="font-size: 12px; color: #616161;">{{ item.1.amount }} {{ item.1.unit }}</span></p>
+			<p class="product__title dark">{{ item.1.description }}</p>
+			<div class="d-flex justify-content-end align-items-center">
+				<div class="store-item__data-count dark d-flex justify-content-between">
+					<span onclick="minus(this, '{{item.0}}', '{{item.1.price}}')">-</span>
+					<input type="text" disabled value="{{ item.1.count }}">
+					<span onclick="plus(this, '{{item.0}}', '{{item.1.price}}')">+</span>
+				</div>
+				<p class="product__price dark" style="margin: 0px 15px; width: 100px;"><span>{{ item.1.price|multiply:item.1.count }}</span> ₽</p>
+				<p style="font-size: 12px; color: #616161; width: 120px;"><span>{{ item.1.price|multiply:item.1.count }}</span> ₽ без TODOMARKET</p>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
 {% endfor %}
-<div style="background-color: #282828; padding: 10px 15px; border-radius: 16px; display: none;">
+<div style="background-color: #282828; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 100px;">
 	<div style="width: 270px;">
 		<p style="font-weight: 500; color: #E9E9E9;">Способ получения</p>
 		<div style="border-radius: 8px; margin: 10px 0px; background-color: #313131;">
@@ -78,9 +95,9 @@
 	</div>
 	<div style="width: 300px;">
 		<p style="color: #E9E9E9; font-weight: 500;">Общая информация</p>
-		<input class="input-field" type="text">
-		<input class="input-field" type="text">
-		<input class="input-field" type="text">
+		<input class="input-field dark" type="text">
+		<input class="input-field dark" type="text">
+		<input class="input-field dark" type="text">
 		<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%;" type="submit">Оплатить</button>
 	</div>
 </div>

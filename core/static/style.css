@@ -1213,12 +1213,10 @@ td {
 .mult-select-tag .drawer {
 	position: absolute;
 	background: #313131;
-	max-height: 15rem;
+	max-height: 10rem;
 	z-index: 40;
 	top: 98%;
 	width: 100%;
-	/* overflow-y: scroll; */
-	/* border: 1px solid var(--border-color); */
 	border-radius: .25rem
 }
 

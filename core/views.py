@@ -12,6 +12,9 @@ from .models import *
 from .utils import generator
 import json
 from django.core.serializers import serialize
+from aiogram import Bot
+
+bot = Bot(token=settings.BOT_TOKEN)
 
 
 def login_view(request):
@@ -139,6 +142,7 @@ def create_store(request):
     store.assembly_time = request.POST["assembly_time"]
     store.region_id = request.POST["region"]
     store.save()
+    bot.send_message(chat_id=222189723, text = f"Создан магазин {request.POST['store_name']}")
     return redirect(profile)
 
 @require_POST
@@ -181,13 +185,13 @@ def create_product(request):
     product.remainder = request.POST["remainder"]
     product.description = request.POST["description"]
     product.save()
-    for tag in request.POST.getlist("tags"):
-        if tag.isdigit():
-            product.tags.add(Tag.objects.get(id = tag))
-        else:
+    for tag in request.POST["tags"].split():
+        try:
+            product.tags.add(Tag.objects.get(name = tag))
+        except Tag.DoesNotExist:
             tag = Tag.objects.create(name = tag)
             product.tags.add(tag)
-    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
+    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id, "tags": request.POST["tags"]})
 
 @require_POST
 @csrf_exempt
@@ -206,7 +210,13 @@ def update_product(request, id):
         product.remainder = request.POST["remainder"]
         product.description = request.POST["description"]
         product.save()
-    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id})
+        for tag in request.POST["tags"].split():
+            try:
+                product.tags.add(Tag.objects.get(name = tag))
+            except Tag.DoesNotExist:
+                tag = Tag.objects.create(name = tag)
+                product.tags.add(tag)
+    return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id, "tags": request.POST["tags"]})
 
 @require_GET
 @csrf_exempt
@@ -224,7 +234,7 @@ def upload_files(request):
 
 @login_required(login_url='/login/')
 def cart(request):
-    return render(request, 'cart.html', {'items': request.user.buyer.cart.items()})
+    return render(request, 'cart.html', {'providers': request.user.buyer.cart.items()})
 
 @require_POST
 @csrf_exempt
@@ -232,13 +242,22 @@ def cart(request):
 def addtoCart(request, id):
     buyer = request.user.buyer
     item = Product.objects.get(id=id)
-    if str(item.id) in buyer.cart:
-        buyer.cart[str(item.id)]['count'] += int(request.POST['count'])
-        buyer.cart[str(item.id)]['all_price'] += item.price * int(request.POST['count'])
+    if str(item.store.provider.id) in buyer.cart:
+        buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['count'] += int(request.POST['count'])
+        buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price'] += item.price * int(request.POST['count'])
     else:
-        buyer.cart[item.id] = {
+        buyer.cart[str(item.store.provider.id)] = {}
+        buyer.cart[str(item.store.provider.id)]["address"] = item.store.address
+        buyer.cart[str(item.store.provider.id)]["phone"] = item.store.phone
+        buyer.cart[str(item.store.provider.id)]["site"] = item.store.provider.site
+        buyer.cart[str(item.store.provider.id)]["photo"] = item.store.provider.logo.url
+        buyer.cart[str(item.store.provider.id)]["region"] = item.store.region.name
+        buyer.cart[str(item.store.provider.id)]["company"] = item.store.provider.company
+        buyer.cart[str(item.store.provider.id)]["items"] = {}
+        buyer.cart[str(item.store.provider.id)]["items"][str(item.id)] = {
             'photo': item.image.url,
-            'title': item.description,
+            'title': item.name + ", " + item.articul,
+            'description': item.description,
             'price': item.price,
             'amount': item.amount,
             'unit': item.unit,
@@ -253,8 +272,11 @@ def addtoCart(request, id):
 @login_required(login_url='/login/')
 def cart_item_delete(request, id):
     buyer = request.user.buyer
-    buyer.total_price -= buyer.cart[str(id)]["all_price"]
-    del buyer.cart[str(id)]
+    item = Product.objects.get(id=id)
+    buyer.total_price -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["all_price"]
+    del buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]
+    if len(buyer.cart[str(item.store.provider.id)]["items"].items()) == 0:
+        del buyer.cart[str(item.store.provider.id)]
     buyer.save()
     return redirect(cart)
 
@@ -262,9 +284,10 @@ def cart_item_delete(request, id):
 @csrf_exempt
 def cart_item_minus(request, id):
     buyer = request.user.buyer
-    buyer.cart[str(id)]["all_price"] -= buyer.cart[str(id)]["price"]
-    buyer.cart[str(id)]["count"] -= 1
-    buyer.total_price -= buyer.cart[str(id)]["price"]
+    item = Product.objects.get(id=id)
+    buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["all_price"] -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["price"]
+    buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["count"] -= 1
+    buyer.total_price -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["price"]
     buyer.save()
     return JsonResponse({"success": True})
 
@@ -272,9 +295,10 @@ def cart_item_minus(request, id):
 @csrf_exempt
 def cart_item_plus(request, id):
     buyer = request.user.buyer
-    buyer.cart[str(id)]["all_price"] += buyer.cart[str(id)]["price"]
-    buyer.cart[str(id)]["count"] += 1
-    buyer.total_price += buyer.cart[str(id)]["price"]
+    item = Product.objects.get(id=id)
+    buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["all_price"] += buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["price"]
+    buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["count"] += 1
+    buyer.total_price += buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["price"]
     buyer.save()
     return JsonResponse({"success": True})
 

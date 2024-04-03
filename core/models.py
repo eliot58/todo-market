@@ -161,7 +161,7 @@ class Product(models.Model):
     
 class Query(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE, verbose_name = "Аккаунт")
-    query = models.TextField()
+    query = models.TextField(unique = True)
     date = models.DateTimeField(auto_now_add = True)
 
     class Meta:

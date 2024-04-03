@@ -251,19 +251,14 @@
 							<div class="d-flex">
 								<input type="number" name="price" style="margin-bottom: 0px; margin-right: 10px;"
 									class="input-field dark" placeholder="Цена" required>
-								<input type="number" name="remainder" style="margin-bottom: 0px; margin-right: 20px;"
+								<input type="number" name="remainder" style="margin-bottom: 0px;"
 									class="input-field dark" placeholder="Остаток" required>
 							</div>
 						</div>
 						<div class="d-flex flex-column justify-content-between">
 							<textarea name="description" style="margin: 0px; width: 280px; margin-left: 10px;"
-								class="input-field dark" placeholder="Описание" required cols="40" rows="10"></textarea>
-							<!-- <textarea name="tags" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Введите тэги товара через пробел" required cols="20" rows="5"></textarea> -->
-							<select name="tags" id="tags" multiple>
-								{% for tag in tags %}
-								<option value="{{ tag.id }}">{{ tag.name }}</option>
-								{% endfor %}
-							</select>
+								class="input-field dark" placeholder="Описание" required cols="20" rows="5"></textarea>
+							<textarea name="tags" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Введите тэги товара через пробел" required cols="20" rows="5"></textarea>
 						</div>
 					</div>
 					<div class="button-parent" style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
@@ -356,8 +351,8 @@
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
 						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо
 							за доверие! Теперь зайдите в cвой профиль и заполните данные о Вашем магазине и добавьте
-							товар</p>
-						<button onclick="document.querySelector('.success_reg2-popup').style.display = 'none';"
+							товары</p>
+						<button onclick="window.location.pathname = '/profile/'"
 							class="button-1 dark"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
@@ -524,11 +519,9 @@
 		<div id="snackbar" class="dark">Товар добавлен в корзину</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="{% static 'multi-select.js' %}"></script>
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<script>
 
-		new MultiSelectTag('tags')
 
 
 		function themeChange() {
@@ -971,15 +964,10 @@
 				productPreview.querySelector("img").style.display = 'block';
 
 				popup_product.querySelector("select").value = ""
-				const textarea = popup_product.querySelector("textarea")
-				textarea.value = ""
-				const tags_input = popup_product.querySelector("#tags")
-				tags_input.value = ""
-				tags_input.nextElementSibling.remove()
-				new MultiSelectTag('tags')
+				const textarea = popup_product.querySelectorAll("textarea")
 
-				const remainder_input = popup_product.querySelector("input[name='remainder']")
-				remainder_input.style.marginRight = "10px"
+				textarea[0].value = ""
+				textarea[1].value = ""
 
 				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
 			} else {
@@ -988,8 +976,8 @@
 				const amount_input = popup_product.querySelector("input[name='amount']")
 				const remainder_input = popup_product.querySelector("input[name='remainder']")
 				const price_input = popup_product.querySelector("input[name='price']")
-				const description_input = popup_product.querySelector("textarea")
-				const tags_input = popup_product.querySelector("#tags")
+				const description_input = popup_product.querySelectorAll("textarea")[0]
+				const tags_input = popup_product.querySelectorAll("textarea")[1]
 				const select_unit = popup_product.querySelector("select")
 
 				productPreview.style.background = `url("${image}") 0 0/100% 100% no-repeat`;
@@ -1000,11 +988,10 @@
 				articul_input.value = articul
 				amount_input.value = amount
 				remainder_input.value = remainder
-				remainder_input.style.marginRight = "0px"
 				description_input.value = description
-				tags_input.nextElementSibling.style.display = 'none'
 				select_unit.value = unit
 				price_input.value = price
+				tags_input.value = tags
 
 				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="updateProduct(${store}, ${category}, ${id}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
 			}
