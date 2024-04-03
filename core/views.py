@@ -13,6 +13,7 @@ from .utils import generator
 import json
 from django.core.serializers import serialize
 from aiogram import Bot
+from django.db import IntegrityError
 
 bot = Bot(token=settings.BOT_TOKEN)
 
@@ -68,7 +69,10 @@ def logout_view(request):
 def index(request):
 
     if request.GET.get("query", "") != "":
-        Query.objects.create(user = request.user, query = request.GET["query"])
+        try:
+            Query.objects.create(user = request.user, query = request.GET["query"])
+        except IntegrityError:
+            pass
 
     providers = None
     flag = False
@@ -243,8 +247,20 @@ def addtoCart(request, id):
     buyer = request.user.buyer
     item = Product.objects.get(id=id)
     if str(item.store.provider.id) in buyer.cart:
-        buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['count'] += int(request.POST['count'])
-        buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price'] += item.price * int(request.POST['count'])
+        if str(item.id) in buyer.cart[str(item.store.provider.id)]["items"]:
+            buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['count'] += int(request.POST['count'])
+            buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price'] += item.price * int(request.POST['count'])
+        else:
+            buyer.cart[str(item.store.provider.id)]["items"][str(item.id)] = {
+                'photo': item.image.url,
+                'title': item.name + ", " + item.articul,
+                'description': item.description,
+                'price': item.price,
+                'amount': item.amount,
+                'unit': item.unit,
+                'count': int(request.POST["count"]),
+                'all_price': item.price * int(request.POST['count'])
+            }
     else:
         buyer.cart[str(item.store.provider.id)] = {}
         buyer.cart[str(item.store.provider.id)]["address"] = item.store.address
