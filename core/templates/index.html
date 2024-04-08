@@ -61,8 +61,9 @@
 		<div class="card dark" id="map" style="{% if flag %} display: none; {% else %} display: block; {% endif %}width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
 			
 		</div>
-		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 160px;">
+		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card dark" style="width: 275px; max-height: 220px;">
 			<p class="filter_search-title dark" style="margin-bottom: 10px;">Фильтр поиска</p>
+			<input class="input-field dark" type="text" id="searchInput" name="query" placeholder="Поиск...">
 			<select class="input-field dark">
 				<option value="" disabled selected >Сортировка</option>
 				<option value="">По возрастанию цены</option>
