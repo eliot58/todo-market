@@ -4,6 +4,52 @@
 
 {% load static %}
 
+{% block style %} 
+<link rel="stylesheet" href="{% static 'multiple/dist/virtual-select.min.css' %}" /> 
+<style>
+	.vscomp-toggle-button {
+		padding: 0px;
+		background-color: inherit;
+		border: none;
+	}
+
+	.vscomp-toggle-button .vscomp-value{
+		padding: 0px 10px;
+		color: #fff;
+	}
+
+	.input-field.dark .vscomp-toggle-button .vscomp-value{
+		padding: 0px 10px;
+		color: #F8F8F8;
+	}
+
+	.input-field.light .vscomp-toggle-button .vscomp-value{
+		padding: 0px 10px;
+		color: #323232;
+	}
+
+	.input-field#delivery-select, .input-field#payment-select {
+		padding: 0px;
+		min-width: 33%;
+	}
+
+	.input-field#delivery-select .vscomp-wrapper, .input-field#payment-select .vscomp-wrapper {
+		height: 100%;
+		border-radius: inherit;
+	}
+
+	.input-field#create-delivery-select, .input-field#create-payment-select {
+		padding: 0px;
+		min-width: 33%;
+	}
+
+	.input-field#create-delivery-select .vscomp-wrapper, .input-field#create-payment-select .vscomp-wrapper {
+		height: 100%;
+		border-radius: inherit;
+	}
+</style>
+{% endblock style %}
+
 {% block content %}
 <div class="d-flex justify-content-between">
 	<h1 class="title dark">Профиль компании</h1>
@@ -56,6 +102,70 @@
 		</div>
 	</form>
 </div>
+<div class="create-store" style="display: none;">
+	<p class="profile-info dark" style="font-weight: 500; margin-top: 10px;">Информация о магазине</p>
+	<form method="post" action="{% url 'create_store' %}" class="d-flex flex-column card dark" style="margin: 10px 0px;">
+		{% csrf_token %}
+		<div class="d-flex">
+			<div class="form-group" style="width: 50%;">
+				<input type="text" name="store_name" class="input-field dark" placeholder="Название магазина" required>
+				<label for="store_name">Название магазина</label>
+			</div>
+			<div class="form-group" style="width: 50%; margin-left: 10px;">
+				<input type="text" name="phone" class="input-field dark" placeholder="Контакты для заказа" required>
+				<label for="phone">Контакт для заказа</label>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="form-group" style="width: 50%;">
+				<input type="text" name="email" class="input-field dark" placeholder="E-mail для выгрузок" required>
+				<label for="email">E-mail для выгрузок</label>
+			</div>
+			<div class="form-group" style="width: 50%; margin-left: 10px;">
+				<input type="text" name="map_visor" class="input-field dark" placeholder="координаты для отображения на карте" required>
+				<label for="map_visor">координаты для отображения на карте</label>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="form-group" style="width: 100%;">
+				<input type="text" name="address" class="input-field dark" placeholder="Адрес склада для самовывоза" required>
+				<label for="address">Адрес склада для самовывоза</label>
+			</div>
+		</div>
+		<div class="d-flex">
+			<div class="form-group" style="width: 50%;">
+				<input type="text" name="assembly_time" class="input-field dark" placeholder="время сборки товара, в мин" required>
+				<label for="assembly_time">время сборки товара, в мин</label>
+			</div>
+			<div class="form-group" style="width: 50%; margin-left: 10px;">
+				<input type="text" name="work_time" class="input-field dark" placeholder="Часы работы" required>
+				<label for="work_time">Часы работы</label>
+			</div>
+		</div>
+		<div class="d-flex">
+			<select name="delivery_conditions" multiple id="create-delivery-select" class="input-field dark" style="width: 33%;" required>
+				{% for delivery_condition in delivery_conditions %}
+				<option value="{{ delivery_condition.id }}">{{ delivery_condition.name }}</option>
+				{% endfor %}
+			</select>
+			<select name="region" class="input-field dark" style="width: 33%; margin: 10px;" required>
+				<option value="" disabled selected >Регион</option>
+				{% for region in regions %}
+				<option value="{{ region.id }}" {% if region == store.region %} selected {% endif %}>{{ region.name }}</option>
+				{% endfor %}
+			</select>
+			<select name="payments" multiple id="create-payment-select" class="input-field dark" style="width: 33%; margin-left: 10px;" required>
+				{% for payment in payments %}
+				<option value="{{ payment.id }}">{{ payment.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+
+		<div style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
+			<button class="button-1 dark" type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; position: absolute; right: 0px;">Создать</button>
+		</div>
+	</form>
+</div>
 <!-- <p style="font-weight: 500; color: #E9E9E9; margin: 20px 0px;">Условия сотрудничества (заполняются менеджеру сервиса)</p> -->
 {% for store in stores %}
 	<div class="d-flex flex-column">
@@ -103,16 +213,20 @@
 				</div>
 			</div>
 			<div class="d-flex">
-				<select name="delivery_condition" class="input-field dark" style="width: 50%;" required>
-					<option value="" disabled selected >Условия доставки</option>
+				<select name="delivery_conditions" multiple id="delivery-select" class="input-field dark" style="width: 33%;" required>
 					{% for delivery_condition in delivery_conditions %}
-					<option value="{{ delivery_condition.id }}" {% if delivery_condition == store.delivery_condition %} selected {% endif %}>{{ delivery_condition.name }}</option>
+					<option value="{{ delivery_condition.id }}" {% if delivery_condition in store.delivery_conditions.all %} selected {% endif %}>{{ delivery_condition.name }}</option>
 					{% endfor %}
 				</select>
-				<select name="region" class="input-field dark" style="width: 50%; margin-left: 10px;" required>
+				<select name="region" class="input-field dark" style="width: 33%; margin: 10px;" required>
 					<option value="" disabled selected >Регион</option>
 					{% for region in regions %}
 					<option value="{{ region.id }}" {% if region == store.region %} selected {% endif %}>{{ region.name }}</option>
+					{% endfor %}
+				</select>
+				<select name="payments" multiple id="payment-select" class="input-field dark" style="width: 33%; margin-left: 10px;" required>
+					{% for payment in payments %}
+					<option value="{{ payment.id }}" {% if payment in store.payment_methods.all %} selected {% endif %}>{{ payment.name }}</option>
 					{% endfor %}
 				</select>
 			</div>
@@ -161,7 +275,7 @@
 			</div>
 			{% endfor %}
 			<div class="d-flex justify-content-between" style="margin-top: 10px;">
-				<button class="button-1 dark" type="button" onclick="document.querySelector('.approve-popup').style.display = 'block'; this.parentNode.parentNode.submit()" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%;;">На проверку</button>
+				<button class="button-1 dark" type="button" onclick="sendToCheck(this.parentNode.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%;">На проверку</button>
 				<a href="{% url 'delete_store' store.id %}" style="background-color: inherit; color: #FF0000; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; border: 1px solid #FF0000; text-align: center;">Удалить</a>
 			</div>
 		</form>
@@ -174,73 +288,61 @@
 	<input type="file" name="files" multiple hidden>
 	<button class="button-1 dark" type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Отправить</button>
 </form>
-
-<div id="template" style="display: none;">
-	<div class="d-flex flex-column store-info">
-		<p class="profile-info dark" style="font-weight: 500; margin-top: 10px;">Информация о магазине</p>
-		<form method="post" action="{% url 'create_store' %}" class="d-flex flex-column card dark" style="margin: 10px 0px;">
-			{% csrf_token %}
-			<div class="d-flex">
-				<div class="form-group" style="width: 50%;">
-					<input type="text" name="store_name" class="input-field dark" placeholder="Название магазина" required>
-					<label for="store_name">Название магазина</label>
-				</div>
-				<div class="form-group" style="width: 50%; margin-left: 10px;">
-					<input type="text" name="phone" class="input-field dark" placeholder="Контакты для заказа" required>
-					<label for="phone">Контакт для заказа</label>
-				</div>
-			</div>
-			<div class="d-flex">
-				<div class="form-group" style="width: 50%;">
-					<input type="text" name="email" class="input-field dark" placeholder="E-mail для выгрузок" required>
-					<label for="email">E-mail для выгрузок</label>
-				</div>
-				<div class="form-group" style="width: 50%; margin-left: 10px;">
-					<input type="text" name="map_visor" class="input-field dark" placeholder="координаты для отображения на карте" required>
-					<label for="map_visor">координаты для отображения на карте</label>
-				</div>
-			</div>
-			<div class="d-flex">
-				<div class="form-group" style="width: 100%;">
-					<input type="text" name="address" class="input-field dark" placeholder="Адрес склада для самовывоза" required>
-					<label for="address">Адрес склада для самовывоза</label>
-				</div>
-			</div>
-			<div class="d-flex">
-				<div class="form-group" style="width: 50%;">
-					<input type="text" name="assembly_time" class="input-field dark" placeholder="время сборки товара, в мин" required>
-					<label for="assembly_time">время сборки товара, в мин</label>
-				</div>
-				<div class="form-group" style="width: 50%; margin-left: 10px;">
-					<input type="text" name="work_time" class="input-field dark" placeholder="Часы работы" required>
-					<label for="work_time">Часы работы</label>
-				</div>
-			</div>
-			<div class="d-flex">
-				<select name="delivery_condition" class="input-field dark" style="width: 50%;" required>
-					<option value="" disabled selected >Условия доставки</option>
-					{% for delivery_condition in delivery_conditions %}
-					<option value="{{ delivery_condition.id }}">{{ delivery_condition.name }}</option>
-					{% endfor %}
-				</select>
-				<select name="region" class="input-field dark" style="width: 50%; margin-left: 10px;" required>
-					<option value="" disabled selected >Регион</option>
-					{% for region in regions %}
-					<option value="{{ region.id }}">{{ region.name }}</option>
-					{% endfor %}
-				</select>
-			</div>
-
-			<div style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
-				<button class="button-1 dark" type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; position: absolute; right: 0px;">Создать</button>
-			</div>
-		</form>
-	</div>
-</div>
 {% endblock content %}
 
 {% block script %}
+<script src="{% static 'multiple/dist/virtual-select.min.js' %}"></script>
 <script>
+	VirtualSelect.init({ 
+		ele: '#delivery-select',
+		multiple: true,
+		search: false,
+		placeholder: 'Условия доставки' 
+	});
+
+	VirtualSelect.init({ 
+		ele: '#payment-select',
+		multiple: true,
+		search: false,
+		placeholder: 'Способы оплаты' 
+	});
+
+	new VirtualSelect.init({ 
+		ele: '#create-delivery-select',
+		multiple: true,
+		search: false,
+		placeholder: 'Условия доставки' 
+	});
+
+	new VirtualSelect.init({ 
+		ele: '#create-payment-select',
+		multiple: true,
+		search: false,
+		placeholder: 'Способы оплаты' 
+	});
+
+
+	function createStore(element) {
+		element.style.display = 'none';
+		const create_store = document.querySelector(".create-store")
+
+		create_store.style.display = "flex"
+		create_store.style.flexDirection = "column"
+	}
+
+	function sendToCheck(form){
+		let formData = new FormData(form);
+		let xhr = new XMLHttpRequest();
+		xhr.open('POST', form.action);
+		xhr.responseType = 'json';
+		xhr.onload = function () {
+			if (xhr.status == 200) {
+				document.querySelector('.approve-popup').style.display = 'block'; 
+			}
+		};
+		xhr.send(formData);
+	}
+
 	const logoInput = document.getElementById("logo_input");
 	const logoPreview = document.querySelector(".logo_preview");
 	logoInput.onchange = (e) => {

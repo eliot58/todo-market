@@ -44,63 +44,39 @@
 		</div>
 	</div>
 	{% endfor %}
-{% endfor %}
-<div style="background-color: #282828; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 100px;">
-	<div style="width: 270px;">
-		<p style="font-weight: 500; color: #E9E9E9;">Способ получения</p>
-		<div style="border-radius: 8px; margin: 10px 0px; background-color: #313131;">
-			<label class="checkbox-label">
-				<input name="change_mail" checked style="position: absolute; display: none;" type="radio"><span style="padding: 12px 22px; text-align: center; display: block;">Самовывоз</span>
-				</label>
-				<label class="checkbox-label">
-				<input name="change_mail" style="position: absolute; display: none;" type="radio"><span style="padding: 12px 22px; text-align: center; display: block;">Доставка</span>
-				</label>
-		</div>
-		<p style="color: #E9E9E9; font-weight: 500;">Курьером по адресу</p>
-		<p style="color: #E9E9E9; line-height: 24px; margin: 10px 0px;">Москва, Ленинский проспект, кв. 20, к. 1 офис 20, подьезд. 2, этаж 16</p>
-		<button style="background-color: inherit; color: #00A550; padding: 12px 0px; border-radius: 8px; font-weight: 600; width: 100%; border: 1px solid #00A550;">Изменить адрес</button>
-	</div>
-	<div style="width: 300px;">
-		<p style="color: #E9E9E9; font-weight: 500;">Дата и время доставки</p>
-		<div class="d-flex justify-content-between flex-wrap" style="margin-top: 5px;">
-			<label class="checkbox-label-date">
-				<input name="change_mail" checked style="position: absolute; display: none;" type="radio"><span style="padding: 10px 16px; text-align: center; display: block;">17 сен.</span>
-				</label>
-				<label class="checkbox-label-date">
-				<input name="change_mail" style="position: absolute; display: none;" type="radio"><span style="padding: 10px 16px; text-align: center; display: block;">17 сен.</span>
-				</label>
-				<label class="checkbox-label-date">
-				<input name="change_mail" checked style="position: absolute; display: none;" type="radio"><span style="padding: 10px 16px;text-align: center; display: block;">17 сен.</span>
-				</label>
-				<label class="checkbox-label-date">
-				<input name="change_mail" style="position: absolute; display: none;" type="radio"><span style="padding: 10px 16px; text-align: center; display: block;">17 сен.</span>
-				</label>
-				<label class="checkbox-label-date">
-				<input name="change_mail" checked style="position: absolute; display: none;" type="radio"><span style="padding: 10px 16px; text-align: center; display: block;">17 сен.</span>
-				</label>
-				<label class="checkbox-label-date">
-				<input name="change_mail" style="position: absolute; display: none;" type="radio"><span style="padding: 10px 16px; text-align: center; display: block;">17 сен.</span>
-				</label>
-		</div>
-		<select class="input-field" style="background-color: #00A550; font-weight: 500; color: #E9E9E9; text-align: center;" name="" id="">
-			<option value="">8:00-12:00 +1000 ₽</option>
-		</select>
-		<div class="d-flex justify-content-between align-items-center" style="margin-top: 10px;">
-			<div class="d-flex flex-column">
-				<p style="color: #616161; margin-bottom: 5px;">Товары: 2400 ₽</p>
-				<p style="color: #616161;">Товары: 2400 ₽</p>
+	<div class="d-flex justify-content-end" style="width: 100%;">
+		<form action="{% url 'drawup' %}" method="post" class="provider-card dark" style="width: 600px; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 200px;">
+			<div style="width: 300px; margin-right: 20px;">
+				<p class="product__title dark" style="font-weight: 500;">Общая информация</p>
+				<input class="input-field dark" name="fullName" placeholder="ФИО получателя" type="text">
+				<input class="input-field dark" name="phone" placeholder="Номер телефона" type="text">
+				<input class="input-field dark" name="comment" placeholder="Комментарий к заказу" type="text">
 			</div>
-			<p style="font-size: 12px; color: #E9E9E9; width: 100px;">3400 ₽ без TODOMARKET</p>
-		</div>
+			<div style="width: 300px; margin-top: 18px;">
+				<select class="input-field dark" name="delivery" onchange="if (this.value == 1) { this.nextElementSibling.textContent = '{{provider.1.address}}'; this.nextElementSibling.disabled = true} else {this.nextElementSibling.textContent = ''; this.nextElementSibling.disabled = false}">
+					<option value="" selected disabled>Способ получения</option>
+					{% for delivery_condition in provider.1.delivery_conditions %}
+					<option value="{{delivery_condition.id}}">{{delivery_condition.name}}</option>
+					{% endfor %}
+				</select>
+				<input class="input-field dark" name="address" placeholder="Адрес доставки" type="text">
+				<select class="input-field dark" style="font-weight: 500; text-align: center;" name="time">
+					<option value="" selected disabled>Время доставки</option>
+					<option value="9:00-12:00">9:00-12:00</option>
+					<option value="12:00-15:00">12:00-15:00</option>
+					<option value="15:00-18:00">15:00-18:00</option>
+				</select>
+				<div class="d-flex justify-content-between align-items-center" style="margin: 10px 0px;">
+					<div class="d-flex flex-column">
+						<p style="color: #616161; margin-bottom: 5px;">Товары: {{request.user.buyer.total_price}} ₽</p>
+					</div>
+					<!-- <p class="product__title dark" style="font-size: 12px; width: 100px;">3400 ₽ без TODOMARKET</p> -->
+				</div>
+				<button class="button-1 dark" type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%;" type="submit">Оформить</button>
+			</div>
+		</form>
 	</div>
-	<div style="width: 300px;">
-		<p style="color: #E9E9E9; font-weight: 500;">Общая информация</p>
-		<input class="input-field dark" type="text">
-		<input class="input-field dark" type="text">
-		<input class="input-field dark" type="text">
-		<button style="background-color: #00A550; color: #E9E9E9; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%;" type="submit">Оплатить</button>
-	</div>
-</div>
+{% endfor %}
 <div style="padding: 10px 15px; border-radius: 16px; display: none;">
 	<div style="width: 450px;">
 		<p style="font-weight: 500; color: #E9E9E9;">Оплата</p>

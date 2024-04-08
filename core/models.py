@@ -42,7 +42,7 @@ class Ads(models.Model):
 
     class Meta:
         verbose_name = "Бегущая строка"
-        verbose_name_plural = "Поставщики"
+        verbose_name_plural = "Бегущая строка"
 
     def __str__(self):
         return self.title
@@ -50,6 +50,12 @@ class Ads(models.Model):
 class Provider(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, verbose_name = "Аккаунт")
     logo = models.ImageField(upload_to="users/logo", null=True, blank=True)
+    status_ch = [
+        ("free", "Частник"),
+        ("store", "Магазин"),
+        ("hyper", "Гипермаркет")
+    ]
+    status = models.CharField(max_length = 256, choices = status_ch, default = "free", verbose_name = "Статус")
     company = models.CharField(max_length = 256, default = "", verbose_name = "Название компании")
     fullName = models.CharField(max_length = 256, verbose_name = "Контактное лицо")
     phone = models.CharField(max_length = 256, unique = True, verbose_name = "Номер телефона")
@@ -103,11 +109,22 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
+class PaymentMethod(models.Model):
+    name = models.CharField(max_length = 256, unique = True, verbose_name = "Способ оплаты")
+
+    class Meta:
+        verbose_name = "Способ оплаты"
+        verbose_name_plural = "Способы оплаты"
+
+    def __str__(self):
+        return self.name
+    
 
 class Store(models.Model):
     provider = models.ForeignKey(Provider, on_delete = models.CASCADE, verbose_name = "Продавец")
     store_name = models.CharField(max_length = 256, verbose_name = "Название магазина")
-    delivery_condition = models.ForeignKey(DeliveryCondition, on_delete = models.DO_NOTHING ,verbose_name = "Условия доставки")
+    delivery_conditions = models.ManyToManyField(DeliveryCondition, verbose_name = "Условия доставки")
+    payment_methods = models.ManyToManyField(PaymentMethod, verbose_name = "Способ оплаты")
     map_visor = models.CharField(max_length = 256, verbose_name = "Отображение на карте")
     contract = models.CharField(max_length = 256, null = True, blank = True, verbose_name = "Договор")
     address = models.CharField(max_length = 256, verbose_name = "Адрес склада для самовывоза")

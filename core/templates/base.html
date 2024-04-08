@@ -377,6 +377,21 @@
 				</div>
 			</div>
 		</div>
+		
+		<div id="popup" class="popup status-popup">
+			<div class="popup-content dark" style="width: 750px; height: 170px;">
+				<div class="d-flex" style="position: relative; height: 100%;">
+					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш статус позволяет создать <span></span> товаров</p>
+						<button onclick="document.querySelector('.status-popup').style.display = 'none';"
+							class="button-1 dark"
+							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Понято</button>
+					</div>
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
+						style="position: absolute; bottom: -20px; right: 20px;" alt="">
+				</div>
+			</div>
+		</div>
 
 		<div id="popup" class="popup base_profile-popup" {% if success_save %} style="display: block;" {% endif %}>
 			<div class="popup-content dark" style="width: 750px; height: 170px;">
@@ -480,6 +495,9 @@
 				</li>
 	
 				<br><br><br><br><br>
+				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
+					<a href="{% url 'susbscriptions' %}">Подписка</a>
+				</li>
 				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
 					<a href="https://t.me/chattodotodo_bot">Другие проекты</a>
 				</li>
@@ -927,15 +945,6 @@
 			}
 		}
 
-		function createStore(element) {
-			element.style.display = 'none';
-			let template = document.getElementById('template');
-			let targetBlock = document.querySelector('.main-profile');
-
-			let clonedBlock = template.querySelector('.store-info').cloneNode(true);
-
-			targetBlock.parentNode.insertBefore(clonedBlock, targetBlock.nextSibling);
-		}
 
 		function openProduct(element, store, isCreate, category, name, articul, amount, unit, remainder, image, description, tags, id, price, is_first) {
 			const popup_product = document.querySelector(".product-popup")
@@ -1006,6 +1015,11 @@
 			xhr.responseType = 'json';
 			xhr.onload = function () {
 				if (xhr.status == 200) {
+					if (xhr.response["status"] != undefined) {
+						document.querySelector(".product-popup").style.display = "none"
+						document.querySelector(".status-popup span").textContent = xhr.response["amount"]
+						document.querySelector(".status-popup").styel.display = "block"
+					}
 					if (is_first) {
 						const target_element = document.querySelector(`#template category_${category_id}`)
 						target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">

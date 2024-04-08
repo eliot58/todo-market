@@ -129,15 +129,14 @@ def profile(request):
         user.provider.site = request.POST['site']
         user.provider.description = request.POST['description']
         user.provider.save()
-        return render(request, "profile.html", {"regions": Region.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider), "success_save": True})
-    return render(request, "profile.html", {"regions": Region.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider)})
+        return render(request, "profile.html", {"regions": Region.objects.all(),"payments": PaymentMethod.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider), "success_save": True})
+    return render(request, "profile.html", {"regions": Region.objects.all(),"payments": PaymentMethod.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider)})
 
 @require_POST
 def create_store(request):
     store = Store()
     store.provider = request.user.provider
     store.store_name = request.POST["store_name"]
-    store.delivery_condition_id = request.POST["delivery_condition"]
     store.map_visor = request.POST["map_visor"]
     store.address = request.POST["address"]
     store.phone = request.POST["phone"]
@@ -146,14 +145,25 @@ def create_store(request):
     store.assembly_time = request.POST["assembly_time"]
     store.region_id = request.POST["region"]
     store.save()
-    bot.send_message(chat_id=222189723, text = f"Создан магазин {request.POST['store_name']}")
+    try:
+        store.delivery_conditions.clear()
+        for i in request.POST.getlist('delivery_conditions')[0].split(","):
+            store.delivery_conditions.add(DeliveryCondition.objects.get(id=i))
+    except KeyError:
+        store.delivery_conditions.clear()
+    try:
+        store.payment_methods.clear()   
+        for i in request.POST.getlist('payments')[0].split(","):
+            store.payment_methods.add(PaymentMethod.objects.get(id=i))  
+    except KeyError:
+        store.payment_methods.clear() 
+    # bot.send_message(chat_id=222189723, text = f"Создан магазин {request.POST['store_name']}")
     return redirect(profile)
 
 @require_POST
 def update_store(request, id):
     store = Store.objects.get(id=id)
     store.store_name = request.POST["store_name"]
-    store.delivery_condition_id = request.POST["delivery_condition"]
     store.map_visor = request.POST["map_visor"]
     store.address = request.POST["address"]
     store.phone = request.POST["phone"]
@@ -164,6 +174,19 @@ def update_store(request, id):
     store.approve = False
     store.provider.save()
     store.save()
+    try:
+        store.delivery_conditions.clear()
+        for i in request.POST.getlist('delivery_conditions')[0].split(","):
+            store.delivery_conditions.add(DeliveryCondition.objects.get(id=i))
+    except KeyError:
+        store.delivery_conditions.clear()
+    try:
+        store.payment_methods.clear()   
+        for i in request.POST.getlist('payments')[0].split(","):
+            store.payment_methods.add(PaymentMethod.objects.get(id=i))  
+    except KeyError:
+        store.payment_methods.clear() 
+    # bot.send_message(chat_id=222189723, text = f"Изменен магазин {request.POST['store_name']}")
     return redirect(profile)
 
 @require_GET
@@ -177,6 +200,12 @@ def delete_store(request, id):
 @require_POST
 @csrf_exempt
 def create_product(request):
+    if request.user.provider.status == "free":
+        if len(Product.objects.filter(store_id = request.POST["store"])) == 3:
+            return JsonResponse({"status": "forbidden", "amount": 3})
+    elif request.user.provider.status == "store":
+        if len(Product.objects.filter(store_id = request.POST["store"])) == 10:
+            return JsonResponse({"status": "forbidden", "amount": 10})
     product = Product()
     product.store_id = request.POST["store"]
     product.category_id = request.POST["category"]
@@ -269,6 +298,7 @@ def addtoCart(request, id):
         buyer.cart[str(item.store.provider.id)]["photo"] = item.store.provider.logo.url
         buyer.cart[str(item.store.provider.id)]["region"] = item.store.region.name
         buyer.cart[str(item.store.provider.id)]["company"] = item.store.provider.company
+        buyer.cart[str(item.store.provider.id)]["delivery_conditions"] = [{"id": delivery_condition.id, "name": delivery_condition.name} for delivery_condition in item.store.delivery_conditions.all()]
         buyer.cart[str(item.store.provider.id)]["items"] = {}
         buyer.cart[str(item.store.provider.id)]["items"][str(item.id)] = {
             'photo': item.image.url,
@@ -331,3 +361,10 @@ def storeProducts(request, id):
 #     tags = Tag.objects.filter(name__icontains = query)
 #     products = Product.objects.filter(tags__in = tags)
 #     return JsonResponse({"results": json.dumps(list(products.values("id", "name")))})
+
+def susbscriptions(request):
+    return render(request, "subs.html")
+
+
+def drawup(request):
+    return redirect(cart)

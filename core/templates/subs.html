@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %} Подписка {% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<div class="d-flex">
+    <div class="d-flex flex-column status-card dark" style="margin-right: 20px; text-align: center;">
+        <div class="title" style="font-size: 20px; font-weight: 600;">Магазин</div>
+        <div class="price">3000 р в месяц</div>
+        <div class="description">3-10 товаров</div>
+        <button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    </div>
+    <div class="d-flex flex-column status-card dark" style="text-align: center;">
+        <div class="title" style="font-size: 20px; font-weight: 600;">Гипермаркет</div>
+        <div class="price">10000 р в месяц</div>
+        <div class="description">11+ товаров в месяц</div>
+        <button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    </div>
+</div>
+             
+{% endblock content %}

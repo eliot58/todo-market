@@ -7,10 +7,16 @@ class ProviderFileInline(admin.StackedInline):
     extra = 0
 
 class StoreInline(admin.StackedInline):
+    formfield_overrides = {
+        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
+    }
     model = Store
     extra = 0
 
 class ProductInline(admin.StackedInline):
+    formfield_overrides = {
+        models.ManyToManyField: {'widget': CheckboxSelectMultiple},
+    }
     model = Product
     extra = 0
 
@@ -46,6 +52,10 @@ class RegionAdmin(admin.ModelAdmin):
 
 @admin.register(DeliveryCondition)
 class DeliveryAdmin(admin.ModelAdmin):
+    list_display = ['name']
+
+@admin.register(PaymentMethod)
+class PaymentAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 
