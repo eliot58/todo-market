@@ -27,5 +27,8 @@ urlpatterns = [
     path("storeProducts/<int:id>/", storeProducts, name="store_products"),
     path("susbscriptions/", susbscriptions, name="susbscriptions"),
     path("drawup/", drawup, name="drawup"),
+    path("orders/", orders, name="orders"),
+    path("order/<int:id>/", order, name="order"),
+    path("buyer/", buyer, name="buyer"),
     # path("search/", search, name="search"),
 ]

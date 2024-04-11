@@ -4,6 +4,8 @@
 
 {% load static %}
 
+{% load custom_tags %}
+
 {% block style %} 
 <link rel="stylesheet" href="{% static 'multiple/dist/virtual-select.min.css' %}" /> 
 <style>
@@ -47,6 +49,21 @@
 		height: 100%;
 		border-radius: inherit;
 	}
+
+	.input-field.dark#delivery-select .vscomp-dropbox, .input-field.dark#payment-select .vscomp-dropbox, .input-field.dark#create-delivery-select .vscomp-dropbox, .input-field.dark#create-payment-select .vscomp-dropbox {
+		background-color: #323232;
+	}
+
+	.input-field.dark#delivery-select .vscomp-option.selected, .input-field.dark#payment-select .vscomp-option.selected, .input-field.dark#create-delivery-select .vscomp-option.selected, .input-field.dark#create-payment-select .vscomp-option.selected {
+		background-color: #323232;
+	}
+
+
+	.input-field.dark#delivery-select .vscomp-option.focused, .input-field.dark#payment-select .vscomp-option.focused, .input-field.dark#create-delivery-select .vscomp-option.focused, .input-field.dark#create-payment-select .vscomp-option.focused {
+		background-color: #616161;
+	}
+
+	
 </style>
 {% endblock style %}
 
@@ -137,9 +154,13 @@
 				<input type="text" name="assembly_time" class="input-field dark" placeholder="время сборки товара, в мин" required>
 				<label for="assembly_time">время сборки товара, в мин</label>
 			</div>
-			<div class="form-group" style="width: 50%; margin-left: 10px;">
-				<input type="text" name="work_time" class="input-field dark" placeholder="Часы работы" required>
-				<label for="work_time">Часы работы</label>
+			<div class="form-group" style="width: 25%; margin-left: 10px;">
+				<input type="time" name="work_time_from" class="input-field dark" placeholder="Часы работы от" required>
+				<label for="work_time">Часы работы от</label>
+			</div>
+			<div class="form-group" style="width: 25%; margin-left: 10px;">
+				<input type="time" name="work_time_to" class="input-field dark" placeholder="Часы работы до" required>
+				<label for="work_time">Часы работы до</label>
 			</div>
 		</div>
 		<div class="d-flex">
@@ -207,9 +228,13 @@
 					<input type="text" name="assembly_time" class="input-field dark" value="{{store.assembly_time}}" placeholder="время сборки товара, в мин" required>
 					<label for="assembly_time">время сборки товара, в мин</label>
 				</div>
-				<div class="form-group" style="width: 50%; margin-left: 10px;">
-					<input type="text" name="work_time" class="input-field dark" value="{{store.work_time}}" placeholder="Часы работы" required>
-					<label for="work_time">Часы работы</label>
+				<div class="form-group" style="width: 25%; margin-left: 10px;">
+					<input type="time" name="work_time_from" value="{{store.work_time_from|time}}" class="input-field dark" placeholder="Часы работы от" required>
+					<label for="work_time">Часы работы от</label>
+				</div>
+				<div class="form-group" style="width: 25%; margin-left: 10px;">
+					<input type="time" name="work_time_to" value="{{store.work_time_to|time}}" class="input-field dark" placeholder="Часы работы до" required>
+					<label for="work_time">Часы работы до</label>
 				</div>
 			</div>
 			<div class="d-flex">

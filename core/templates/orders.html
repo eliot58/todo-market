@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %} Заказы {% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<h1 class="title dark">Заказы</h1>
+<table class="dark" style="width: 100%;">
+	<thead>
+		<tr>
+			<th>Дата</th>
+			<th>Сумма</th>
+			<th>Статус</th>
+			<th>Счет</th>
+			<th>Отгружен</th>
+			<th>Дата отгрузки</th>
+			<th>Номер заказа</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for order in orders %}
+		<tr>
+			<td>{{order.created}}</td>
+			<td>{{order.total_price}}</td>
+			<td>{{order.status}}</td>
+			<td>{% if order.checked %}Да{% else %}Нет{% endif %}</td>
+			<td>{% if order.shipped_date %}Да{% else %}Нет{% endif %}</td>
+			<td>{{order.shipped_date}}</td>
+			<td>{{order.id}}</td>
+			<td><a href="{% url 'order' 1 %}" class="button-2 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 15px; background-color: inherit;">Подробнее</a></td>
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% endblock content %}

@@ -69,6 +69,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.ads',
                 'core.context_processors.news',
+                'core.context_processors.category',
             ],
         },
     },

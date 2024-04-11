@@ -83,6 +83,11 @@
 		spaceBetween: 20
 	});
 
+	var swiper = new Swiper('.swiper-container-category', {
+		slidesPerView: 8,
+		spaceBetween: 20
+	});
+
 	const searchInput = document.getElementById('searchInput');
 
 	const dropdownMenu = document.getElementById('dropdownMenu');
@@ -123,6 +128,7 @@
 <script src="https://api-maps.yandex.ru/2.1/?apikey=52427b0d-4b85-4b1a-828b-ad4cf6903c9f&lang=ru_RU" type="text/javascript">
 </script>
 <script type="text/javascript">
+
 	ymaps.ready(init);
 	function init(){
 		var myMap = new ymaps.Map("map", {
@@ -149,21 +155,23 @@
 						const product_subtitle = storeProducts.querySelectorAll(".product-subtitle")
 						const img_provider = storeProducts.querySelector(".img-provider")
 						const provider_link = storeProducts.querySelector("a")
-						const target_element = storeProducts.querySelector(`.products-list`)
-						for (const div of target_element.querySelectorAll("div")) {
-							div.remove()
+						for (const target_element of storeProducts.querySelectorAll(`.products-list`)) {
+							for (const div of target_element.querySelectorAll("div")) {
+								div.remove()
+							}
 						}
 						provider_link.href = `/provider/${provider[0]["pk"]}`
 						product_subtitle[0].textContent = provider[0]["fields"]["company"]
 						product_subtitle[2].textContent = store[0]["fields"]["address"]
 						img_provider.src = "/media/" + provider[0]["fields"]["logo"]
 						for (const product of products) {
+							const target_element = storeProducts.querySelector(`.products-list.cat_${product['fields']['category']}`)
 							target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="max-width: 256px; margin-right: 20px;">
 								<img src="${'/media/' + product['fields']['image']}" width="260" height="260" style="border-radius: 8px;" alt="">
 								{% if not request.user.provider %}
 								<form method="post" class="d-flex justify-content-between" style="margin-top: 5px;">
 									{% csrf_token %}
-									<button class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" type="button" onclick="addToCart(addToCart('${product['pk']}', this.parentNode))" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
+									<button class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" type="button" onclick="addToCart('${product['pk']}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
 									<div class="store-item__data-count ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'} d-flex justify-content-between">
 										<span onclick="minus(this)">-</span>
 										<input type="text" name="count" value="1">

@@ -70,3 +70,5 @@ class QueryAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Ads)
+
+admin.site.register(Order)

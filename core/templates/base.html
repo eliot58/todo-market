@@ -234,8 +234,7 @@
 							<input type="text" name="category" hidden>
 							<input type="text" name="store" hidden>
 							<input type="text" name="articul" class="input-field dark" style="margin-top: 0px;"
-								placeholder="Артикул (необязательно)"
-								title="К вам поступят заявки, с четким указанием артикула товара, если Ваш товар не имеет артикула оставьте поле пустым"
+								placeholder="Артикул" 
 								required>
 							<input type="text" name="name" class="input-field dark" placeholder="Название" required>
 							<div class="d-flex">
@@ -288,11 +287,20 @@
 					</div>
 				</div>
 				<div class="swiper-container" style="overflow: hidden;">
-					<div class="d-flex swiper-wrapper products-list">
+					{% for category in categories %}
+					<div class="swiper-wrapper products-list cat_{{category.id}} {% if category.id == 1 %}active{% endif %}">
+					</div>
+					{% endfor %}
+				</div>
+				<div class="d-flex swiper-container-category" style="position: absolute; top: 100%; left: 50%; transform: translate(-50%, 40%); width: 1200px; overflow: hidden;">
+					<div class="d-flex swiper-wrapper">
+						{% for category in categories %}
+						<div class="category-item dark swiper-slide {% if category.id == 1 %}active{% endif %}" onclick="changeCategory(this, '{{category.id}}')">{{category.name}}</div>
+						{% endfor %}
 					</div>
 				</div>
-				
 			</div>
+
 		</div>
 
 		<div id="popup" class="popup success_deal-popup">
@@ -335,7 +343,7 @@
 						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш пароль был
 							отправлен на почту: {{request.user.email}}</p>
 						<button
-							onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% endif %}"
+							onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% else %}document.querySelector('.success_reg3-popup').style.display = 'block'; {% endif %}"
 							class="button-1 dark"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
 					</div>
@@ -353,6 +361,22 @@
 							за доверие! Теперь зайдите в cвой профиль и заполните данные о Вашем магазине и добавьте
 							товары</p>
 						<button onclick="window.location.pathname = '/profile/'"
+							class="button-1 dark"
+							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
+					</div>
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
+						style="position: absolute; bottom: -20px; right: 20px;" alt="">
+				</div>
+			</div>
+		</div>
+
+		<div id="popup" class="popup success_reg3-popup">
+			<div class="popup-content dark" style="width: 750px; height: 170px;">
+				<div class="d-flex" style="position: relative; height: 100%;">
+					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо
+							за доверие! Теперь нужно заполнить профиль покупателя</p>
+						<button onclick="window.location.pathname = '/buyer/'"
 							class="button-1 dark"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
@@ -382,7 +406,7 @@
 			<div class="popup-content dark" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш статус позволяет создать <span></span> товаров</p>
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш статус позволяет создать <span></span> товара</p>
 						<button onclick="document.querySelector('.status-popup').style.display = 'none';"
 							class="button-1 dark"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Понято</button>
@@ -461,31 +485,17 @@
 				<li class="sidebar__link dark {% if request.path == '/profile/' %} sidebar__link-active {% endif %}">
 					<div>
 						<img class="profile-icon" src="{% if request.path == '/profile/' %} {% static 'img/profile-active.svg' %} {% else %} {% static 'img/profile.svg' %} {% endif %}" alt="">
-						<a href="{% if request.user.provider %}{% url 'profile' %}{% else %}{% url 'partner' %}{% endif %}">Мой профиль</a>
-					</div>
-				</li>
-				{% if request.user.buyer %}
-				<li class="sidebar__link dark {% if request.path == '/archive/' %} sidebar__link-active {% endif %}">
-					<div>
-						<img class="orders-icon" src="{% if request.path == '/orders/' %} {% static 'img/orders-active.svg' %} {% else %} {% static 'img/orders.svg' %} {% endif %}" alt="">
-						<a href="">Мои заказы</a>
-					</div>
-				</li>
-				{% endif %}
-	
-				<li class="sidebar__link dark {% if request.path == '/archive/' %} sidebar__link-active {% endif %}">
-					<div>
-						<img class="works-icon" src="{% if request.path == '/works/' %} {% static 'img/works-active.svg' %} {% else %} {% static 'img/works.svg' %} {% endif %}" alt="">
-						<a href="">Заказы в работе</a>
+						<a href="{% if request.user.provider %}{% url 'profile' %}{% else %}{% url 'buyer' %}{% endif %}">Мой профиль</a>
 					</div>
 				</li>
 	
-				<li class="sidebar__link dark {% if request.path == '/archive/' %} sidebar__link-active {% endif %}">
+				<li class="sidebar__link dark {% if request.path == '/orders/' %} sidebar__link-active {% endif %}">
 					<div>
-						<img class="archive-icon" src="{% if request.path == '/archive/' %} {% static 'img/store-active.svg' %} {% else %} {% static 'img/archive.svg' %} {% endif %}" alt="">
-						<a href="">Архив</a>
+						<img class="works-icon" src="{% if request.path == '/orders/' %} {% static 'img/works-active.svg' %} {% else %} {% static 'img/works.svg' %} {% endif %}" alt="">
+						<a href="{% url 'orders' %}">Заказы</a>
 					</div>
 				</li>
+	
 	
 				<li class="sidebar__link dark">
 					<div>
@@ -538,342 +548,8 @@
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+	<script src="{% static 'js/theme.min.js' %}"></script>
 	<script>
-
-
-
-		function themeChange() {
-			if (localStorage.getItem('theme') == 'light') {
-				document.querySelector(".auth_tab.active").style.backgroundColor = "#00A550"
-				localStorage.removeItem("theme")
-				const lights = document.querySelectorAll(".light")
-				for (let light of lights) {
-					light.classList.remove("light")
-					light.classList.add("dark")
-				}
-
-				document.querySelector('.profile-icon').src = '/static/img/profile.svg';
-				try {
-					document.querySelector('.orders-icon').src = '/static/img/orders.svg';
-				} catch (_) {
-					console.log("orders not fount")
-				}
-				document.querySelector('.works-icon').src = '/static/img/works.svg';
-				document.querySelector('.archive-icon').src = '/static/img/archive.svg';
-				document.querySelector('.help-icon').src = '/static/img/help.svg';
-
-				try {
-					document.querySelector('.moon-icon').src = '/static/img/moon.svg';
-				} catch (_) {
-					console.log("moon not found")
-				}
-				try {
-					document.querySelector('.user-icon').src = '/static/img/user.svg';
-				} catch (_) {
-					console.log("user not found")
-				}
-				try {
-					if (window.location.pathname == '/cart/') {
-						document.querySelector('.cart-icon').src = '/static/img/cart-active.svg';
-					} else {
-						document.querySelector('.cart-icon').src = '/static/img/cart.svg';
-					}
-
-				} catch (_) {
-					console.log("cart not found")
-				}
-
-				try {
-					document.querySelector('.target-icon').src = '/static/img/target.svg';
-				} catch (_) {
-					console.log("target not found")
-				}
-
-				try {
-					document.querySelector('.earth-icon').src = '/static/img/earth.svg';
-				} catch (_) {
-					console.log("earth not found")
-				}
-
-				try {
-					document.querySelector('.search-icon').src = '/static/img/search.svg';
-				} catch (_) {
-					console.log("search not found")
-				}
-
-				try {
-					document.querySelector('.truck-icon').src = '/static/img/truck.svg';
-				} catch (_) {
-					console.log("truck not found")
-				}
-
-				try {
-					document.querySelector('.star-icon').src = '/static/img/star.svg';
-				} catch (_) {
-					console.log("star not found")
-				}
-
-				try {
-					for (const deals of document.querySelectorAll('.success_deal')) {
-						deals.src = '/static/img/success_deal.png';
-					}
-				} catch (_) {
-					console.log("deals not found")
-				}
-
-				try {
-					for (const close of document.querySelectorAll('.close-icon')) {
-						close.src = '/static/img/close.svg';
-					}
-				} catch (_) {
-					console.log("close not found")
-				}
-
-				try {
-					for (const upload of document.querySelectorAll('.upload-icon')) {
-						upload.src = '/static/img/upload.png';
-					}
-				} catch (_) {
-					console.log("upload not found")
-				}
-
-				try {
-					document.querySelector('.signup-img').src = '/static/img/signup.png';
-				} catch (_) {
-					console.log("signup not found")
-				}
-
-				try {
-					document.querySelector('.delivery').src = '/static/img/delivery.png';
-				} catch (_) {
-					console.log("delivery not found")
-				}
-
-				document.querySelector('.logo').src = '/static/img/logo.svg';
-
-
-			} else {
-				document.querySelector(".auth_tab.active").style.backgroundColor = "#2094AD"
-				const darks = document.querySelectorAll(".dark")
-				for (let dark of darks) {
-					dark.classList.remove("dark")
-					dark.classList.add("light")
-				}
-
-				document.querySelector('.profile-icon').src = '/static/img/light-profile.svg';
-				try {
-					document.querySelector('.orders-icon').src = '/static/img/light-orders.svg';
-				} catch (_) {
-					console.log("orders not found")
-				}
-				document.querySelector('.works-icon').src = '/static/img/light-works.svg';
-				document.querySelector('.archive-icon').src = '/static/img/light-archive.svg';
-				document.querySelector('.help-icon').src = '/static/img/light-help.svg';
-
-				try {
-					document.querySelector('.moon-icon').src = '/static/img/light-moon.svg';
-				} catch (_) {
-					console.log("moon not found")
-				}
-				try {
-					document.querySelector('.user-icon').src = '/static/img/light-user.svg';
-				} catch (_) {
-					console.log("user not found")
-				}
-				try {
-					if (window.location.pathname == '/cart/') {
-						document.querySelector('.cart-icon').src = '/static/img/light-cart-active.svg';
-					} else {
-						document.querySelector('.cart-icon').src = '/static/img/light-cart.svg';
-					}
-				} catch (_) {
-					console.log("cart not found")
-				}
-
-				try {
-					document.querySelector('.target-icon').src = '/static/img/light-target.svg';
-				} catch (_) {
-					console.log("target not found")
-				}
-
-				try {
-					document.querySelector('.earth-icon').src = '/static/img/light-earth.svg';
-				} catch (_) {
-					console.log("earth not found")
-				}
-
-				try {
-					document.querySelector('.search-icon').src = '/static/img/light-search.svg';
-				} catch (_) {
-					console.log("search not found")
-				}
-
-				try {
-					document.querySelector('.truck-icon').src = '/static/img/light-truck.svg';
-				} catch (_) {
-					console.log("truck not found")
-				}
-
-				try {
-					document.querySelector('.star-icon').src = '/static/img/light-star.svg';
-				} catch (_) {
-					console.log("star not found")
-				}
-
-				try {
-					for (const deals of document.querySelectorAll('.success_deal')) {
-						deals.src = '/static/img/success_deal_light.png';
-					}
-				} catch (_) {
-					console.log("deals not found")
-				}
-
-				try {
-					for (const close of document.querySelectorAll('.close-icon')) {
-						close.src = '/static/img/light-close.svg';
-					}
-				} catch (_) {
-					console.log("close not found")
-				}
-
-				try {
-					for (const upload of document.querySelectorAll('.upload-icon')) {
-						upload.src = '/static/img/light-upload.png';
-					}
-				} catch (_) {
-					console.log("upload not found")
-				}
-
-				try {
-					document.querySelector('.signup-img').src = '/static/img/light-signup.png';
-				} catch (_) {
-					console.log("signup not found")
-				}
-
-				try {
-					document.querySelector('.delivery').src = '/static/img/delivery-light.png';
-				} catch (_) {
-					console.log("delivery not found")
-				}
-
-				document.querySelector('.logo').src = '/static/img/logo-light.png';
-
-				localStorage.setItem("theme", "light")
-
-			}
-		}
-
-		document.addEventListener('DOMContentLoaded', function () {
-
-			if (localStorage.getItem('theme') == 'light') {
-				localStorage.removeItem("theme")
-				const darks = document.querySelectorAll(".dark")
-				for (let dark of darks) {
-					dark.classList.remove("dark")
-					dark.classList.add("light")
-				}
-
-				document.querySelector('.profile-icon').src = '/static/img/light-profile.svg';
-				try {
-					document.querySelector('.orders-icon').src = '/static/img/light-orders.svg';
-				} catch (_) {
-					console.log("orders not found")
-				}
-				document.querySelector('.works-icon').src = '/static/img/light-works.svg';
-				document.querySelector('.archive-icon').src = '/static/img/light-archive.svg';
-				document.querySelector('.help-icon').src = '/static/img/light-help.svg';
-				try {
-					document.querySelector('.moon-icon').src = '/static/img/light-moon.svg';
-				} catch (_) {
-					console.log("moon not found")
-				}
-				try {
-					document.querySelector('.user-icon').src = '/static/img/light-user.svg';
-				} catch (_) {
-					console.log("user not found")
-				}
-				try {
-					if (window.location.pathname == '/cart/') {
-						document.querySelector('.cart-icon').src = '/static/img/light-cart-active.svg';
-					} else {
-						document.querySelector('.cart-icon').src = '/static/img/light-cart.svg';
-					}
-				} catch (_) {
-					console.log("cart not found")
-				}
-
-				try {
-					document.querySelector('.target-icon').src = '/static/img/light-target.svg';
-				} catch (_) {
-					console.log("target not found")
-				}
-
-				try {
-					document.querySelector('.earth-icon').src = '/static/img/light-earth.svg';
-				} catch (_) {
-					console.log("earth not found")
-				}
-
-				try {
-					document.querySelector('.search-icon').src = '/static/img/light-search.svg';
-				} catch (_) {
-					console.log("search not found")
-				}
-
-				try {
-					document.querySelector('.truck-icon').src = '/static/img/light-truck.svg';
-				} catch (_) {
-					console.log("truck not found")
-				}
-
-				try {
-					document.querySelector('.star-icon').src = '/static/img/light-star.svg';
-				} catch (_) {
-					console.log("star not found")
-				}
-
-				try {
-					for (const deals of document.querySelectorAll('.success_deal')) {
-						deals.src = '/static/img/success_deal_light.png';
-					}
-				} catch (_) {
-					console.log("deals not found")
-				}
-
-				try {
-					for (const close of document.querySelectorAll('.close-icon')) {
-						close.src = '/static/img/light-close.svg';
-					}
-				} catch (_) {
-					console.log("close not found")
-				}
-
-				try {
-					for (const upload of document.querySelectorAll('.upload-icon')) {
-						upload.src = '/static/img/light-upload.png';
-					}
-				} catch (_) {
-					console.log("upload not found")
-				}
-
-				try {
-					document.querySelector('.signup-img').src = '/static/img/light-signup.png';
-				} catch (_) {
-					console.log("signup not found")
-				}
-
-				try {
-					document.querySelector('.delivery').src = '/static/img/delivery-light.png';
-				} catch (_) {
-					console.log("delivery not found")
-				}
-
-				document.querySelector('.logo').src = '/static/img/logo-light.png';
-
-				localStorage.setItem("theme", "light")
-			}
-
-		});
 
 		window.addEventListener('click', function (event) {
 			let popups = document.querySelectorAll('#popup');
@@ -1018,7 +694,8 @@
 					if (xhr.response["status"] != undefined) {
 						document.querySelector(".product-popup").style.display = "none"
 						document.querySelector(".status-popup span").textContent = xhr.response["amount"]
-						document.querySelector(".status-popup").styel.display = "block"
+						document.querySelector(".status-popup").style.display = "block"
+						return null;
 					}
 					if (is_first) {
 						const target_element = document.querySelector(`#template category_${category_id}`)
@@ -1082,7 +759,7 @@
 		function showSnack() {
 			var x = document.getElementById("snackbar");
 			x.classList.add("show")
-			setTimeout(function () { x.className = x.classList.remove("show"); }, 3000);
+			setTimeout(function () { x.classList.remove("show"); }, 3000);
 		}
 
 
@@ -1099,6 +776,13 @@
 				}
 			};
 			xhr.send(formData);
+		}
+
+		function changeCategory(elem, id) {
+			document.querySelector(".products-list.active").classList.remove("active")
+			document.querySelector(".category-item.active").classList.remove("active")
+			document.querySelector(`.products-list.cat_${id}`).classList.add("active")
+			elem.classList.add("active")
 		}
 
 	</script>

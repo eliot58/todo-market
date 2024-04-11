@@ -1,4 +1,4 @@
-from .models import Ads, News
+from .models import Ads, News, Category
 
 def ads(_):
     try:
@@ -10,3 +10,8 @@ def ads(_):
 
 def news(_):
     return {"news_length": len(News.objects.all())}
+
+def category(request):
+    if request.path == "/":
+        return {"categories": Category.objects.all()}
+    return {}

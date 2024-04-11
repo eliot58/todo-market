@@ -132,6 +132,19 @@ def profile(request):
         return render(request, "profile.html", {"regions": Region.objects.all(),"payments": PaymentMethod.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider), "success_save": True})
     return render(request, "profile.html", {"regions": Region.objects.all(),"payments": PaymentMethod.objects.all(), "tags": Tag.objects.all(), "categories": Category.objects.all(), "stores": Store.objects.filter(provider=request.user.provider), "delivery_conditions": DeliveryCondition.objects.all(), 'products': Product.objects.filter(store__provider=request.user.provider)})
 
+    
+@login_required(login_url="/login/")
+def buyer(request):
+    if request.method == "POST":
+        user = request.user
+        user.email = request.POST['email']
+        user.buyer.phone = request.POST['phone']
+        user.buyer.fullName = request.POST['fullName']
+        user.save()
+        user.buyer.save()
+    return render(request, "buyer.html")
+    
+
 @require_POST
 def create_store(request):
     store = Store()
@@ -141,7 +154,8 @@ def create_store(request):
     store.address = request.POST["address"]
     store.phone = request.POST["phone"]
     store.email = request.POST["email"]
-    store.work_time = request.POST["work_time"]
+    store.work_time_from = request.POST["work_time_from"]
+    store.work_time_to = request.POST["work_time_to"]
     store.assembly_time = request.POST["assembly_time"]
     store.region_id = request.POST["region"]
     store.save()
@@ -168,7 +182,8 @@ def update_store(request, id):
     store.address = request.POST["address"]
     store.phone = request.POST["phone"]
     store.email = request.POST["email"]
-    store.work_time = request.POST["work_time"]
+    store.work_time_from = request.POST["work_time_from"]
+    store.work_time_to = request.POST["work_time_to"]
     store.assembly_time = request.POST["assembly_time"]
     store.region_id = request.POST["region"]
     store.approve = False
@@ -298,6 +313,8 @@ def addtoCart(request, id):
         buyer.cart[str(item.store.provider.id)]["photo"] = item.store.provider.logo.url
         buyer.cart[str(item.store.provider.id)]["region"] = item.store.region.name
         buyer.cart[str(item.store.provider.id)]["company"] = item.store.provider.company
+        buyer.cart[str(item.store.provider.id)]["provider_id"] = item.store.provider.id
+        buyer.cart[str(item.store.provider.id)]["store_id"] = item.store.id
         buyer.cart[str(item.store.provider.id)]["delivery_conditions"] = [{"id": delivery_condition.id, "name": delivery_condition.name} for delivery_condition in item.store.delivery_conditions.all()]
         buyer.cart[str(item.store.provider.id)]["items"] = {}
         buyer.cart[str(item.store.provider.id)]["items"][str(item.id)] = {
@@ -365,6 +382,34 @@ def storeProducts(request, id):
 def susbscriptions(request):
     return render(request, "subs.html")
 
+def orders(request):
+    try:
+        if request.user.provider:
+            orders = Order.objects.filter(provider = request.user.provider)
+    except:
+        orders = Order.objects.filter(buyer = request.user.buyer)
+    return render(request, 'orders.html', {"orders": orders})
+
+def order(request, id):
+    return render(request, 'order.html', {"order": Order.objects.get(id = id)})
+
 
 def drawup(request):
-    return redirect(cart)
+    buyer = request.user.buyer
+    provider = Provider.objects.get(id = id)
+    order = Order()
+    order.buyer = buyer
+    order.provider = provider
+    order.items = buyer.cart
+    order.total_price = buyer.total_price
+    order.delivery_id = request.POST["delivery"]
+    if request.POST["delivery"] == "1":
+        order.address = provider
+    else:
+        order.address = request.POST["address"]
+    order.time = request.POST["time"]
+    order.comment = request.POST["comment"]
+    buyer.cart = {}
+    buyer.total_price = 0
+    buyer.save()
+    return redirect(orders)

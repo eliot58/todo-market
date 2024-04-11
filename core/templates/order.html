@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %} Заказы {% endblock title %}
+
+{% load static %}
+
+{% block content %}
+<div class="d-flex flex-column card dark" style="margin-bottom: 100px;">
+	<div class="d-flex justify-content-between align-items-start">
+		<div class="d-flex">
+			<img src="{% static 'img/location.svg' %}" alt="">
+			<p style="color: #E9E9E9; width: 300px; line-height: 24px; margin-left: 10px;">г. Москва, ул.
+				Центральная, д. 10 Самовывоз, дата: 19.09.23, 12-14 ч.</p>
+		</div>
+		<img src="{% static 'img/close.svg' %}" alt="">
+	</div>
+	<div style="background-color: #313131; border-radius: 8px; margin-top: 10px;">
+		<table style="width: 100%;">
+			<thead>
+				<tr style="background-color: #313131;">
+					<th>Артикул</th>
+					<th>Название</th>
+					<th>Цена</th>
+					<th>Количество</th>
+					<th>Итого</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr style="background-color: #313131;">
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+				<tr style="background-color: #313131;">
+					<td style="font-weight: 500; color: #00A550;">Сумма заказа: 19 200</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Продажи</p>
+	<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px 0px 10px;">
+		<div class="d-flex align-items-center">
+			<p style="color: #E9E9E9;">22.09.23</p>
+			<button class="button-2 dark"
+				style="background-color: inherit;font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 20px;">Принять</button>
+			<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
+		</div>
+		<p style="font-size: 12px; color: #FF0000; margin: 10px 0px;">Нажимая кнопку принять, Вы
+			подтверждаете отгрузку в выбранную Вами дату</p>
+	</div>
+	<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
+	<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;"
+		class="d-flex align-items-center">
+		<button style="background-color: inherit;">
+			<img src="{% static 'img/clip.svg' %}" alt="">
+		</button>
+		<button class="button-2 dark"
+			style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 10px;">Отправить
+			счет</button>
+		<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
+	</div>
+	<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
+	<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;"
+		class="d-flex align-items-center">
+		<button class="button-2 dark"
+			style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin-right: 10px;">Заказ
+			отгружен</button>
+		<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
+	</div>
+</div>
+
+{% endblock content %}

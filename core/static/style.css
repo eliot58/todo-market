@@ -867,12 +867,10 @@ select.input-field.light {
 
 .product-subtitle.dark {
 	color: #E9E9E9;
-	;
 }
 
 .product-subtitle.light {
 	color: #323232;
-	;
 }
 
 .upload-product.dark {
@@ -917,9 +915,15 @@ table {
 	border-spacing: 0 8px;
 }
 
-thead {
+table.dark thead {
 	background: #282828;
 	color: #E9E9E9;
+	font-weight: 500;
+}
+
+table.light thead {
+	background: #F1F1F1;
+	color: #323232;
 	font-weight: 500;
 }
 
@@ -948,9 +952,14 @@ td:last-child {
 	-webkit-border-radius: 0px 8px 8px 0px;
 }
 
-tr {
+table.dark tr {
 	background-color: #282828;
 	color: #E9E9E9;
+}
+
+table.light tr {
+	background: #F1F1F1;
+	color: #323232;
 }
 
 th,
@@ -1150,4 +1159,44 @@ td {
 
 .status-card div:first-child {
 	margin-top: 10px;
+}
+
+.category-item.dark{
+	background-color: #313131;
+	color: #E9E9E9;
+	padding: 10px 20px;
+	font-weight: 500;
+	border-radius: 8px;
+	margin-right: 10px;
+	border: 1px solid #686868;
+	cursor: pointer;
+}
+
+.category-item.dark.active{
+	background-color: #00A550;
+	border: 1px solid #313131;
+}
+
+.category-item.light{
+	background-color: #F1F1F1;
+	color: #323232;
+	padding: 10px 20px;
+	font-weight: 500;
+	border-radius: 8px;
+	margin-right: 10px;
+	border: 1px solid #686868;
+	cursor: pointer;
+}
+
+.category-item.light.active{
+	background-color: #2094AD;
+	border: 1px solid #E9E9E9;
+}
+
+.products-list {
+	display: none;
+}
+
+.products-list.active {
+	display: flex;
 }

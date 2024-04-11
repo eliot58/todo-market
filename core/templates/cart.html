@@ -49,19 +49,17 @@
 			{% csrf_token %}
 			<div style="width: 300px; margin-right: 20px;">
 				<p class="product__title dark" style="font-weight: 500;">Общая информация</p>
-				<input class="input-field dark" name="fullName" placeholder="ФИО получателя" type="text">
-				<input class="input-field dark" name="phone" placeholder="Номер телефона" type="text">
-				<input class="input-field dark" name="comment" placeholder="Комментарий к заказу" type="text">
+				<textarea class="input-field dark" name="comment" rows="10" cols="30" placeholder="Комментарий к заказу"></textarea>
 			</div>
 			<div style="width: 300px; margin-top: 18px;">
-				<select class="input-field dark" name="delivery" onchange="if (this.value == 1) { this.nextElementSibling.textContent = '{{provider.1.address}}'; this.nextElementSibling.disabled = true} else {this.nextElementSibling.textContent = ''; this.nextElementSibling.disabled = false}">
+				<select class="input-field dark" name="delivery" onchange="if (this.value != 1) { this.nextElementSibling.style.display = 'block'}" required>
 					<option value="" selected disabled>Способ получения</option>
 					{% for delivery_condition in provider.1.delivery_conditions %}
 					<option value="{{delivery_condition.id}}">{{delivery_condition.name}}</option>
 					{% endfor %}
 				</select>
-				<input class="input-field dark" name="address" placeholder="Адрес доставки" type="text">
-				<select class="input-field dark" style="font-weight: 500; text-align: center;" name="time">
+				<input class="input-field dark" name="address" placeholder="Адрес доставки" style="display: none;" type="text" required>
+				<select class="input-field dark" style="font-weight: 500; text-align: center;" name="time" required>
 					<option value="" selected disabled>Время доставки</option>
 					<option value="9:00-12:00">9:00-12:00</option>
 					<option value="12:00-15:00">12:00-15:00</option>

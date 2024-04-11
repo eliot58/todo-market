@@ -130,7 +130,8 @@ class Store(models.Model):
     address = models.CharField(max_length = 256, verbose_name = "Адрес склада для самовывоза")
     phone = models.CharField(max_length = 256, verbose_name = "Контакты для заказа")
     email = models.EmailField(verbose_name = "Email для выгрузок")
-    work_time = models.CharField(max_length = 256, verbose_name = "Часы работы")
+    work_time_from = models.TimeField(verbose_name = "Часы работы от")
+    work_time_to = models.TimeField(verbose_name = "Часы работы до")
     region = models.ForeignKey(Region, on_delete = models.DO_NOTHING, verbose_name = "Регион")
     assembly_time = models.CharField(max_length = 256, verbose_name = "Время сборки")
     approve = models.BooleanField(default = False)
@@ -203,5 +204,30 @@ class News(models.Model):
         return str(self.id)
     
 
-class Work(models.Model):
-    pass
+class Order(models.Model):
+    provider = models.ForeignKey(Provider, on_delete = models.DO_NOTHING)
+    buyer = models.ForeignKey(Buyer, on_delete = models.DO_NOTHING)
+    store = models.ForeignKey(Store, on_delete = models.DO_NOTHING)
+    status_ch = [
+        ("work", "В работе"),
+        ("accept", "Принят в работу"),
+        ("transit", "В пути"),
+        ("received", "Получен")
+    ]
+    status = models.CharField(max_length = 256, choices = status_ch, default = "work", verbose_name = "Статус")
+    items = models.JSONField()
+    checked = models.DateTimeField(null = True, blank = True)
+    shipped_date = models.DateField(null = True, blank = True)
+    delivery = models.ForeignKey(DeliveryCondition, on_delete = models.DO_NOTHING)
+    address = models.CharField(max_length = 256, null = True, blank = True)
+    time = models.TimeField()
+    comment = models.TextField()
+    total_price = models.PositiveIntegerField()
+    created = models.DateTimeField(auto_now_add = True)
+
+    class Meta:
+        verbose_name = "Заказ"
+        verbose_name_plural = "Заказы"
+
+    def __str__(self):
+        return str(self.id)

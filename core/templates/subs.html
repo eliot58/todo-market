@@ -21,3 +21,23 @@
 </div>
              
 {% endblock content %}
+
+<div class="d-flex flex-column swiper-slide" style="max-width: 256px; margin-right: 20px;">
+    <img src="${'/media/' + product['fields']['image']}" width="260" height="260" style="border-radius: 8px;" alt="">
+    {% if not request.user.provider %}
+    <form method="post" class="d-flex justify-content-between" style="margin-top: 5px;">
+        {% csrf_token %}
+        <button class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" type="button" onclick="addToCart('${product["pk"]}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
+        <div class="store-item__data-count ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'} d-flex justify-content-between">
+            <span onclick="minus(this)">-</span>
+            <input type="text" name="count" value="1">
+            <span onclick="plus(this)">+</span>
+        </div>
+    </form>
+    {% endif %}
+    <div class="d-flex align-items-center" style="margin: 10px 0px; ">
+        <p class="product__price ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="margin-right: 10px;">${product['fields']['price']} ₽</p>
+        <p class="product__price-2">${product['fields']['price']} ₽ без TODOMARKET</p>
+    </div>
+    <p class="product__title ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}">${product['fields']['name']}, ${product['fields']['articul']} <span style="font-size: 12px; color: #616161;">${product['fields']['amount']} ${product['fields']['unit']}</span></p>
+</div>
