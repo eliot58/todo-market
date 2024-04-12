@@ -30,5 +30,4 @@ urlpatterns = [
     path("orders/", orders, name="orders"),
     path("order/<int:id>/", order, name="order"),
     path("buyer/", buyer, name="buyer"),
-    # path("search/", search, name="search"),
 ]

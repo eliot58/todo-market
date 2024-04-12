@@ -208,22 +208,17 @@ class Order(models.Model):
     provider = models.ForeignKey(Provider, on_delete = models.DO_NOTHING)
     buyer = models.ForeignKey(Buyer, on_delete = models.DO_NOTHING)
     store = models.ForeignKey(Store, on_delete = models.DO_NOTHING)
-    status_ch = [
-        ("work", "В работе"),
-        ("accept", "Принят в работу"),
-        ("transit", "В пути"),
-        ("received", "Получен")
-    ]
-    status = models.CharField(max_length = 256, choices = status_ch, default = "work", verbose_name = "Статус")
     items = models.JSONField()
-    checkk = models.FileField(upload_to="check", null = True, blank = True)
-    shipped_date = models.DateField(null = True, blank = True)
-    delivery = models.ForeignKey(DeliveryCondition, on_delete = models.DO_NOTHING)
     address = models.CharField(max_length = 256, null = True, blank = True)
     time = models.CharField(max_length=20)
     comment = models.TextField()
-    total_price = models.PositiveIntegerField()
     created = models.DateTimeField(auto_now_add = True)
+    checkk = models.FileField(upload_to="check", null = True, blank = True)
+    check_date = models.DateTimeField(null = True, blank = True)
+    accept = models.DateTimeField(null = True, blank = True)
+    transit = models.DateTimeField(null = True, blank = True)
+    delivery = models.ForeignKey(DeliveryCondition, on_delete = models.DO_NOTHING)
+    total_price = models.PositiveIntegerField()
 
     class Meta:
         verbose_name = "Заказ"

@@ -26,8 +26,8 @@
 			<td>{{order.total_price}}</td>
 			<td>{{order.get_status_display}}</td>
 			<td>{% if order.check %}Да{% else %}Нет{% endif %}</td>
-			<td>{% if order.shipped_date %}Да{% else %}Нет{% endif %}</td>
-			<td>{% if order.shipped_date %} {{order.shipped_date}} {% else %} {% endif %}</td>
+			<td>{% if order.transit %}Да{% else %}Нет{% endif %}</td>
+			<td>{% if order.transit %} {{order.transit}} {% else %} {% endif %}</td>
 			<td>{{order.id}}</td>
 			<td><a href="{% url 'order' order.id %}" class="button-2 dark" style="display: block; text-align: center;font-weight: 600; border-radius: 8px; background-color: inherit; padding: 10px 0px;">Подробнее</a></td>
 		</tr>

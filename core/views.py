@@ -171,7 +171,7 @@ def create_store(request):
             store.payment_methods.add(PaymentMethod.objects.get(id=i))  
     except KeyError:
         store.payment_methods.clear() 
-    # bot.send_message(chat_id=222189723, text = f"Создан магазин {request.POST['store_name']}")
+    bot.send_message(chat_id=222189723, text = f"Создан магазин {request.POST['store_name']}")
     return redirect(profile)
 
 @require_POST
@@ -201,7 +201,7 @@ def update_store(request, id):
             store.payment_methods.add(PaymentMethod.objects.get(id=i))  
     except KeyError:
         store.payment_methods.clear() 
-    # bot.send_message(chat_id=222189723, text = f"Изменен магазин {request.POST['store_name']}")
+    bot.send_message(chat_id=222189723, text = f"Изменен магазин {request.POST['store_name']}")
     return redirect(profile)
 
 @require_GET
@@ -391,14 +391,17 @@ def order(request, id):
 
 def drawup(request, id):
     buyer = request.user.buyer
-    provider = Provider.objects.get(id = id)
+    provider = Provider.objects.get(id=id)
     order = Order()
     order.buyer = buyer
     order.provider = provider
     store = Store.objects.get(id=buyer.cart[str(id)]["store_id"])
     order.store_id = store.id
     order.items = buyer.cart[str(id)]["items"]
-    order.total_price = buyer.total_price
+    total_price = 0
+    for _, value in buyer.cart[str(id)]["items"].items():
+        total_price += value["all_price"]
+    order.total_price = total_price
     order.delivery_id = request.POST["delivery"]
     if request.POST["delivery"] == "1":
         order.address = store.address
@@ -407,7 +410,8 @@ def drawup(request, id):
     order.time = request.POST["time"]
     order.comment = request.POST["comment"]
     order.save()
-    buyer.cart = {}
-    buyer.total_price = 0
+    del buyer.cart[str(id)]
+    buyer.cart = buyer.cart
+    buyer.total_price -= total_price
     buyer.save()
     return redirect(orders)
