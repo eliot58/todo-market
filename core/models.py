@@ -210,6 +210,7 @@ class Order(models.Model):
     store = models.ForeignKey(Store, on_delete = models.DO_NOTHING)
     items = models.JSONField()
     address = models.CharField(max_length = 256, null = True, blank = True)
+    delivery_date = models.DateField()
     time = models.CharField(max_length=20)
     comment = models.TextField()
     created = models.DateTimeField(auto_now_add = True)

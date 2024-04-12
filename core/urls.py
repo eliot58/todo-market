@@ -30,4 +30,7 @@ urlpatterns = [
     path("orders/", orders, name="orders"),
     path("order/<int:id>/", order, name="order"),
     path("buyer/", buyer, name="buyer"),
+    path("accept/<int:id>/", accept, name="accept"),
+    path("send_check/<int:id>/", send_check, name="send_check"),
+    path("transit/<int:id>/", transit, name="transit"),
 ]

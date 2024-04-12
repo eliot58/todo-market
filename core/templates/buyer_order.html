@@ -9,7 +9,7 @@
 	<div class="d-flex justify-content-between align-items-start">
 		<div class="d-flex">
 			<img src="{% static 'img/location.svg' %}" class="location-img" alt="">
-			<p class="provider__description dark" style="width: 300px; line-height: 24px; margin-left: 10px;">{{order.address}} {{order.delivery.name}}, дата: {{order.created}}, {{order.time}}</p>
+			<p class="provider__description dark" style="width: 300px; line-height: 24px; margin-left: 10px;">{{order.address}} {{order.delivery.name}}, дата: {{order.delivery_date}}, {{order.time}}</p>
 		</div>
 		<img src="{% static 'img/close.svg' %}" class="close-icon" alt="">
 	</div>
@@ -42,9 +42,21 @@
 			</tbody>
 		</table>
 	</div>
+	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Принят</p>
+	<div class="card-back dark" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
+		<p class="provider__description dark">{% if order.accept %}Заказ принят в {{order.accept}}{% else %}Еще не принят{% endif %}</p>
+	</div>
 	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
 	<div class="card-back dark" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
-		<a href="{% url 'order' order.id %}" class="button-2 dark" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px;">Счет</a>
+		{% if order.checkk %}
+		<a href="{{order.checkk.url}}" class="button-2 dark" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px;">Счет</a>
+		{% else %}
+		<p class="provider__description dark">Счет еще не высставлен</p>
+		{% endif %}
+	</div>
+	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
+	<div class="card-back dark" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
+		<p class="provider__description dark">{% if order.transit %}Отгружен {{order.transit}}{% else %}Товар еще не отгружен{% endif %}</p>
 	</div>
 </div>
 

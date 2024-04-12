@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -10,10 +11,11 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import *
 from .utils import generator
-import json
+import datetime
 from django.core.serializers import serialize
 from aiogram import Bot
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 
 bot = Bot(token=settings.BOT_TOKEN)
 
@@ -377,7 +379,7 @@ def orders(request):
     try:
         if request.user.provider:
             orders = Order.objects.filter(provider = request.user.provider)
-    except:
+    except ObjectDoesNotExist:
         orders = Order.objects.filter(buyer = request.user.buyer)
     return render(request, 'orders.html', {"orders": orders})
 
@@ -385,7 +387,7 @@ def order(request, id):
     try:
         if request.user.provider:
             return render(request, 'order.html', {"order": Order.objects.get(id = id)})
-    except:
+    except ObjectDoesNotExist:
         return render(request, 'buyer_order.html', {"order": Order.objects.get(id = id)})
 
 
@@ -408,6 +410,7 @@ def drawup(request, id):
     else:
         order.address = request.POST["address"]
     order.time = request.POST["time"]
+    order.delivery_date = request.POST["delivery_date"]
     order.comment = request.POST["comment"]
     order.save()
     del buyer.cart[str(id)]
@@ -416,3 +419,28 @@ def drawup(request, id):
     buyer.save()
     send_mail("Новый заказ", f"Новый заказ по адресу https://market.todotodo.ru/order/{order.id}/", settings.EMAIL_HOST_USER, [store.email], fail_silently = False)
     return redirect(orders)
+
+
+def accept(request, id):
+    order = Order.objects.get(id = id)
+    order.accept = datetime.datetime.now()
+    order.save()
+    redirect_url = reverse('order', kwargs={'id': id}) 
+    return redirect(redirect_url)
+
+
+def transit(request, id):
+    order = Order.objects.get(id = id)
+    order.transit = datetime.datetime.now()
+    order.save()
+    redirect_url = reverse('order', kwargs={'id': id}) 
+    return redirect(redirect_url)
+
+
+def send_check(request, id):
+    order = Order.objects.get(id = id)
+    order.checkk = request.FILES["check"]
+    order.check_date = datetime.datetime.now()
+    order.save()
+    redirect_url = reverse('order', kwargs={'id': id}) 
+    return redirect(redirect_url)

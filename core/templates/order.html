@@ -9,7 +9,7 @@
 	<div class="d-flex justify-content-between align-items-start">
 		<div class="d-flex">
 			<img src="{% static 'img/location.svg' %}" class="location-img" alt="">
-			<p class="provider__description dark" style="width: 300px; line-height: 24px; margin-left: 10px;">{{order.address}} {{order.delivery.name}}, дата: {{order.created}}, {{order.time}}</p>
+			<p class="provider__description dark" style="width: 300px; line-height: 24px; margin-left: 10px;">{{order.address}} {{order.delivery.name}}, дата: {{order.delivery_date}}, {{order.time}}</p>
 		</div>
 		<img src="{% static 'img/close.svg' %}" class="close-icon" alt="">
 	</div>
@@ -45,32 +45,41 @@
 	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Продажи</p>
 	<div class="card-back dark" style="border-radius: 8px; padding: 20px 10px 0px 10px;">
 		<div class="d-flex align-items-center">
-			<p class="provider__description dark">22.09.23</p>
-			<button class="button-2 dark"
-				style="background-color: inherit;font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 20px;">Принять</button>
-			<p class="provider__description dark">Заказ принят 21.0923 в 16:31</p>
+			{% if not order.accept %}
+			<p class="provider__description dark">Дата: {{order.delivery_date}}, {{order.time}}</p>
+			<a href="{% url 'accept' order.id %}" class="button-2 dark" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px; margin-left: 10px;">Принять</a>
+			{% else %}
+			<p class="provider__description dark">Заказ принят {{order.accept}}</p>
+			{% endif %}
 		</div>
+		{% if not order.accept %}
 		<p style="font-size: 12px; color: #FF0000; margin: 10px 0px;">Нажимая кнопку принять, Вы
 			подтверждаете отгрузку в выбранную Вами дату</p>
+		{% endif %}
 	</div>
 	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
-	<div style="border-radius: 8px; padding: 20px 10px;"
+	<form method="post" action="{% url 'send_check' order.id %}" enctype="multipart/form-data" style="border-radius: 8px; padding: 20px 10px;"
 		class="d-flex align-items-center card-back dark">
-		<button style="background-color: inherit;">
+		{% csrf_token %}
+		{% if not order.checkk %}
+		<button style="background-color: inherit;" onclick="this.nextElementSibling.click()">
 			<img src="{% static 'img/clip.svg' %}" class="clip-img" alt="">
 		</button>
-		<button class="button-2 dark"
+		<input type="file" name="check" hidden required>
+		<button class="button-2 dark" type="submit"
 			style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 10px;">Отправить
 			счет</button>
-		<p class="provider__description dark">Заказ принят 21.0923 в 16:31</p>
-	</div>
+		{% else %}
+		<p class="provider__description dark">Счет отправлен в {{order.check_date}}</p>
+		{% endif %}
+	</form>
 	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
-	<div class="card-back dark" style="border-radius: 8px; padding: 20px 10px;"
-		class="d-flex align-items-center">
-		<button class="button-2 dark"
-			style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin-right: 10px;">Заказ
-			отгружен</button>
-		<p class="provider__description dark">Заказ принят 21.0923 в 16:31</p>
+	<div class="card-back dark d-flex align-items-center" style="border-radius: 8px; padding: 20px 10px;">
+		{% if not order.transit %}
+		<a href="{% url 'transit' order.id %}" class="button-2 dark" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px;">Заказ отгружен</a>
+		{% else %}
+		<p class="provider__description dark">Заказ отгружен в {{order.transit}}</p>
+		{% endif %}
 	</div>
 </div>
 
