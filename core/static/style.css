@@ -1200,3 +1200,19 @@ td {
 .products-list.active {
 	display: flex;
 }
+
+.card-back.dark {
+	background-color: #313131;
+}
+
+.card-back.light {
+	background-color: #F8F8F8;
+}
+
+.color-1.dark {
+	color: #00A550;
+}
+
+.color-1.light {
+	color: #2094AD;
+}

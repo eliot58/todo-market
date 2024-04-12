@@ -547,7 +547,6 @@
 		<div id="snackbar" class="dark">Товар добавлен в корзину</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 	<script src="{% static 'js/theme.min.js' %}"></script>
 	<script>
 
@@ -759,7 +758,7 @@
 		function showSnack() {
 			var x = document.getElementById("snackbar");
 			x.classList.add("show")
-			setTimeout(function () { x.classList.remove("show"); }, 3000);
+			setTimeout(function () { x.classList.remove("show"); }, 1000);
 		}
 
 

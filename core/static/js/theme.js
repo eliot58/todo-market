@@ -105,6 +105,18 @@ function themeChange() {
             console.log("delivery not found")
         }
 
+        try {
+            document.querySelector('.location-img').src = '/static/img/location.svg';
+        } catch (_) {
+            console.log("location not found")
+        }
+
+        try {
+            document.querySelector('.clip-img').src = '/static/img/clip.svg';
+        } catch (_) {
+            console.log("clip not found")
+        }
+
         document.querySelector('.logo').src = '/static/img/logo.svg';
 
 
@@ -210,6 +222,18 @@ function themeChange() {
             document.querySelector('.delivery').src = '/static/img/delivery-light.png';
         } catch (_) {
             console.log("delivery not found")
+        }
+
+        try {
+            document.querySelector('.location-img').src = '/static/img/light-location.svg';
+        } catch (_) {
+            console.log("location not found")
+        }
+
+        try {
+            document.querySelector('.clip-img').src = '/static/img/light-clip.svg';
+        } catch (_) {
+            console.log("clip not found")
         }
 
         document.querySelector('.logo').src = '/static/img/logo-light.png';
@@ -322,6 +346,18 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('.delivery').src = '/static/img/delivery-light.png';
         } catch (_) {
             console.log("delivery not found")
+        }
+
+        try {
+            document.querySelector('.location-img').src = '/static/img/light-location.svg';
+        } catch (_) {
+            console.log("location not found")
+        }
+
+        try {
+            document.querySelector('.clip-img').src = '/static/img/light-clip.svg';
+        } catch (_) {
+            console.log("clip not found")
         }
 
         document.querySelector('.logo').src = '/static/img/logo-light.png';

@@ -26,7 +26,7 @@ urlpatterns = [
     path('plus/<int:id>/', cart_item_plus),
     path("storeProducts/<int:id>/", storeProducts, name="store_products"),
     path("susbscriptions/", susbscriptions, name="susbscriptions"),
-    path("drawup/", drawup, name="drawup"),
+    path("drawup/<int:id>/", drawup, name="drawup"),
     path("orders/", orders, name="orders"),
     path("order/<int:id>/", order, name="order"),
     path("buyer/", buyer, name="buyer"),

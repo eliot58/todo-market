@@ -216,11 +216,11 @@ class Order(models.Model):
     ]
     status = models.CharField(max_length = 256, choices = status_ch, default = "work", verbose_name = "Статус")
     items = models.JSONField()
-    checked = models.DateTimeField(null = True, blank = True)
+    checkk = models.FileField(upload_to="check", null = True, blank = True)
     shipped_date = models.DateField(null = True, blank = True)
     delivery = models.ForeignKey(DeliveryCondition, on_delete = models.DO_NOTHING)
     address = models.CharField(max_length = 256, null = True, blank = True)
-    time = models.TimeField()
+    time = models.CharField(max_length=20)
     comment = models.TextField()
     total_price = models.PositiveIntegerField()
     created = models.DateTimeField(auto_now_add = True)

@@ -45,20 +45,20 @@
 	</div>
 	{% endfor %}
 	<div class="d-flex justify-content-end" style="width: 100%;">
-		<form action="{% url 'drawup' %}" method="post" class="provider-card dark" style="width: 600px; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 200px;">
+		<form action="{% url 'drawup' provider.0 %}" method="post" class="provider-card dark" style="width: 600px; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 200px;">
 			{% csrf_token %}
 			<div style="width: 300px; margin-right: 20px;">
 				<p class="product__title dark" style="font-weight: 500;">Общая информация</p>
 				<textarea class="input-field dark" name="comment" rows="10" cols="30" placeholder="Комментарий к заказу"></textarea>
 			</div>
 			<div style="width: 300px; margin-top: 18px;">
-				<select class="input-field dark" name="delivery" onchange="if (this.value != 1) { this.nextElementSibling.style.display = 'block'}" required>
+				<select class="input-field dark" name="delivery" onchange="if (this.value != 1) { this.nextElementSibling.style.display = 'block'; this.nextElementSibling.required = true}" required>
 					<option value="" selected disabled>Способ получения</option>
 					{% for delivery_condition in provider.1.delivery_conditions %}
 					<option value="{{delivery_condition.id}}">{{delivery_condition.name}}</option>
 					{% endfor %}
 				</select>
-				<input class="input-field dark" name="address" placeholder="Адрес доставки" style="display: none;" type="text" required>
+				<input class="input-field dark" name="address" placeholder="Адрес доставки" style="display: none;" type="text">
 				<select class="input-field dark" style="font-weight: 500; text-align: center;" name="time" required>
 					<option value="" selected disabled>Время доставки</option>
 					<option value="9:00-12:00">9:00-12:00</option>

@@ -313,7 +313,6 @@ def addtoCart(request, id):
         buyer.cart[str(item.store.provider.id)]["photo"] = item.store.provider.logo.url
         buyer.cart[str(item.store.provider.id)]["region"] = item.store.region.name
         buyer.cart[str(item.store.provider.id)]["company"] = item.store.provider.company
-        buyer.cart[str(item.store.provider.id)]["provider_id"] = item.store.provider.id
         buyer.cart[str(item.store.provider.id)]["store_id"] = item.store.id
         buyer.cart[str(item.store.provider.id)]["delivery_conditions"] = [{"id": delivery_condition.id, "name": delivery_condition.name} for delivery_condition in item.store.delivery_conditions.all()]
         buyer.cart[str(item.store.provider.id)]["items"] = {}
@@ -371,14 +370,6 @@ def storeProducts(request, id):
     return JsonResponse({"store": serialize('json', Store.objects.filter(id = id)), "provider": serialize('json', [Store.objects.filter(id = id)[0].provider]), "products": serialize('json', Product.objects.filter(store_id = id))})
 
 
-# @require_GET
-# @csrf_exempt
-# def search(request):
-#     query = request.GET["query"]
-#     tags = Tag.objects.filter(name__icontains = query)
-#     products = Product.objects.filter(tags__in = tags)
-#     return JsonResponse({"results": json.dumps(list(products.values("id", "name")))})
-
 def susbscriptions(request):
     return render(request, "subs.html")
 
@@ -391,24 +382,31 @@ def orders(request):
     return render(request, 'orders.html', {"orders": orders})
 
 def order(request, id):
-    return render(request, 'order.html', {"order": Order.objects.get(id = id)})
+    try:
+        if request.user.provider:
+            return render(request, 'order.html', {"order": Order.objects.get(id = id)})
+    except:
+        return render(request, 'buyer_order.html', {"order": Order.objects.get(id = id)})
 
 
-def drawup(request):
+def drawup(request, id):
     buyer = request.user.buyer
     provider = Provider.objects.get(id = id)
     order = Order()
     order.buyer = buyer
     order.provider = provider
-    order.items = buyer.cart
+    store = Store.objects.get(id=buyer.cart[str(id)]["store_id"])
+    order.store_id = store.id
+    order.items = buyer.cart[str(id)]["items"]
     order.total_price = buyer.total_price
     order.delivery_id = request.POST["delivery"]
     if request.POST["delivery"] == "1":
-        order.address = provider
+        order.address = store.address
     else:
         order.address = request.POST["address"]
     order.time = request.POST["time"]
     order.comment = request.POST["comment"]
+    order.save()
     buyer.cart = {}
     buyer.total_price = 0
     buyer.save()
