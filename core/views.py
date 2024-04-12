@@ -402,8 +402,8 @@ def drawup(request, id):
     for _, value in buyer.cart[str(id)]["items"].items():
         total_price += value["all_price"]
     order.total_price = total_price
-    order.delivery_id = request.POST["delivery"]
-    if request.POST["delivery"] == "1":
+    order.delivery = DeliveryCondition.objects.get(name = request.POST["delivery"])
+    if request.POST["delivery"] == "Самовывоз":
         order.address = store.address
     else:
         order.address = request.POST["address"]
