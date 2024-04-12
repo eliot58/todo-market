@@ -414,4 +414,5 @@ def drawup(request, id):
     buyer.cart = buyer.cart
     buyer.total_price -= total_price
     buyer.save()
+    send_mail("Новый заказ", f"Новый заказ по адресу https://market.todotodo.ru/order/{order.id}/", settings.EMAIL_HOST_USER, [store.email], fail_silently = False)
     return redirect(orders)
