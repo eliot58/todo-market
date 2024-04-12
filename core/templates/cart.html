@@ -52,7 +52,7 @@
 				<textarea class="input-field dark" name="comment" rows="10" cols="30" placeholder="Комментарий к заказу"></textarea>
 			</div>
 			<div style="width: 300px; margin-top: 18px;">
-				<select class="input-field dark" name="delivery" onchange="if (this.value.toLowerCase() != 'самовывоз') { this.nextElementSibling.style.display = 'block'; this.nextElementSibling.required = true}" required>
+				<select class="input-field dark" name="delivery" onchange="if (this.value.toLowerCase() != 'самовывоз') { this.nextElementSibling.style.display = 'block'; this.nextElementSibling.required = true} else {this.nextElementSibling.style.display = 'none'; this.nextElementSibling.required = false}" required>
 					<option value="" selected disabled>Способ получения</option>
 					{% for delivery_condition in provider.1.delivery_conditions %}
 					<option value="{{delivery_condition.name}}">{{delivery_condition.name}}</option>
