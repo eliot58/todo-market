@@ -9,7 +9,7 @@
 {% block content %}
 <h1 class="title dark">Корзина</h1>
 {% for provider in providers %}
-	<div class="d-flex card dark">
+	<div class="d-flex card dark" style="margin: 10px 0px;">
 		<div class="d-flex">
 			<img src="{{provider.1.photo}}" width="72" height="72" style="border-radius: 8px;" alt="">
 			<div class="d-flex flex-column justify-content-around" style="margin: 10px;"> 
@@ -24,6 +24,7 @@
 		</div>
 	</div>
 	{% for item in provider.1.items.items %}
+	<p class="product__title dark" style="margin: 0px 10px; font-weight: 600;">#{{ forloop.counter }}</p>
 	<div class="d-flex cart dark" style="position: relative; margin: 10px 0px; padding: 10px; border-radius: 8px;">
 		<img src="{{item.1.photo}}" width="136" height="136" style="border-radius: 8px;" alt="">
 		<a href="{% url 'cart_item_delete' item.0 %}" style="position: absolute; top: 10px; right: 10px;">

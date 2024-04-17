@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Заказы {% endblock title %}
+{% block title %} Заказ {% endblock title %}
 
 {% load static %}
 
@@ -9,9 +9,8 @@
 	<div class="d-flex justify-content-between align-items-start">
 		<div class="d-flex">
 			<img src="{% static 'img/location.svg' %}" class="location-img" alt="">
-			<p class="provider__description dark" style="width: 300px; line-height: 24px; margin-left: 10px;">{{order.address}} {{order.delivery.name}}, дата: {{order.delivery_date}}, {{order.time}}</p>
+			<p class="provider__description dark" style="line-height: 24px; margin-left: 10px;">Адрес: {{order.address}} ---- Тип доставки: {{order.delivery.name}} <br> Дата и время желаемой доставки: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
 		</div>
-		<img src="{% static 'img/close.svg' %}" class="close-icon" alt="">
 	</div>
 	<div class="card-back dark" style="border-radius: 8px; margin-top: 10px;">
 		<table style="width: 100%;">
@@ -44,7 +43,7 @@
 	</div>
 	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Принят</p>
 	<div class="card-back dark" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
-		<p class="provider__description dark">{% if order.accept %}Заказ принят в {{order.accept}}{% else %}Еще не принят{% endif %}</p>
+		<p class="provider__description dark">{% if order.accept %}Заказ принят в {{order.accept|date:'d.m.Y'}}{% else %}Еще не принят{% endif %}</p>
 	</div>
 	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
 	<div class="card-back dark" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
@@ -56,7 +55,7 @@
 	</div>
 	<p class="provider__description dark" style="font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
 	<div class="card-back dark" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
-		<p class="provider__description dark">{% if order.transit %}Отгружен {{order.transit}}{% else %}Товар еще не отгружен{% endif %}</p>
+		<p class="provider__description dark">{% if order.transit %}Отгружен {{order.transit|date:'d.m.Y'}}{% else %}Товар еще не отгружен{% endif %}</p>
 	</div>
 </div>
 

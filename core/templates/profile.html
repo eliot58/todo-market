@@ -70,7 +70,7 @@
 {% block content %}
 <div class="d-flex justify-content-between">
 	<h1 class="title dark">Профиль компании</h1>
-	<button class="button-2 dark" type="button" onclick="createStore(this)" style="{% if request.user.provider.company == '' or request.user.provider.slogan == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == '' %}display: none;{% endif %}background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px;">Добавить магазин</button>
+	<button class="button-2 dark" type="button" onclick="createStore(this)" style="{% if request.user.provider.company == '' or request.user.provider.slogan == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == '' or stores|length >= 1 %}display: none;{% endif %}background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px;">Добавить магазин</button>
 </div>
 <p class="profile-info dark" style="font-weight: 500; margin: 10px 0px;">Общая информация</p>
 <div class="main-profile card dark">

@@ -227,3 +227,16 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+
+class ApplicationSubscribes(models.Model):
+    provider = models.ForeignKey(Provider, on_delete = models.DO_NOTHING)
+    order = models.TextField()
+
+
+    class Meta:
+        verbose_name = "Заявка на подписку"
+        verbose_name_plural = "Заявки на подписку"
+
+    def __str__(self):
+        return self.order

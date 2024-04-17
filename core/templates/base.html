@@ -143,77 +143,6 @@
 				</form>
 			</div>
 		</div>
-		<div id="popup" class="popup works-popup">
-			<div class="popup-content dark d-flex flex-column" style="width: 1000px;">
-				<div class="d-flex justify-content-between align-items-start">
-					<div class="d-flex">
-						<img src="{% static 'img/location.svg' %}" alt="">
-						<p style="color: #E9E9E9; width: 300px; line-height: 24px; margin-left: 10px;">г. Москва, ул.
-							Центральная, д. 10 Самовывоз, дата: 19.09.23, 12-14 ч.</p>
-					</div>
-					<img src="{% static 'img/close.svg' %}" alt="">
-				</div>
-				<div style="background-color: #313131; border-radius: 8px; margin-top: 10px;">
-					<table style="width: 100%;">
-						<thead>
-							<tr style="background-color: #313131;">
-								<th>Артикул</th>
-								<th>Название</th>
-								<th>Цена</th>
-								<th>Количество</th>
-								<th>Итого</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr style="background-color: #313131;">
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-							<tr style="background-color: #313131;">
-								<td style="font-weight: 500; color: #00A550;">Сумма заказа: 19 200</td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Продажи</p>
-				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px 0px 10px;">
-					<div class="d-flex align-items-center">
-						<p style="color: #E9E9E9;">22.09.23</p>
-						<button class="button-2 dark"
-							style="background-color: inherit;font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 20px;">Принять</button>
-						<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
-					</div>
-					<p style="font-size: 12px; color: #FF0000; margin: 10px 0px;">Нажимая кнопку принять, Вы
-						подтверждаете отгрузку в выбранную Вами дату</p>
-				</div>
-				<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
-				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;"
-					class="d-flex align-items-center">
-					<button style="background-color: inherit;">
-						<img src="{% static 'img/clip.svg' %}" alt="">
-					</button>
-					<button class="button-2 dark"
-						style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 10px;">Отправить
-						счет</button>
-					<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
-				</div>
-				<p style="color: #E9E9E9; font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
-				<div style="background-color: #313131; border-radius: 8px; padding: 20px 10px;"
-					class="d-flex align-items-center">
-					<button class="button-2 dark"
-						style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin-right: 10px;">Заказ
-						отгружен</button>
-					<p style="color: #E9E9E9;">Заказ принят 21.0923 в 16:31</p>
-				</div>
-			</div>
-		</div>
 		<div id="popup" class="popup product-popup">
 			<div class="popup-content dark" style="width: 1000px; max-height: 320px;">
 				<form method="post" enctype="multipart/form-data" class="d-flex flex-column product-form">
@@ -407,9 +336,24 @@
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
 						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш статус позволяет создать <span></span> товара</p>
-						<button onclick="document.querySelector('.status-popup').style.display = 'none';"
+						<button onclick="window.location.pathname = '/susbscriptions/'"
 							class="button-1 dark"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Понято</button>
+					</div>
+					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
+						style="position: absolute; bottom: -20px; right: 20px;" alt="">
+				</div>
+			</div>
+		</div>
+
+		<div id="popup" class="popup application-popup">
+			<div class="popup-content dark" style="width: 750px; height: 170px;">
+				<div class="d-flex" style="position: relative; height: 100%;">
+					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
+						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваша заявка принята, ближайший свободный менеджер с вами свяжется</p>
+						<button onclick="document.querySelector('.application-popup').style.display = 'none';"
+							class="button-1 dark"
+							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
 						style="position: absolute; bottom: -20px; right: 20px;" alt="">

@@ -373,7 +373,19 @@ def storeProducts(request, id):
 
 
 def susbscriptions(request):
+    if request.method == "POST":
+        application = ApplicationSubscribes()
+        application.provider = request.user.provider
+        if request.POST["application"] == "1":
+            application.order = "Магазин 3000 р в месяц"
+        elif request.POST["application"] == "2":
+            application.order = "Гипермаркет 10000 р в месяц"
+        elif request.POST["application"] == "3":
+            application.order = "Бегущая строка"
+
+        application.save()
     return render(request, "subs.html")
+
 
 def orders(request):
     try:
