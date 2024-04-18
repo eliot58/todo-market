@@ -389,8 +389,7 @@ def susbscriptions(request):
 
 def orders(request):
     try:
-        if request.user.provider:
-            orders = Order.objects.filter(provider = request.user.provider)
+        orders = Order.objects.filter(provider = request.user.provider)
     except ObjectDoesNotExist:
         orders = Order.objects.filter(buyer = request.user.buyer)
     return render(request, 'orders.html', {"orders": orders})
@@ -437,6 +436,7 @@ def accept(request, id):
     order = Order.objects.get(id = id)
     order.accept = datetime.datetime.now()
     order.save()
+    send_mail(f"Заказ #{order.id} принят", f"Заказ https://market.todotodo.ru/order/{order.id}/", settings.EMAIL_HOST_USER, [order.buyer.user.email], fail_silently = False)
     redirect_url = reverse('order', kwargs={'id': id}) 
     return redirect(redirect_url)
 
@@ -445,6 +445,7 @@ def transit(request, id):
     order = Order.objects.get(id = id)
     order.transit = datetime.datetime.now()
     order.save()
+    send_mail(f"Заказ #{order.id} отгружен", f"Заказ https://market.todotodo.ru/order/{order.id}/", settings.EMAIL_HOST_USER, [order.buyer.user.email], fail_silently = False)
     redirect_url = reverse('order', kwargs={'id': id}) 
     return redirect(redirect_url)
 
@@ -454,5 +455,6 @@ def send_check(request, id):
     order.checkk = request.FILES["check"]
     order.check_date = datetime.datetime.now()
     order.save()
+    send_mail(f"Получен счет для заказа #{order.id}", f"Получен счет для заказа https://market.todotodo.ru/order/{order.id}/", settings.EMAIL_HOST_USER, [order.buyer.user.email], fail_silently = False)
     redirect_url = reverse('order', kwargs={'id': id}) 
     return redirect(redirect_url)

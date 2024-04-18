@@ -93,6 +93,9 @@ class Buyer(models.Model):
     cart = models.JSONField(default = dict(), blank = True)
     total_price = models.PositiveIntegerField(default=0)
 
+    def __str__(self):
+        return self.fullName
+
 
     class Meta:
         verbose_name = "Покупатель"
