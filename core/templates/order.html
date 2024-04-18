@@ -14,6 +14,14 @@
 			<p class="provider__description dark" style="line-height: 24px; margin-left: 10px;">Адрес: {{order.address}} ---- Тип доставки: {{order.delivery.name}} <br> Дата и время желаемой доставки: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
 		</div>
 	</div>
+	<div class="d-flex flex-column">
+		<p class="provider__description dark" style="margin: 0px; font-weight: 600;">Инфо о покупателе</p>
+		<div class="d-flex">
+			<p class="provider__description dark">ФИО: {{order.buyer.fullName}}</p>
+			<p class="provider__description dark" style="margin: 20px;">Телефон: {{order.buyer.phone}}</p>
+			<p class="provider__description dark">E-mail: {{order.buyer.user.email}}</p>
+		</div>
+	</div>
 	<div class="card-back dark" style="border-radius: 8px; margin-top: 10px;">
 		<table style="width: 100%;">
 			<thead>
