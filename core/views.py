@@ -17,8 +17,6 @@ from aiogram import Bot
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 
-bot = Bot(token=settings.BOT_TOKEN)
-
 
 def login_view(request):
     if request.method == "POST":
@@ -172,6 +170,7 @@ def create_store(request):
             store.payment_methods.add(PaymentMethod.objects.get(id=i))  
     except KeyError:
         store.payment_methods.clear() 
+    bot = Bot(token=settings.BOT_TOKEN)
     bot.send_message(chat_id=222189723, text = f"Создан магазин {request.POST['store_name']}")
     return redirect(profile)
 
@@ -202,6 +201,7 @@ def update_store(request, id):
             store.payment_methods.add(PaymentMethod.objects.get(id=i))  
     except KeyError:
         store.payment_methods.clear() 
+    bot = Bot(token=settings.BOT_TOKEN)
     bot.send_message(chat_id=222189723, text = f"Изменен магазин {request.POST['store_name']}")
     return redirect(profile)
 
@@ -385,6 +385,7 @@ def susbscriptions(request):
             application.order = "Новость от партнера 5000 р"
 
         application.save()
+        bot = Bot(token=settings.BOT_TOKEN)
         bot.send_message(chat_id=222189723, text = f"Добавлено заявка на подписку {application.order}")
         bot.send_message(chat_id=977794713, text = f"Добавлено заявка на подписку {application.order}")
     return render(request, "subs.html")
