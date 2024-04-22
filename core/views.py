@@ -234,7 +234,7 @@ def create_product(request):
     product.remainder = request.POST["remainder"]
     product.description = request.POST["description"]
     product.save()
-    for tag in request.POST["tags"].split():
+    for tag in request.POST["tags"].split(", "):
         try:
             product.tags.add(Tag.objects.get(name = tag))
         except Tag.DoesNotExist:
@@ -259,7 +259,7 @@ def update_product(request, id):
         product.remainder = request.POST["remainder"]
         product.description = request.POST["description"]
         product.save()
-        for tag in request.POST["tags"].split():
+        for tag in request.POST["tags"].split(", "):
             try:
                 product.tags.add(Tag.objects.get(name = tag))
             except Tag.DoesNotExist:
