@@ -385,7 +385,7 @@ def susbscriptions(request):
             application.order = "Новость от партнера 5000 р"
 
         application.save()
-    bot.send_message(chat_id=222189723, text = f"Добавлено заявка на подписку {application.order}")
+        bot.send_message(chat_id=222189723, text = f"Добавлено заявка на подписку {application.order}")
     return render(request, "subs.html")
 
 
