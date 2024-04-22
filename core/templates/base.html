@@ -449,9 +449,11 @@
 				</li>
 	
 				<br><br><br><br><br>
+				{% if request.user.provider %}
 				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
 					<a href="{% url 'susbscriptions' %}">Подписка</a>
 				</li>
+				{% endif %}
 				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
 					<a href="https://t.me/chattodotodo_bot">Другие проекты</a>
 				</li>

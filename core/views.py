@@ -397,11 +397,7 @@ def orders(request):
     return render(request, 'orders.html', {"orders": orders})
 
 def order(request, id):
-    try:
-        if request.user.provider:
-            return render(request, 'order.html', {"order": Order.objects.get(id = id)})
-    except ObjectDoesNotExist:
-        return render(request, 'buyer_order.html', {"order": Order.objects.get(id = id)})
+    return render(request, 'order.html', {"order": Order.objects.get(id = id)})
 
 
 def drawup(request, id):
