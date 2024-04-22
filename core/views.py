@@ -127,7 +127,6 @@ def profile(request):
             user.provider.logo = request.FILES['logo']
         except KeyError:
             pass
-        user.provider.slogan = request.POST['slogan']
         user.provider.site = request.POST['site']
         user.provider.description = request.POST['description']
         user.provider.save()
@@ -382,8 +381,11 @@ def susbscriptions(request):
             application.order = "Гипермаркет 10000 р в месяц"
         elif request.POST["application"] == "3":
             application.order = "Бегущая строка"
+        elif request.POST["application"] == "4":
+            application.order = "Новость от партнера 5000 р"
 
         application.save()
+    bot.send_message(chat_id=222189723, text = f"Добавлено заявка на подписку {application.order}")
     return render(request, "subs.html")
 
 

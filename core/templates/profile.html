@@ -70,7 +70,7 @@
 {% block content %}
 <div class="d-flex justify-content-between">
 	<h1 class="title dark">Профиль компании</h1>
-	<button class="button-2 dark" type="button" onclick="createStore(this)" style="{% if request.user.provider.company == '' or request.user.provider.slogan == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == '' or stores|length >= 1 %}display: none;{% endif %}background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px;">Добавить магазин</button>
+	<button class="button-2 dark" type="button" onclick="createStore(this)" style="{% if request.user.provider.company == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == '' or stores|length >= 1 %}display: none;{% endif %}background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px;">Добавить магазин</button>
 </div>
 <p class="profile-info dark" style="font-weight: 500; margin: 10px 0px;">Общая информация</p>
 <div class="main-profile card dark">
@@ -99,17 +99,9 @@
 					<input type="text" name="email" value="{{request.user.provider.email}}" class="input-field dark" placeholder="E-mail" required>
 					<label for="email">E-mail</label>
 				</div>
-				<div>
-					<div class="d-flex">
-						<div class="form-group" style="width: 50%;">
-							<input type="text" name="slogan" value="{{request.user.provider.slogan}}" class="input-field dark" placeholder="Слоган" required>
-							<label for="slogan">Слоган</label>
-						</div>
-						<div class="form-group" style="width: 50%; margin-left: 10px;">
-							<input type="text" name="site" value="{{request.user.provider.site}}" class="input-field dark" placeholder="Сайт" required>
-							<label for="site">Сайт</label>
-						</div>
-					</div>
+				<div class="form-group">
+					<input type="text" name="site" value="{{request.user.provider.site}}" class="input-field dark" placeholder="Сайт" required>
+					<label for="site">Сайт</label>
 				</div>
 			</div>
 		</div>

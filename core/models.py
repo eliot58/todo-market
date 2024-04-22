@@ -60,7 +60,6 @@ class Provider(models.Model):
     fullName = models.CharField(max_length = 256, verbose_name = "Контактное лицо")
     phone = models.CharField(max_length = 256, unique = True, verbose_name = "Номер телефона")
     email = models.EmailField(unique = True, verbose_name = "Email")
-    slogan = models.CharField(max_length = 256, default = "", verbose_name = "Слоган")
     site = models.URLField(default = "", verbose_name = "Сайт")
     description = models.TextField(default = "", verbose_name = "Описание")
 
