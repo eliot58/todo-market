@@ -10,7 +10,6 @@ from django.http import JsonResponse, HttpResponse
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import *
-from .utils import generator
 import datetime
 from django.core.serializers import serialize
 from aiogram import Bot
@@ -39,7 +38,7 @@ def login_view(request):
 @require_POST
 def signup(request):
     if request.method == "POST":
-        password = generator(8)
+        password = User.objects.make_random_password(length=8)
         register_form = RegisterForm(request.POST)
         if register_form.is_valid():
             cd = register_form.cleaned_data
