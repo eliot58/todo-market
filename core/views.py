@@ -78,9 +78,7 @@ def index(request):
             pass
 
     providers = None
-    flag = False
     if "query" in request.GET:
-        flag = True
         tags = Tag.objects.filter(name__icontains = request.GET["query"])
         products = Product.objects.filter(name__icontains = request.GET["query"]).distinct()
         providers = {}
@@ -92,7 +90,7 @@ def index(request):
 
         providers = providers.items()
 
-    return render(request, "index.html", {"providers": providers, "stores": Store.objects.all(), "flag": flag})
+    return render(request, "index.html", {"providers": providers, "stores": Store.objects.all()})
 
 def delivery(request):
     return render(request, "map.html", {"login_form": LoginForm(), "register_form": RegisterForm()})

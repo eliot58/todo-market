@@ -7,12 +7,12 @@
 {% block content %}
 <h1 class="title">Новости партнеров</h1>
 {% for new in news %}
-    <div class="d-flex flex-column news">
+    <div class="d-flex flex-column">
         <div class="d-flex align-items-center">
             <img src="{{new.logo.url}}" style="border-radius: 8px;" width="48" height="48" alt="">
-            <p class="news__author">{{new.author}}</p>
+            <p>{{new.author}}</p>
         </div>
-        <p class="news__text">{{new.text}}</p>
+        <p>{{new.text}}</p>
     </div>
 {% endfor %}
 

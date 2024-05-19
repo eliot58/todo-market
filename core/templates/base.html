@@ -115,7 +115,7 @@
 						<label for="email">E-mail</label>
 					</div>
 					{{ register_form.email.errors }}
-					<button class="button-1" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
+					<button style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
 						type="submit">Зарегистрироваться</button>
 				</form>
 				<form action="{% url 'login_view' %}" method="post" class="signin" {% if login_form.errors %}
@@ -130,7 +130,7 @@
 						<label for="password">Пароль</label>
 					</div>
 					{{ login_form.password.errors }}
-					<button class="button-1" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
+					<button style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
 						type="submit">Войти</button>
 				</form>
 			</div>
@@ -201,7 +201,7 @@
 							<div class="product-subtitle" style="font-size: 12px; line-height: 16px;"></div>
 						</a>
 					</div>
-					<div class="d-flex search_products">
+					<div class="d-flex">
 						<input placeholder="Поиск поставщика" type="text"
 							style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
 						<img src="{% static 'img/loop.svg' %}" alt="">
@@ -231,7 +231,7 @@
 						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Ваш магазин отправлен
 							на модерацию, ожидайте, мы пришлем вам уведомление на почту, и в разделе “Новости” на сайте.
 						</p>
-						<button class="button-1"
+						<button
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -265,7 +265,6 @@
 							отправлен на почту: {{request.user.email}}</p>
 						<button
 							onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% else %}document.querySelector('.success_reg3-popup').style.display = 'block'; {% endif %}"
-							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -282,7 +281,6 @@
 							за доверие! Теперь зайдите в cвой профиль и заполните данные о Вашем магазине и добавьте
 							товары</p>
 						<button onclick="window.location.pathname = '/profile/'"
-							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -298,7 +296,6 @@
 						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо
 							за доверие! Теперь нужно заполнить профиль покупателя</p>
 						<button onclick="window.location.pathname = '/buyer/'"
-							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -314,7 +311,6 @@
 						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Магазин отправлен на
 							проверку ожидайте сообщения на вашу почту</p>
 						<button onclick="document.querySelector('.approve-popup').style.display = 'none';"
-							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -329,7 +325,6 @@
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
 						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Ваш статус позволяет создать <span></span> товара</p>
 						<button onclick="window.location.pathname = '/susbscriptions/'"
-							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Понято</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -344,7 +339,6 @@
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
 						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Ваша заявка принята, ближайший свободный менеджер с вами свяжется</p>
 						<button onclick="document.querySelector('.application-popup').style.display = 'none';"
-							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -360,7 +354,6 @@
 						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Отлично, добавьте Ваш
 							первый магазин! Для этого нажмите добавить магазин в правом верхнем углу.</p>
 						<button onclick="document.querySelector('.base_profile-popup').style.display = 'none';"
-							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -585,7 +578,7 @@
 				textarea[0].value = ""
 				textarea[1].value = ""
 
-				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
+				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
 			} else {
 				const name_input = popup_product.querySelector("input[name='name']")
 				const articul_input = popup_product.querySelector("input[name='articul']")
@@ -609,7 +602,7 @@
 				price_input.value = price
 				tags_input.value = tags
 
-				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1" onclick="updateProduct(${store}, ${category}, ${id}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
+				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" onclick="updateProduct(${store}, ${category}, ${id}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
 			}
 			popup_product.style.display = 'block';
 		}

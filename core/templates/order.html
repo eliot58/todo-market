@@ -7,25 +7,25 @@
 {% block content %}
 
 {% if request.user.provider %}
-<div class="d-flex flex-column card" style="margin-bottom: 100px;">
+<div class="d-flex flex-column" style="margin-bottom: 100px;">
 	<div class="d-flex justify-content-between align-items-start">
 		<div class="d-flex">
 			<img src="{% static 'img/location.svg' %}" class="location-img" alt="">
-			<p class="provider__description" style="line-height: 24px; margin-left: 10px;">Адрес: {{order.address}} ---- Тип доставки: {{order.delivery.name}} <br> Дата и время желаемой доставки: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
+			<p style="line-height: 24px; margin-left: 10px;">Адрес: {{order.address}} ---- Тип доставки: {{order.delivery.name}} <br> Дата и время желаемой доставки: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
 		</div>
 	</div>
 	<div class="d-flex flex-column">
-		<p class="provider__description" style="margin: 0px; font-weight: 600;">Инфо о покупателе</p>
+		<p style="margin: 0px; font-weight: 600;">Инфо о покупателе</p>
 		<div class="d-flex">
-			<p class="provider__description">ФИО: {{order.buyer.fullName}}</p>
-			<p class="provider__description" style="margin: 20px;">Телефон: {{order.buyer.phone}}</p>
-			<p class="provider__description">E-mail: {{order.buyer.user.email}}</p>
+			<p>ФИО: {{order.buyer.fullName}}</p>
+			<p style="margin: 20px;">Телефон: {{order.buyer.phone}}</p>
+			<p>E-mail: {{order.buyer.user.email}}</p>
 		</div>
 	</div>
-	<div class="card-back" style="border-radius: 8px; margin-top: 10px;">
+	<div style="border-radius: 8px; margin-top: 10px;">
 		<table style="width: 100%;">
 			<thead>
-				<tr class="provider__description card-back">
+				<tr>
 					<th>Название</th>
 					<th>Цена</th>
 					<th>Количество</th>
@@ -34,15 +34,15 @@
 			</thead>
 			<tbody>
 				{% for item in order.items.items %}
-				<tr class="provider__description card-back">
+				<tr>
 					<td>{{item.1.title}}</td>
 					<td>{{item.1.price}}</td>
 					<td>{{item.1.count}}</td>
 					<td>{{item.1.all_price}}</td>
 				</tr>
 				{% endfor %}
-				<tr class="card-back">
-					<td style="font-weight: 500;" class="color-1">Сумма заказа: {{order.total_price}}</td>
+				<tr>
+					<td style="font-weight: 500;">Сумма заказа: {{order.total_price}}</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -51,58 +51,58 @@
 			</tbody>
 		</table>
 	</div>
-	<p class="provider__description" style="font-weight: 500; margin: 10px 0px 10px 10px;">Продажи</p>
-	<div class="card-back" style="border-radius: 8px; padding: 20px 10px 0px 10px;">
+	<p style="font-weight: 500; margin: 10px 0px 10px 10px;">Продажи</p>
+	<div style="border-radius: 8px; padding: 20px 10px 0px 10px;">
 		<div class="d-flex align-items-center">
 			{% if not order.accept %}
-			<p class="provider__description">Дата: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
-			<a href="{% url 'accept' order.id %}" class="button-2" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px; margin-left: 10px;">Принять</a>
+			<p>Дата: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
+			<a href="{% url 'accept' order.id %}" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px; margin-left: 10px;">Принять</a>
 			{% else %}
-			<p class="provider__description">Заказ принят {{order.accept|date:'d.m.Y'}}</p>
+			<p>Заказ принят {{order.accept|date:'d.m.Y'}}</p>
 			{% endif %}
 		</div>
 		{% if not order.accept %}
 		<p style="font-size: 12px; color: #FF0000; margin: 10px 0px;">Нажимая кнопку принять, Вы обязуетесь произвести отгрузку выбранную клиентом дату</p>
 		{% endif %}
 	</div>
-	<p class="provider__description" style="font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
+	<p style="font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
 	<form method="post" action="{% url 'send_check' order.id %}" enctype="multipart/form-data" style="border-radius: 8px; padding: 20px 10px;"
-		class="d-flex align-items-center card-back">
+		class="d-flex align-items-center">
 		{% csrf_token %}
 		{% if not order.checkk %}
 		<button style="background-color: inherit;" onclick="this.nextElementSibling.click()">
 			<img src="{% static 'img/clip.svg' %}" class="clip-img" alt="">
 		</button>
 		<input type="file" name="check" hidden required>
-		<button class="button-2" type="submit"
+		<button type="submit"
 			style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 20px; margin: 0px 10px;">Отправить
 			счет</button>
 		{% else %}
-		<p class="provider__description">Счет отправлен в {{order.check_date|date:'d.m.Y'}}</p>
+		<p>Счет отправлен в {{order.check_date|date:'d.m.Y'}}</p>
 		{% endif %}
 	</form>
-	<p class="provider__description" style="font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
-	<div class="card-back d-flex align-items-center" style="border-radius: 8px; padding: 20px 10px;">
+	<p style="font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
+	<div class="d-flex align-items-center" style="border-radius: 8px; padding: 20px 10px;">
 		{% if not order.transit %}
-		<a href="{% url 'transit' order.id %}" class="button-2" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px;">Заказ отгружен</a>
+		<a href="{% url 'transit' order.id %}" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px;">Заказ отгружен</a>
 		{% else %}
-		<p class="provider__description">Заказ отгружен в {{order.transit|date:'d.m.Y'}}</p>
+		<p>Заказ отгружен в {{order.transit|date:'d.m.Y'}}</p>
 		{% endif %}
 	</div>
 </div>
 {% else %}
 
-<div class="d-flex flex-column card" style="margin-bottom: 100px;">
+<div class="d-flex flex-column" style="margin-bottom: 100px;">
 	<div class="d-flex justify-content-between align-items-start">
 		<div class="d-flex">
 			<img src="{% static 'img/location.svg' %}" class="location-img" alt="">
-			<p class="provider__description" style="line-height: 24px; margin-left: 10px;">Адрес: {{order.address}} ---- Тип доставки: {{order.delivery.name}} <br> Дата и время желаемой доставки: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
+			<p style="line-height: 24px; margin-left: 10px;">Адрес: {{order.address}} ---- Тип доставки: {{order.delivery.name}} <br> Дата и время желаемой доставки: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
 		</div>
 	</div>
-	<div class="card-back" style="border-radius: 8px; margin-top: 10px;">
+	<div style="border-radius: 8px; margin-top: 10px;">
 		<table style="width: 100%;">
 			<thead>
-				<tr class="provider__description card-back" >
+				<tr>
 					<th>Название</th>
 					<th>Цена</th>
 					<th>Количество</th>
@@ -111,15 +111,15 @@
 			</thead>
 			<tbody>
 				{% for item in order.items.items %}
-				<tr class="provider__description card-back">
+				<tr>
 					<td>{{item.1.title}}</td>
 					<td>{{item.1.price}}</td>
 					<td>{{item.1.count}}</td>
 					<td>{{item.1.all_price}}</td>
 				</tr>
 				{% endfor %}
-				<tr class="card-back">
-					<td class="color-1" style="font-weight: 500;">Сумма заказа: {{order.total_price}}</td>
+				<tr>
+					<td style="font-weight: 500;">Сумма заказа: {{order.total_price}}</td>
 					<td></td>
 					<td></td>
 					<td></td>
@@ -128,21 +128,21 @@
 			</tbody>
 		</table>
 	</div>
-	<p class="provider__description" style="font-weight: 500; margin: 10px 0px 10px 10px;">Принят</p>
-	<div class="card-back" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
-		<p class="provider__description">{% if order.accept %}Заказ принят в {{order.accept|date:'d.m.Y'}}{% else %}Еще не принят{% endif %}</p>
+	<p style="font-weight: 500; margin: 10px 0px 10px 10px;">Принят</p>
+	<div style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
+		<p>{% if order.accept %}Заказ принят в {{order.accept|date:'d.m.Y'}}{% else %}Еще не принят{% endif %}</p>
 	</div>
-	<p class="provider__description" style="font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
-	<div class="card-back" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
+	<p style="font-weight: 500; margin: 10px 0px 10px 10px;">Бухгалтерия</p>
+	<div style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
 		{% if order.checkk %}
-		<a href="{{order.checkk.url}}" class="button-2" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px;">Счет</a>
+		<a href="{{order.checkk.url}}" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px;">Счет</a>
 		{% else %}
-		<p class="provider__description">Счет еще не высставлен</p>
+		<p>Счет еще не высставлен</p>
 		{% endif %}
 	</div>
-	<p class="provider__description" style="font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
-	<div class="card-back" style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
-		<p class="provider__description">{% if order.transit %}Отгружен {{order.transit|date:'d.m.Y'}}{% else %}Товар еще не отгружен{% endif %}</p>
+	<p style="font-weight: 500; margin: 10px 0px 10px 10px;">Склад</p>
+	<div style="border-radius: 8px; padding: 10px" class="d-flex align-items-center">
+		<p>{% if order.transit %}Отгружен {{order.transit|date:'d.m.Y'}}{% else %}Товар еще не отгружен{% endif %}</p>
 	</div>
 </div>
 

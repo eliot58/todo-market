@@ -9,7 +9,7 @@
 <div class="d-flex justify-content-between">
 	<h1 class="title">Профиль покупателя</h1>
 </div>
-<div class="main-profile card" style="width: 600px;">
+<div style="width: 600px;">
 	<form class="d-flex flex-column" method="post" action="{% url 'buyer' %}" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="d-flex">
@@ -28,7 +28,7 @@
 				</div>
 			</div>
 		</div>
-        <button class="button-1" type="submit" style="font-weight: 600; border-radius: 8px; width: 30%; height: 42px;">Сохранить</button>
+        <button type="submit" style="font-weight: 600; border-radius: 8px; width: 30%; height: 42px;">Сохранить</button>
 	</form>
 </div>
 

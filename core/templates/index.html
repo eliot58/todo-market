@@ -9,7 +9,7 @@
 <h1 class="title">Главная страница</h1>
 <div class="d-flex flex-column">
 	<div class="d-flex">
-		<div class="card products" style="width: 700px; margin-right: 10px; margin-bottom: 300px; {% if flag %} display: block; {% else %} display: none; {% endif %}">
+		<div style="width: 700px; margin-right: 10px; margin-bottom: 300px; {% if flag %} display: block; {% else %} display: none; {% endif %}">
 			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
 			{% if providers|length == 0 %}
 			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;">По вашему запросу ничего не найдено</p>
@@ -32,13 +32,13 @@
 				<!-- <p class="product__distance">10 км от вас</p> -->
 				<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
 					<div style="margin-top: 20px;" class="d-flex justify-content-between">
-						<a href="{% url 'provider' product.store.provider.id %}" class="product__title" style="font-weight: 600;">{{product.store.provider.company}}</a>
-						<p class="product__title">{{product.store.address}}</p>
+						<a href="{% url 'provider' product.store.provider.id %}" style="font-weight: 600;">{{product.store.provider.company}}</a>
+						<p>{{product.store.address}}</p>
 					</div>
-					<p class="product__title">{{product.name}}, {{product.articul}} <span>{{product.amount}} {{product.unit}}</span></p>
+					<p>{{product.name}}, {{product.articul}} <span>{{product.amount}} {{product.unit}}</span></p>
 					<div class="d-flex {% if request.user.provider %} {% else %}justify-content-between{% endif %} align-items-end">
-						<p class="product__price">{{product.price}} ₽</p>
-						<p class="product__price-2" {% if request.user.provider %} style="margin-left: 10px;" {% endif %}>{{product.price}} ₽ без TODOMARKET</p>
+						<p>{{product.price}} ₽</p>
+						<p {% if request.user.provider %} style="margin-left: 10px;" {% endif %}>{{product.price}} ₽ без TODOMARKET</p>
 						{% if request.user.provider %}
 						{% else %}
 						<form method="post" class="store-item__data-count d-flex justify-content-between">
@@ -47,7 +47,7 @@
 							<input type="text" name="count" value="1">
 							<span onclick="plus(this)">+</span>
 						</form>
-						<button class="button-1" type="button" onclick="addToCart('{{product.id}}', this.previousElementSibling)" style="padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
+						<button type="button" onclick="addToCart('{{product.id}}', this.previousElementSibling)" style="padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
 						{% endif %}
 					</div>
 				</div>
@@ -58,18 +58,18 @@
 			{% endif %}
 			
 		</div>
-		<div class="card" id="map" style="{% if flag %} display: none; {% else %} display: block; {% endif %}width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
+		<div id="map" style="width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
 			
 		</div>
-		<form method="get" action="{% url 'index' %}" class="d-flex flex-column card" style="width: 275px; max-height: 220px;">
-			<p class="filter_search-title" style="margin-bottom: 10px;">Фильтр поиска</p>
+		<form method="get" action="{% url 'index' %}" class="d-flex flex-column" style="width: 275px; max-height: 220px;">
+			<p style="margin-bottom: 10px;">Фильтр поиска</p>
 			<input class="input-field" type="text" id="searchInput" name="query" placeholder="Поиск...">
 			<select class="input-field">
 				<option value="" disabled selected >Сортировка</option>
 				<option value="">По возрастанию цены</option>
 				<option value="">По убыванию цены</option>
 			</select>
-			<button class="button-1" {% if request.user.is_authenticated %} type="submit" {% else %} type="button" {% endif %} style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
+			<button {% if request.user.is_authenticated %} type="submit" {% else %} type="button" {% endif %} style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
 		</form>
 	</div>
 </div>
@@ -172,7 +172,7 @@
 								{% if not request.user.provider %}
 								<form method="post" class="d-flex justify-content-between" style="margin-top: 5px;">
 									{% csrf_token %}
-									<button class="button-1 " type="button" onclick="addToCart('${product['pk']}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
+									<button type="button" onclick="addToCart('${product['pk']}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
 									<div class="store-item__data-count  d-flex justify-content-between">
 										<span onclick="minus(this)">-</span>
 										<input type="text" name="count" value="1">
@@ -181,10 +181,10 @@
 								</form>
 								{% endif %}
 								<div class="d-flex align-items-center" style="margin: 10px 0px; ">
-									<p class="product__price " style="margin-right: 10px;">${product['fields']['price']} ₽</p>
-									<p class="product__price-2">${product['fields']['price']} ₽ без TODOMARKET</p>
+									<p style="margin-right: 10px;">${product['fields']['price']} ₽</p>
+									<p>${product['fields']['price']} ₽ без TODOMARKET</p>
 								</div>
-								<p class="product__title">${product['fields']['name']}, ${product['fields']['articul']} <span style="font-size: 12px; color: #616161;">${product['fields']['amount']} ${product['fields']['unit']}</span></p>
+								<p>${product['fields']['name']}, ${product['fields']['articul']} <span style="font-size: 12px; color: #616161;">${product['fields']['amount']} ${product['fields']['unit']}</span></p>
 							</div>`)
 						}
 						storeProducts.style.display = 'block'

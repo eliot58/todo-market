@@ -7,22 +7,22 @@
 {% block content %}
 <div class="d-flex justify-content-between" style="margin-bottom: 10px;">
 	<h1 class="title">Поставщики</h1>
-	<div class="d-flex search_providers">
+	<div class="d-flex">
 		<input placeholder="Поиск поставщика" type="text" style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
 		<img src="{% static 'img/loop.svg' %}" alt="">
 	</div>
 </div>
 {% for provider in providers %}
 	{% if provider.logo %}
-	<a href="{% url 'provider' provider.id %}" class="d-flex provider-card">
+	<a href="{% url 'provider' provider.id %}" class="d-flex">
 		<img src="{{provider.logo.url}}" width="144" height="144" style="border-radius: 8px;" alt="">
 		<div class="d-flex flex-column justify-content-around" style="margin-left: 10px; width: 100%;">
 			<div class="d-flex justify-content-between">
-				<p class="providers__company">{{provider.company}}</p>
-				<p class="details">Подробнее</p>
+				<p>{{provider.company}}</p>
+				<p>Подробнее</p>
 			</div>
-			<p class="providers__region">{{provider.store_set.all.0.region.name}}</p>
-			<p class="providers__description">{{provider.description}}</p>
+			<p>{{provider.store_set.all.0.region.name}}</p>
+			<p>{{provider.description}}</p>
 		</div>
 	</a>
 	{% endif %}

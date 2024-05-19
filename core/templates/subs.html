@@ -8,29 +8,29 @@
 <form method="post" action="{% url 'susbscriptions' %}" class="d-flex application-form">
     <input type="text" name="application" hidden>
     {% csrf_token %}
-    <div class="d-flex flex-column status-card" style="margin-right: 20px; text-align: center;">
-        <div class="title" style="font-size: 20px; font-weight: 600;">Магазин</div>
-        <div class="price">3000 р в месяц</div>
-        <div class="description">3-10 товаров</div>
-        <button class="button-1" type="button" onclick="sendApplication(this, 1)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center;">
+        <div style="font-size: 20px; font-weight: 600;">Магазин</div>
+        <div>3000 р в месяц</div>
+        <div>3-10 товаров</div>
+        <button type="button" onclick="sendApplication(this, 1)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
     </div>
-    <div class="d-flex flex-column status-card" style="margin-right: 20px; text-align: center;">
-        <div class="title" style="font-size: 20px; font-weight: 600;">Гипермаркет</div>
-        <div class="price">10000 р в месяц</div>
-        <div class="description">11+ товаров в месяц</div>
-        <button class="button-1" type="button" onclick="sendApplication(this, 2)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center;">
+        <div style="font-size: 20px; font-weight: 600;">Гипермаркет</div>
+        <div>10000 р в месяц</div>
+        <div>11+ товаров в месяц</div>
+        <button type="button" onclick="sendApplication(this, 2)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
     </div>
-    <div class="d-flex flex-column status-card" style="margin-right: 20px; text-align: center;">
-        <div class="title" style="font-size: 20px; font-weight: 600;">Реклама</div>
-        <div class="price">По согласованию</div>
-        <div class="description">Бегущая строка</div>
-        <button class="button-1" type="button" onclick="sendApplication(this, 3)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center;">
+        <div style="font-size: 20px; font-weight: 600;">Реклама</div>
+        <div>По согласованию</div>
+        <div>Бегущая строка</div>
+        <button type="button" onclick="sendApplication(this, 3)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
     </div>
-    <div class="d-flex flex-column status-card" style="text-align: center;">
-        <div class="title" style="font-size: 20px; font-weight: 600;">Реклама</div>
-        <div class="price">5000 р</div>
-        <div class="description">Новость от партнера</div>
-        <button class="button-1" type="button" onclick="sendApplication(this, 4)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    <div class="d-flex flex-column" style="text-align: center;">
+        <div style="font-size: 20px; font-weight: 600;">Реклама</div>
+        <div>5000 р</div>
+        <div>Новость от партнера</div>
+        <button type="button" onclick="sendApplication(this, 4)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
     </div>
 </form>
              
