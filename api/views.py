@@ -117,10 +117,6 @@ class SignUpView(generics.CreateAPIView):
         }, status=status.HTTP_201_CREATED)
 
 
-
-
-
-
-
-
-
+class StoreViewSet(generics.ListAPIView):
+    queryset = Store.objects.all()
+    serializer_class = StoreSerializer

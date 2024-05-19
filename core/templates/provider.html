@@ -5,27 +5,27 @@
 {% load static %}
 
 {% block content %}
-<div class="d-flex flex-column card dark" style="margin-bottom: 100px;">
+<div class="d-flex flex-column card" style="margin-bottom: 100px;">
     <div class="d-flex">
         <img src="{{provider.logo.url}}" width="72" height="72" style="border-radius: 8px;" alt="">
         <div class="d-flex flex-column justify-content-around" style="margin: 10px;"> 
-            <p class="providers__company dark">{{provider.company}}</p>
-            <p class="providers__region dark">{{provider.store_set.all.0.region.name}}</p>
+            <p class="providers__company">{{provider.company}}</p>
+            <p class="providers__region">{{provider.store_set.all.0.region.name}}</p>
         </div>
     </div>
     <div class="d-flex justify-content-between" style="margin-top: 20px;">
-        <p class="providers__company dark" style="font-size: 16px; font-weight: 400;">Адрес: {{provider.address}}</p>
-        <p class="providers__company dark" style="font-size: 16px; font-weight: 400;">Телефон: {{provider.phone}}</p>
-        <p class="providers__company dark" style="font-size: 16px; font-weight: 400;">Сайт: {{provider.site}}</p>
+        <p class="providers__company" style="font-size: 16px; font-weight: 400;">Адрес: {{provider.address}}</p>
+        <p class="providers__company" style="font-size: 16px; font-weight: 400;">Телефон: {{provider.phone}}</p>
+        <p class="providers__company" style="font-size: 16px; font-weight: 400;">Сайт: {{provider.site}}</p>
     </div>
-    <div class="provider__description dark">
+    <div class="provider__description">
         Описание: {{provider.description}}
     </div>
     {% for product in products %}
-    <div class="custom-accordion-item dark">
-        <div class="custom-accordion-header dark" onclick="toggleAccordion(this)">
+    <div class="custom-accordion-item">
+        <div class="custom-accordion-header" onclick="toggleAccordion(this)">
             <p style="font-size: 20px; font-weight: 500;">{{product.0}}</p>
-            <div class="triangle triangle-bottom dark"></div>
+            <div class="triangle triangle-bottom"></div>
         </div>
         <div class="custom-accordion-content swiper-container" style="overflow: hidden;">
             <div class="d-flex swiper-wrapper">
@@ -36,8 +36,8 @@
                     {% else %}
                     <form method="post" class="d-flex justify-content-between" style="margin-top: 5px;">
                         {% csrf_token %}
-                        <button class="button-1 dark" type="button" onclick="addToCart('{{item.id}}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
-                        <div class="store-item__data-count dark d-flex justify-content-between">
+                        <button class="button-1" type="button" onclick="addToCart('{{item.id}}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
+                        <div class="store-item__data-count d-flex justify-content-between">
                             <span onclick="minus(this)">-</span>
                             <input type="text" name="count" value="1">
                             <span onclick="plus(this)">+</span>
@@ -45,10 +45,10 @@
                     </form>
                     {% endif %}
                     <div class="d-flex align-items-center" style="margin: 10px 0px;">
-                        <p class="product__price dark" style="margin-right: 10px;">{{item.price}} ₽</p>
+                        <p class="product__price" style="margin-right: 10px;">{{item.price}} ₽</p>
                         <p class="product__price-2">{{item.price}} ₽ без TODOMARKET</p>
                     </div>
-                    <p class="product__title dark">{{item.name}}, {{item.articul}} <span style="font-size: 12px; color: #616161;">{{item.amount}} {{item.unit}}</span></p>
+                    <p class="product__title">{{item.name}}, {{item.articul}} <span style="font-size: 12px; color: #616161;">{{item.amount}} {{item.unit}}</span></p>
                 </div>
                 {% endfor %}
             </div>

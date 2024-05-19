@@ -5,8 +5,8 @@
 {% load static %}
 
 {% block content %}
-<h1 class="title dark">Заказы</h1>
-<table class="dark" style="width: 100%;">
+<h1 class="title">Заказы</h1>
+<table style="width: 100%;">
 	<thead>
 		<tr>
 			<th>Дата</th>
@@ -27,7 +27,7 @@
 			<td>{% if order.transit %}Да{% else %}Нет{% endif %}</td>
 			<td>{% if order.transit %} {{order.transit|date:'d.m.Y'}} {% else %} {% endif %}</td>
 			<td>{{order.id}}</td>
-			<td><a href="{% url 'order' order.id %}" class="button-2 dark" style="display: block; text-align: center;font-weight: 600; border-radius: 8px; background-color: inherit; padding: 10px 0px;">Подробнее</a></td>
+			<td><a href="{% url 'order' order.id %}" class="button-2" style="display: block; text-align: center;font-weight: 600; border-radius: 8px; background-color: inherit; padding: 10px 0px;">Подробнее</a></td>
 		</tr>
 		{% endfor %}
 	</tbody>

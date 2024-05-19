@@ -5,9 +5,9 @@
 {% load static %}
 
 {% block content %}
-<h1 class="title dark">Новости партнеров</h1>
+<h1 class="title">Новости партнеров</h1>
 {% for new in news %}
-    <div class="d-flex flex-column news dark">
+    <div class="d-flex flex-column news">
         <div class="d-flex align-items-center">
             <img src="{{new.logo.url}}" style="border-radius: 8px;" width="48" height="48" alt="">
             <p class="news__author">{{new.author}}</p>

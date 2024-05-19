@@ -21,16 +21,8 @@
 			left: 50%;
 			bottom: 80px;
 			font-size: 17px;
-		}
-
-		#snackbar.dark {
 			background-color: #F1F1F1;
 			color: #323232;
-		}
-
-		#snackbar.light {
-			background-color: #242424;
-			color: #E9E9E9;
 		}
 
 		#snackbar.show {
@@ -93,14 +85,14 @@
 </head>
 
 <body>
-	<div class="wrapper dark">
+	<div class="wrapper">
 		<div id="popup" class="popup auth-popup" {% if login_form.errors or register_form.errors %}
 			style="display: block;" {% endif %}>
-			<div class="popup-content dark d-flex flex-column" style="width: 540px;">
+			<div class="popup-content d-flex flex-column" style="width: 540px;">
 				<div class="d-flex justify-content-between" style="margin-bottom: 20px;">
-					<button class="auth_tab {% if login_form.errors %} {% else %} active {% endif %} dark"
+					<button class="auth_tab {% if login_form.errors %} {% else %} active {% endif %}"
 						onclick="openTab(this)">Регистрация</button>
-					<button class="auth_tab {% if login_form.errors %} active {% endif %} dark"
+					<button class="auth_tab {% if login_form.errors %} active {% endif %}"
 						onclick="openTab(this)">Войти</button>
 				</div>
 				<form action="{% url 'signup' %}" method="post" class="signup" {% if login_form.errors %}
@@ -123,7 +115,7 @@
 						<label for="email">E-mail</label>
 					</div>
 					{{ register_form.email.errors }}
-					<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
+					<button class="button-1" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
 						type="submit">Зарегистрироваться</button>
 				</form>
 				<form action="{% url 'login_view' %}" method="post" class="signin" {% if login_form.errors %}
@@ -138,38 +130,38 @@
 						<label for="password">Пароль</label>
 					</div>
 					{{ login_form.password.errors }}
-					<button class="button-1 dark" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
+					<button class="button-1" style="font-weight: 600; border-radius: 8px; padding: 10px 0px;"
 						type="submit">Войти</button>
 				</form>
 			</div>
 		</div>
 		<div id="popup" class="popup product-popup">
-			<div class="popup-content dark" style="width: 1000px; max-height: 320px;">
+			<div class="popup-content" style="width: 1000px; max-height: 320px;">
 				<form method="post" enctype="multipart/form-data" class="d-flex flex-column product-form">
 					{% csrf_token %}
 					<div class="d-flex">
-						<div class="product_image_preview upload-product dark"
+						<div class="product_image_preview upload-product"
 							style="min-width: 233px; min-height: 233px; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer;"
 							onclick="this.querySelector('input').click()">
 							<input type="file" id="product_image_input" name="photo"
 								style="position: absolute; bottom: 0; left: 10px; z-index: -10;" hidden>
 							<img class="upload-icon" src="{% static 'img/upload.png' %}"
 								style="position: absolute; top: 20%; left: 23%;" alt="">
-							<p class="select_logo dark"
+							<p class="select_logo"
 								style="font-weight: 500; font-size: 20px; position: absolute; bottom: 10px; left: 20%;">
 								Выбрать фото</p>
 						</div>
 						<div class="d-flex flex-column justify-content-between">
 							<input type="text" name="category" hidden>
 							<input type="text" name="store" hidden>
-							<input type="text" name="articul" class="input-field dark" style="margin-top: 0px;"
+							<input type="text" name="articul" class="input-field" style="margin-top: 0px;"
 								placeholder="Артикул" 
 								required>
-							<input type="text" name="name" class="input-field dark" placeholder="Название" required>
+							<input type="text" name="name" class="input-field" placeholder="Название" required>
 							<div class="d-flex">
 								<input type="number" name="amount" style="width: 70%; margin-right: 10px;"
-									class="input-field dark" placeholder="Количество" required>
-								<select name="unit" style="width: 30%;" class="input-field dark" required>
+									class="input-field" placeholder="Количество" required>
+								<select name="unit" style="width: 30%;" class="input-field" required>
 									<option disabled value="">Ед. изм</option>
 									<option value="шт">шт</option>
 									<option value="см">см</option>
@@ -178,15 +170,15 @@
 							</div>
 							<div class="d-flex">
 								<input type="number" name="price" style="margin-bottom: 0px; margin-right: 10px;"
-									class="input-field dark" placeholder="Цена" required>
+									class="input-field" placeholder="Цена" required>
 								<input type="number" name="remainder" style="margin-bottom: 0px;"
-									class="input-field dark" placeholder="Остаток" required>
+									class="input-field" placeholder="Остаток" required>
 							</div>
 						</div>
 						<div class="d-flex flex-column justify-content-between">
 							<textarea name="description" style="margin: 0px; width: 280px; margin-left: 10px;"
-								class="input-field dark" placeholder="Описание" required cols="20" rows="5"></textarea>
-							<textarea name="tags" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field dark" placeholder="Введите тэги товара через запятую" required cols="20" rows="5"></textarea>
+								class="input-field" placeholder="Описание" required cols="20" rows="5"></textarea>
+							<textarea name="tags" style="margin: 0px; width: 280px; margin-left: 10px;" class="input-field" placeholder="Введите тэги товара через запятую" required cols="20" rows="5"></textarea>
 						</div>
 					</div>
 					<div class="button-parent" style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
@@ -197,19 +189,19 @@
 		</div>
 
 		<div id="popup" class="popup store_products-popup">
-			<div class="popup-content dark d-flex flex-column" style="width: 1200px;">
+			<div class="popup-content d-flex flex-column" style="width: 1200px;">
 				<div class="d-flex justify-content-between align-items-center">
 					<div class="d-flex" style="margin-bottom: 10px;">
 						<img class="img-provider" src="" width="56" height="56"
 							style="margin-right: 10px; border-radius: 8px;" alt="">
 						<a href="">
-							<div class="product-subtitle dark" style="font-weight: 600; line-height: 16px;"></div>
-							<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;">Адрес склада
+							<div class="product-subtitle" style="font-weight: 600; line-height: 16px;"></div>
+							<div class="product-subtitle" style="font-size: 12px; line-height: 16px;">Адрес склада
 							</div>
-							<div class="product-subtitle dark" style="font-size: 12px; line-height: 16px;"></div>
+							<div class="product-subtitle" style="font-size: 12px; line-height: 16px;"></div>
 						</a>
 					</div>
-					<div class="d-flex search_products dark">
+					<div class="d-flex search_products">
 						<input placeholder="Поиск поставщика" type="text"
 							style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
 						<img src="{% static 'img/loop.svg' %}" alt="">
@@ -224,7 +216,7 @@
 				<div class="d-flex swiper-container-category" style="position: absolute; top: 100%; left: 50%; transform: translate(-50%, 40%); width: 1200px; overflow: hidden;">
 					<div class="d-flex swiper-wrapper">
 						{% for category in categories %}
-						<div class="category-item dark swiper-slide {% if category.id == 1 %}active{% endif %}" onclick="changeCategory(this, '{{category.id}}')">{{category.name}}</div>
+						<div class="category-item swiper-slide {% if category.id == 1 %}active{% endif %}" onclick="changeCategory(this, '{{category.id}}')">{{category.name}}</div>
 						{% endfor %}
 					</div>
 				</div>
@@ -233,13 +225,13 @@
 		</div>
 
 		<div id="popup" class="popup success_deal-popup">
-			<div class="popup-content dark" style="width: 750px; height: 170px;">
+			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш магазин отправлен
+						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Ваш магазин отправлен
 							на модерацию, ожидайте, мы пришлем вам уведомление на почту, и в разделе “Новости” на сайте.
 						</p>
-						<button class="button-1 dark"
+						<button class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -249,9 +241,9 @@
 		</div>
 
 		<div id="popup" class="popup store-delete-popup">
-			<div class="popup-content dark" style="width: 522px;">
+			<div class="popup-content" style="width: 522px;">
 				<div class="d-flex flex-column">
-					<p class="profile-info dark" style="line-height: 24px; margin-bottom: 10px;">Вы действительно хотите
+					<p class="profile-info" style="line-height: 24px; margin-bottom: 10px;">Вы действительно хотите
 						удалить ваш магазин от Маркета?</p>
 					<div class="d-flex justify-content-between">
 						<button
@@ -266,14 +258,14 @@
 
 		<div id="popup" class="popup success_reg-popup" {% if success_reg and not register_form.errors %}
 			style="display: block;" {% endif %}>
-			<div class="popup-content dark" style="width: 750px; height: 170px;">
+			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш пароль был
+						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Ваш пароль был
 							отправлен на почту: {{request.user.email}}</p>
 						<button
 							onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% else %}document.querySelector('.success_reg3-popup').style.display = 'block'; {% endif %}"
-							class="button-1 dark"
+							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Отлично!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -283,14 +275,14 @@
 		</div>
 
 		<div id="popup" class="popup success_reg2-popup">
-			<div class="popup-content dark" style="width: 750px; height: 170px;">
+			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо
+						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо
 							за доверие! Теперь зайдите в cвой профиль и заполните данные о Вашем магазине и добавьте
 							товары</p>
 						<button onclick="window.location.pathname = '/profile/'"
-							class="button-1 dark"
+							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -300,13 +292,13 @@
 		</div>
 
 		<div id="popup" class="popup success_reg3-popup">
-			<div class="popup-content dark" style="width: 750px; height: 170px;">
+			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо
+						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Поздравляем, спасибо
 							за доверие! Теперь нужно заполнить профиль покупателя</p>
 						<button onclick="window.location.pathname = '/buyer/'"
-							class="button-1 dark"
+							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -316,13 +308,13 @@
 		</div>
 
 		<div id="popup" class="popup approve-popup">
-			<div class="popup-content dark" style="width: 750px; height: 170px;">
+			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Магазин отправлен на
+						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Магазин отправлен на
 							проверку ожидайте сообщения на вашу почту</p>
 						<button onclick="document.querySelector('.approve-popup').style.display = 'none';"
-							class="button-1 dark"
+							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -332,12 +324,12 @@
 		</div>
 		
 		<div id="popup" class="popup status-popup">
-			<div class="popup-content dark" style="width: 750px; height: 170px;">
+			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваш статус позволяет создать <span></span> товара</p>
+						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Ваш статус позволяет создать <span></span> товара</p>
 						<button onclick="window.location.pathname = '/susbscriptions/'"
-							class="button-1 dark"
+							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Понято</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -347,12 +339,12 @@
 		</div>
 
 		<div id="popup" class="popup application-popup">
-			<div class="popup-content dark" style="width: 750px; height: 170px;">
+			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Ваша заявка принята, ближайший свободный менеджер с вами свяжется</p>
+						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Ваша заявка принята, ближайший свободный менеджер с вами свяжется</p>
 						<button onclick="document.querySelector('.application-popup').style.display = 'none';"
-							class="button-1 dark"
+							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -362,13 +354,13 @@
 		</div>
 
 		<div id="popup" class="popup base_profile-popup" {% if success_save %} style="display: block;" {% endif %}>
-			<div class="popup-content dark" style="width: 750px; height: 170px;">
+			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
 					<div class="d-flex flex-column justify-content-between" style="width: 420px;">
-						<p class="profile-info dark" style="font-weight: 500; line-height: 24px;">Отлично, добавьте Ваш
+						<p class="profile-info" style="font-weight: 500; line-height: 24px;">Отлично, добавьте Ваш
 							первый магазин! Для этого нажмите добавить магазин в правом верхнем углу.</p>
 						<button onclick="document.querySelector('.base_profile-popup').style.display = 'none';"
-							class="button-1 dark"
+							class="button-1"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px;">Ok!</button>
 					</div>
 					<img class="success_deal" src="{% static 'img/success_deal.png' %}"
@@ -377,26 +369,17 @@
 			</div>
 		</div>
 
-		<header class="navbar dark">
+		<header class="navbar">
 			<div class="container">
-				<div class="navbar-links dark">
+				<div class="navbar-links">
 					<a {% if request.path == '/' or request.path == '/login/' %} class="active" {% endif %} href="{% url 'index' %}">Главная</a>
 					<a {% if request.path == '/partner/' %} class="active" {% endif %} href="{% url 'partner' %}">Стать партнером</a>
 					<a {% if request.path == '/delivery/' %} class="active" {% endif %} href="{% url 'delivery' %}">Доставка</a>
 					<a {% if request.path == '/providers/' %} class="active" {% endif %} href="{% url 'providers' %}">Поставщики</a>
 				</div>
 				{% if request.user.is_authenticated %}
-					{% if request.user.provider %}
+					{% if request.user.buyer %}
 						<div class="navbar-icons">
-							<button type="button" onclick="themeChange()">
-								<img class="moon-icon" src="{% static 'img/moon.svg' %}" alt="">
-							</button>
-						</div>
-					{% else %}
-						<div class="navbar-icons">
-							<button type="button" onclick="themeChange()">
-								<img class="moon-icon" src="{% static 'img/moon.svg' %}" alt="">
-							</button>
 							<button type="button" onclick="window.location.href = '/cart/'">
 								{% if request.path == '/cart/' %}
 								<img class="cart-icon" src="{% static 'img/cart-active.svg' %}" alt="">
@@ -408,9 +391,6 @@
 					{% endif %}
 				{% else %}
 					<div class="navbar-icons">
-						<button type="button" onclick="themeChange()">
-							<img class="moon-icon" src="{% static 'img/moon.svg' %}" alt="">
-						</button>
 						<button type="button" onclick="document.querySelector('.auth-popup').style.display = 'block';">
 							<img class="user-icon" src="{% static 'img/user.svg' %}" alt="">
 						</button>
@@ -419,21 +399,21 @@
 			</div>
 		</header>
 	
-		<div class="sidebar dark">
-			<div class="d-flex justify-content-around align-items-center sidebar__logo dark">
+		<div class="sidebar">
+			<div class="d-flex justify-content-around align-items-center sidebar__logo">
 				<img class="logo" src="{% static 'img/logo.svg' %}" alt="">
 				<p style="font-size: 24px; font-weight: 600; color: #E9E9E9;">TODOMARKET</p>
 			</div>
 			<br>
 			<ul class="sidebar__links">
-				<li class="sidebar__link dark {% if request.path == '/profile/' %} sidebar__link-active {% endif %}">
+				<li class="sidebar__link {% if request.path == '/profile/' %} sidebar__link-active {% endif %}">
 					<div>
 						<img class="profile-icon" src="{% if request.path == '/profile/' %} {% static 'img/profile-active.svg' %} {% else %} {% static 'img/profile.svg' %} {% endif %}" alt="">
 						<a href="{% if request.user.provider %}{% url 'profile' %}{% else %}{% url 'buyer' %}{% endif %}">Мой профиль</a>
 					</div>
 				</li>
 	
-				<li class="sidebar__link dark {% if request.path == '/orders/' %} sidebar__link-active {% endif %}">
+				<li class="sidebar__link {% if request.path == '/orders/' %} sidebar__link-active {% endif %}">
 					<div>
 						<img class="works-icon" src="{% if request.path == '/orders/' %} {% static 'img/works-active.svg' %} {% else %} {% static 'img/works.svg' %} {% endif %}" alt="">
 						<a href="{% url 'orders' %}">Заказы</a>
@@ -441,7 +421,7 @@
 				</li>
 	
 	
-				<li class="sidebar__link dark">
+				<li class="sidebar__link">
 					<div>
 						<img class="help-icon" src="{% static 'img/help.svg' %}" alt="">
 						<a href="https://t.me/todotodo_admin">Помощь</a>
@@ -450,22 +430,22 @@
 	
 				<br><br><br><br><br>
 				{% if request.user.provider %}
-				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
+				<li class="sidebar__link" style="padding: 0px; margin: 0px;">
 					<a href="{% url 'susbscriptions' %}">Подписка</a>
 				</li>
 				{% endif %}
-				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
+				<li class="sidebar__link" style="padding: 0px; margin: 0px;">
 					<a href="https://t.me/chattodotodo_bot">Другие проекты</a>
 				</li>
-				<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
+				<li class="sidebar__link" style="padding: 0px; margin: 0px;">
 					<a href="https://t.me/todotodo_admin">Вопрос-ответ</a>
 				</li>
-				<li class="sidebar__link dark" style="padding: 0px; margin: 0px; position: relative;">
+				<li class="sidebar__link" style="padding: 0px; margin: 0px; position: relative;">
 					<a href="{% url 'news' %}">Новости</a>
-					<p class="news-count dark">{{news_length}}</p>
+					<p class="news-count">{{news_length}}</p>
 				</li>
 				{% if request.user.is_authenticated %}
-					<li class="sidebar__link dark" style="padding: 0px; margin: 0px;">
+					<li class="sidebar__link" style="padding: 0px; margin: 0px;">
 						<a href="{% url 'logout_core_view' %}">Выйти</a>
 					</li>
 				{% endif %}
@@ -481,16 +461,16 @@
 		</div>
 
 		<footer class="footer">
-			<p class="footer__title dark" style="padding-left: 5px;">Реклама</p>
-			<div class="d-flex footer__content dark">
+			<p class="footer__title" style="padding-left: 5px;">Реклама</p>
+			<div class="d-flex footer__content">
 				<img src="{{ads.img.url}}" width="56" height="56" alt="">
 				<div class="d-flex flex-column justify-content-around marquee">
-					<p class="footer__content-title dark">{{ads.title}}</p>
-					<p id="marqueeText" class="dark">{{ads.text}}</p>
+					<p class="footer__content-title">{{ads.title}}</p>
+					<p id="marqueeText">{{ads.text}}</p>
 				</div>
 			</div>
 		</footer>
-		<div id="snackbar" class="dark">Товар добавлен в корзину</div>
+		<div id="snackbar">Товар добавлен в корзину</div>
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="{% static 'js/theme.min.js' %}"></script>
@@ -539,11 +519,6 @@
 		function openTab(element) {
 			if (element.textContent == 'Регистрация') {
 				element.classList.add("active")
-				if (localStorage.getItem('theme') == 'light') {
-					element.style.backgroundColor = "#2094AD"
-				} else {
-					element.style.backgroundColor = "#00A550"
-				}
 				element.nextElementSibling.classList.remove("active")
 				element.nextElementSibling.style.backgroundColor = "inherit"
 				document.querySelector(".signup").classList.add("d-flex")
@@ -553,11 +528,6 @@
 				document.querySelector('.signin').style.display = 'none';
 			} else {
 				element.classList.add("active")
-				if (localStorage.getItem('theme') == 'light') {
-					element.style.backgroundColor = "#2094AD"
-				} else {
-					element.style.backgroundColor = "#00A550"
-				}
 				element.previousElementSibling.classList.remove("active")
 				element.previousElementSibling.style.backgroundColor = "inherit"
 				document.querySelector(".signin").classList.add("d-flex")
@@ -615,7 +585,7 @@
 				textarea[0].value = ""
 				textarea[1].value = ""
 
-				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
+				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Создать</button>`)
 			} else {
 				const name_input = popup_product.querySelector("input[name='name']")
 				const articul_input = popup_product.querySelector("input[name='articul']")
@@ -639,7 +609,7 @@
 				price_input.value = price
 				tags_input.value = tags
 
-				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1 ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" onclick="updateProduct(${store}, ${category}, ${id}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
+				button_parent.insertAdjacentHTML("afterbegin", `<button type="button" class="button-1" onclick="updateProduct(${store}, ${category}, ${id}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;">Сохранить</button>`)
 			}
 			popup_product.style.display = 'block';
 		}
@@ -664,7 +634,7 @@
 						<div style="position: relative;">
 							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', true)" alt="">
 							<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-							<p class="product-subtitle ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+							<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 						</div>
 					</div>`)
 					} else {
@@ -673,7 +643,7 @@
 						<div style="position: relative;">
 							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
 							<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-							<p class="product-subtitle ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+							<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 						</div>
 					</div>`)
 					}
@@ -698,7 +668,7 @@
 					target_element.insertAdjacentHTML("afterbegin", `<div style="position: relative;">
 						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
 						<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-						<p class="product-subtitle ${localStorage.getItem('theme') == 'light' ? 'light' : 'dark'}" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+						<p class="product-subtitle" style="line-height: 24px;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
 					</div>`)
 					document.querySelector(".product-popup").style.display = "none"
 				}

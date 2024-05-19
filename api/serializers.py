@@ -78,3 +78,14 @@ class SignupSerializer(serializers.Serializer):
 
 
 
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+class StoreSerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True, source='product_set')
+
+    class Meta:
+        model = Store
+        fields = '__all__'
