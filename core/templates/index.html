@@ -19,9 +19,9 @@
 				<div class="d-flex" style="margin-bottom: 10px;">
 					<img class="img-provider" src="{{provider.1.logo}}" width="56" height="56" style="margin-right: 10px; border-radius: 8px;" alt="">
 					<div>
-						<div class="product-subtitle" style="font-weight: 600; line-height: 16px;">{{provider.0}}</div>
-						<div class="product-subtitle" style="font-size: 12px; line-height: 16px;">Адрес склада</div>
-						<div class="product-subtitle" style="font-size: 12px; line-height: 16px;">{{provider.1.address}}</div>
+						<div style="font-weight: 600; line-height: 16px;">{{provider.0}}</div>
+						<div style="font-size: 12px; line-height: 16px;">Адрес склада</div>
+						<div style="font-size: 12px; line-height: 16px;">{{provider.1.address}}</div>
 					</div>
 				</div>
 				<a href="{% url 'provider' provider.1.provider_id %}" class="provider_link">Перейти поставщику</a>
@@ -61,22 +61,23 @@
 		<div id="map" style="width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
 			
 		</div>
-		<form method="get" action="{% url 'index' %}" class="d-flex flex-column" style="width: 275px; max-height: 220px;">
-			<p style="margin-bottom: 10px;">Фильтр поиска</p>
+		<form method="get" action="{% url 'index' %}" class="d-flex flex-column" style="width: 275px; max-height: 220px; background-color: #282828; border-radius: 16px; padding: 0px 10px;">
+			<p style="margin: 20px 0px 10px; color: #E9E9E9; font-weight: 500; text-align: center;">Фильтр поиска</p>
 			<input class="input-field" type="text" id="searchInput" name="query" placeholder="Поиск...">
 			<select class="input-field">
 				<option value="" disabled selected >Сортировка</option>
 				<option value="">По возрастанию цены</option>
 				<option value="">По убыванию цены</option>
 			</select>
-			<button {% if request.user.is_authenticated %} type="submit" {% else %} type="button" {% endif %} style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px;">Найти</button>
+			<button {% if request.user.is_authenticated %} type="submit" {% else %} type="button" {% endif %} style="padding: 12px 0px; border-radius: 8px; font-weight: 600; margin: 5px 0px; background-color: #00A550; color: #E9E9E9;">Найти</button>
 		</form>
 	</div>
 </div>
 {% endblock content %}
 
 {% block script %}
-<script src="{% static 'js/swiper.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 <script>
 
 	var swiper = new Swiper('.swiper-container', {
@@ -97,32 +98,6 @@
 		searchInput.value = name
 		dropdownMenu.style.display = "none"
 	}
-
-	// document.addEventListener("DOMContentLoaded", function() {
-
-	// 	searchInput.addEventListener('input', function() {
-	// 		const searchTerm = searchInput.value.toLowerCase();
-	// 		let xhr = new XMLHttpRequest();
-	// 		xhr.open('GET', `/search/?query=${searchTerm}`);
-	// 		xhr.responseType = 'json';
-	// 		xhr.onload = function () {
-	// 			if (xhr.status == 200) {
-	// 				for (const dropItem of dropdownMenu.querySelectorAll("div")) {
-	// 					dropItem.remove()
-	// 				}
-	// 				const items = JSON.parse(xhr.response["results"])
-	// 				for (const item of items) {
-	// 					dropdownMenu.insertAdjacentHTML("afterbegin", `<div class="dropdown-item-custom" onclick="selectDropItem('${item["name"]}')">${item["name"]}</div>`)
-	// 				}
-	// 				dropdownMenu.style.display = "flex"
-	// 				dropdownMenu.style.flexDirection = "column"
-	// 			}
-	// 		};
-	// 		xhr.send();
-	// 	});
-
-	// });
-
 	
 </script>
 
@@ -172,7 +147,7 @@
 								{% if not request.user.provider %}
 								<form method="post" class="d-flex justify-content-between" style="margin-top: 5px;">
 									{% csrf_token %}
-									<button type="button" onclick="addToCart('${product['pk']}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center;">В корзину</button>
+									<button type="button" onclick="addToCart('${product['pk']}', this.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; text-align: center; background-color: #00A550; color: #E9E9E9;">В корзину</button>
 									<div class="store-item__data-count  d-flex justify-content-between">
 										<span onclick="minus(this)">-</span>
 										<input type="text" name="count" value="1">
@@ -181,10 +156,10 @@
 								</form>
 								{% endif %}
 								<div class="d-flex align-items-center" style="margin: 10px 0px; ">
-									<p style="margin-right: 10px;">${product['fields']['price']} ₽</p>
-									<p>${product['fields']['price']} ₽ без TODOMARKET</p>
+									<p style="margin-right: 10px; font-size: 24px; font-weight: 500; color: #00A550;">${product['fields']['price']} ₽</p>
+									<p style="font-size: 12px; color: #616161; width: 100px;">${product['fields']['price']} ₽ без TODOMARKET</p>
 								</div>
-								<p>${product['fields']['name']}, ${product['fields']['articul']} <span style="font-size: 12px; color: #616161;">${product['fields']['amount']} ${product['fields']['unit']}</span></p>
+								<p style="color: #E9E9E9;">${product['fields']['name']}, ${product['fields']['articul']} <span style="font-size: 12px; color: #616161;">${product['fields']['amount']} ${product['fields']['unit']}</span></p>
 							</div>`)
 						}
 						storeProducts.style.display = 'block'

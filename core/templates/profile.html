@@ -8,19 +8,73 @@
 
 {% block style %} 
 <link rel="stylesheet" href="{% static 'multiple/dist/virtual-select.min.css' %}" /> 
+<style>
+
+	.vscomp-toggle-button {
+		padding: 0px;
+		background-color: inherit;
+		border: none;
+	}
+
+	.vscomp-toggle-button .vscomp-value{
+		padding: 0px 10px;
+		color: #fff;
+	}
+
+	.input-field .vscomp-toggle-button .vscomp-value{
+		padding: 0px 10px;
+		color: #F8F8F8;
+	}
+
+	.input-field#delivery-select, .input-field#payment-select {
+		padding: 0px;
+		min-width: 33%;
+	}
+
+	.input-field#delivery-select .vscomp-wrapper, .input-field#payment-select .vscomp-wrapper {
+		height: 100%;
+		border-radius: inherit;
+	}
+
+	.input-field#create-delivery-select, .input-field#create-payment-select {
+		padding: 0px;
+		min-width: 33%;
+	}
+
+	.input-field#create-delivery-select .vscomp-wrapper, .input-field#create-payment-select .vscomp-wrapper {
+		height: 100%;
+		border-radius: inherit;
+	}
+
+	.input-field#delivery-select .vscomp-dropbox, .input-field#payment-select .vscomp-dropbox, .input-field#create-delivery-select .vscomp-dropbox, .input-field#create-payment-select .vscomp-dropbox {
+		background-color: #323232;
+	}
+
+	.input-field#delivery-select .vscomp-option.selected, .input-field#payment-select .vscomp-option.selected, .input-field#create-delivery-select .vscomp-option.selected, .input-field#create-payment-select .vscomp-option.selected {
+		background-color: #323232;
+	}
+
+
+	.input-field#delivery-select .vscomp-option.focused, .input-field#payment-select .vscomp-option.focused, .input-field#create-delivery-select .vscomp-option.focused, .input-field#create-payment-select .vscomp-option.focused {
+		background-color: #616161;
+	}
+
+	
+
+</style>
 {% endblock style %}
 
 {% block content %}
 <div class="d-flex justify-content-between">
 	<h1 class="title">Профиль компании</h1>
-	<button type="button" onclick="createStore(this)" style="{% if request.user.provider.company == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == '' or stores|length >= 1 %}display: none;{% endif %}background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px;">Добавить магазин</button>
+	<button type="button" onclick="createStore(this)" style="{% if request.user.provider.company == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == '' or stores|length >= 1 %}display: none;{% endif %}background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550; color: #00A550;">Добавить магазин</button>
 </div>
-<p class="profile-info" style="font-weight: 500; margin: 10px 0px;">Общая информация</p>
+<p style="font-weight: 500; margin: 10px 0px; color: #E9E9E9;">Общая информация</p>
 <div>
-	<form class="d-flex flex-column" method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
+	<form class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px;" method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="d-flex">
-			<div class="logo_preview" style="min-width: 270px; min-height: 270px; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer; {% if request.user.provider.logo %} background: url('{{ request.user.provider.logo.url }}') 0 0/100% 100%; {% endif %}" onclick="this.querySelector('input').click()">
+			<div class="logo_preview" style="min-width: 270px; min-height: 270px; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer; background-color: #313131; border: 1px solid #00A550; {% if request.user.provider.logo %} background: url('{{ request.user.provider.logo.url }}') 0 0/100% 100%; {% endif %}" onclick="this.querySelector('input').click()">
 				<input type="file" id="logo_input" name="logo" style="position: absolute; bottom: 0; left: 0; z-index: -10;" required>
 				<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%); {% if request.user.provider.logo %} display: none; {% endif %}" alt="">
 				<p class="select_logo">Выбрать логотип</p>
@@ -50,13 +104,13 @@
 		</div>
 		<div class="d-flex align-items-end">
 			<textarea name="description" placeholder="Описание" rows="5" class="input-field" style="width: 70%; margin: 10px 10px 0px 0px;" required>{{request.user.provider.description}}</textarea>
-			<button type="submit" style="font-weight: 600; border-radius: 8px; width: 30%; height: 42px;">Сохранить</button>
+			<button type="submit" style="font-weight: 600; border-radius: 8px; width: 30%; height: 42px; background-color: #00A550; color: #E9E9E9;">Сохранить</button>
 		</div>
 	</form>
 </div>
 <div class="create-store" style="display: none;">
-	<p class="profile-info" style="font-weight: 500; margin-top: 10px;">Информация о магазине</p>
-	<form method="post" action="{% url 'create_store' %}" class="d-flex flex-column" style="margin: 10px 0px;">
+	<p style="font-weight: 500; margin-top: 10px; color: #E9E9E9;">Информация о магазине</p>
+	<form method="post" action="{% url 'create_store' %}" class="d-flex flex-column" style="margin: 10px 0px; background-color: #282828; padding: 20px;">
 		{% csrf_token %}
 		<div class="d-flex">
 			<div class="form-group" style="width: 50%;">
@@ -118,15 +172,14 @@
 		</div>
 
 		<div style="width: 100%; height: 30px; position: relative; margin-top: 10px;">
-			<button type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; position: absolute; right: 0px;">Создать</button>
+			<button type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; position: absolute; right: 0px; background-color: #00A550; color: #E9E9E9;">Создать</button>
 		</div>
 	</form>
 </div>
-<!-- <p style="font-weight: 500; color: #E9E9E9; margin: 20px 0px;">Условия сотрудничества (заполняются менеджеру сервиса)</p> -->
 {% for store in stores %}
 	<div class="d-flex flex-column">
-		<p class="profile-info" style="font-weight: 500; margin: 10px 10px 0px;">Информация о магазине</p>
-		<form method="post" action="{% url 'update_store' store.id %}" class="d-flex flex-column" style="margin: 10px 0px;">
+		<p style="font-weight: 500; margin: 10px 10px 0px; color: #E9E9E9;">Информация о магазине</p>
+		<form method="post" action="{% url 'update_store' store.id %}" class="d-flex flex-column" style="margin: 10px 0px; background-color: #282828; border-radius: 16px; padding: 20px;">
 			{% csrf_token %}
 			<div class="d-flex">
 				<div class="form-group" style="width: 50%;">
@@ -190,7 +243,7 @@
 					{% endfor %}
 				</select>
 			</div>
-			<p class="profile-info" style="font-weight: 500; margin: 10px; font-size: 18px;">Товары</p>
+			<p class="profile-info" style="font-weight: 500; margin: 10px; font-size: 18px; color: #E9E9E9;">Товары</p>
 			{% for category in categories %}
 			<div class="custom-accordion-item">
 				<div class="custom-accordion-header" onclick="toggleAccordion(this)">
@@ -205,28 +258,28 @@
 									<div style="position: relative;">
 										<img src="{{product.image.url}}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '{{store.id}}', false, '{{category.id}}', '{{product.name}}', '{{product.articul}}', '{{product.amount}}', '{{product.unit}}', '{{product.remainder}}', '{{product.image.url}}', '{{product.description}}', '{{product.tags}}', '{{product.id}}', '{{product.price}}', false)" alt="">
 										<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '{{product.id}}')" style="position: absolute; top: 10px; right: 10px;" alt="">
-										<p class="product-subtitle" style="line-height: 24px;">{{product.name}}, {{product.articul}} <span style="font-size: 12px; color: #616161;">{{product.amount}} {{product.unit}}</span></p>
+										<p style="line-height: 24px; color: #E9E9E9;">{{product.name}}, {{product.articul}} <span style="font-size: 12px; color: #616161;">{{product.amount}} {{product.unit}}</span></p>
 									</div>
 								</div>
 							{% endif %}
 						{% endfor %}
 						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-							<div class="upload-product" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', '', false)">
+							<div style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative; background-color: #313131; border: 1px solid #00A550;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', '', false)">
 								<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 							</div>
 						</div>
 						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-							<div class="upload-product" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', '', false)">
+							<div style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative; background-color: #313131; border: 1px solid #00A550;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', '', false)">
 								<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 							</div>
 						</div>
 						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-							<div class="upload-product" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', '', false)">
+							<div style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative; background-color: #313131; border: 1px solid #00A550;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', '', false)">
 								<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 							</div>
 						</div>
 						<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
-							<div class="upload-product" style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', '', false)">
+							<div style="min-width: 260px; min-height: 260px; text-align: center; border-radius: 16px; position: relative; background-color: #313131; border: 1px solid #00A550;" onclick="openProduct(this, '{{store.id}}', true, '{{category.id}}', '', '', '', '', '', '', '', '', false)">
 								<img class="upload-icon" src="{% static 'img/upload.png' %}" style="position: absolute; top: 50%; left: 50%; margin-right: -50%; transform: translate(-50%, -50%) " alt="">
 							</div>
 						</div>
@@ -235,7 +288,7 @@
 			</div>
 			{% endfor %}
 			<div class="d-flex justify-content-between" style="margin-top: 10px;">
-				<button type="button" onclick="sendToCheck(this.parentNode.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%;">На проверку</button>
+				<button type="button" onclick="sendToCheck(this.parentNode.parentNode)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; background-color: #00A550; color: #E9E9E9;">На проверку</button>
 				<a href="{% url 'delete_store' store.id %}" style="background-color: inherit; color: #FF0000; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 20%; border: 1px solid #FF0000; text-align: center;">Удалить</a>
 			</div>
 		</form>
@@ -243,16 +296,16 @@
 {% endfor %}
 <form method="post" action="{% url 'upload_files' %}" enctype="multipart/form-data" class="d-flex align-items-end justify-content-between upload_files">
 	{% csrf_token %}
-	<p class="upload_files-text">Для модерации, и заключении договора нам потребуется следующие документы: <br> Карта партнеров, ИНН, ОГРН, Карточка банка. <br> Приложите их копии, и нажмите отправить.</p>
-	<button type="button" onclick="this.nextElementSibling.click()" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Приложить</button>
+	<p style="color: #00A550; font-weight: 500; line-height: 24px;">Для модерации, и заключении договора нам потребуется следующие документы: <br> Карта партнеров, ИНН, ОГРН, Карточка банка. <br> Приложите их копии, и нажмите отправить.</p>
+	<button type="button" onclick="this.nextElementSibling.click()" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; color: #00A550; border: 1px solid #00A550;">Приложить</button>
 	<input type="file" name="files" multiple hidden>
-	<button type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Отправить</button>
+	<button type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; background-color: #00A550; color: #E9E9E9;">Отправить</button>
 </form>
 {% endblock content %}
 
 {% block script %}
 <script src="{% static 'multiple/dist/virtual-select.min.js' %}"></script>
-<script src="{% static 'js/swiper.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
 	VirtualSelect.init({ 
 		ele: '#delivery-select',

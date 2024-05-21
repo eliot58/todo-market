@@ -9,47 +9,47 @@
 {% block content %}
 <h1 class="title">Корзина</h1>
 {% for provider in providers %}
-	<div class="d-flex" style="margin: 10px 0px;">
+	<div class="d-flex flex-column" style="margin: 10px 0px; background-color: #282828; padding: 20px; border-radius: 16px;">
 		<div class="d-flex">
 			<img src="{{provider.1.photo}}" width="72" height="72" style="border-radius: 8px;" alt="">
 			<div class="d-flex flex-column justify-content-around" style="margin: 10px;"> 
-				<p>{{provider.1.company}}</p>
-				<p>{{provider.1.region}}</p>
+				<p style="font-size: 20px; font-weight: 600; color: #E9E9E9;">{{provider.1.company}}</p>
+				<p style="color: #00A550; font-weight: 500;">{{provider.1.region}}</p>
 			</div>
 		</div>
 		<div class="d-flex justify-content-between" style="margin-top: 20px;">
-			<p style="font-size: 16px; font-weight: 400;">Адрес: {{provider.1.address}}</p>
-			<p style="font-size: 16px; font-weight: 400;">Телефон: {{provider.1.phone}}</p>
-			<p style="font-size: 16px; font-weight: 400;">Сайт: {{provider.1.site}}</p>
+			<p style="color: #E9E9E9;">Адрес: {{provider.1.address}}</p>
+			<p style="color: #E9E9E9;">Телефон: {{provider.1.phone}}</p>
+			<p style="color: #E9E9E9;">Сайт: {{provider.1.site}}</p>
 		</div>
 	</div>
 	{% for item in provider.1.items.items %}
-	<p style="margin: 0px 10px; font-weight: 600;">#{{ forloop.counter }}</p>
-	<div class="d-flex" style="position: relative; margin: 10px 0px; padding: 10px; border-radius: 8px;">
+	<p style="margin: 0px 10px; font-weight: 600; color: #E9E9E9;">#{{ forloop.counter }}</p>
+	<div class="d-flex" style="position: relative; margin: 10px 0px; padding: 10px; border-radius: 8px; background-color: #282828;">
 		<img src="{{item.1.photo}}" width="136" height="136" style="border-radius: 8px;" alt="">
 		<a href="{% url 'cart_item_delete' item.0 %}" style="position: absolute; top: 10px; right: 10px;">
 			<img class="close-icon" src="{% static 'img/close.svg' %}" alt="">
 		</a>
 		<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
-			<p style="margin-top: 20px; width: 365px; line-height: 24px;">{{ item.1.title }} <span style="font-size: 12px; color: #616161;">{{ item.1.amount }} {{ item.1.unit }}</span></p>
-			<p>{{ item.1.description }}</p>
+			<p style="margin-top: 20px; width: 365px; line-height: 24px; color: #E9E9E9;">{{ item.1.title }} <span style="font-size: 12px; color: #616161;">{{ item.1.amount }} {{ item.1.unit }}</span></p>
+			<p style="color: #E9E9E9;">{{ item.1.description }}</p>
 			<div class="d-flex justify-content-end align-items-center">
 				<div class="store-item__data-count d-flex justify-content-between">
 					<span onclick="minus(this, '{{item.0}}', '{{item.1.price}}')">-</span>
 					<input type="text" disabled value="{{ item.1.count }}">
 					<span onclick="plus(this, '{{item.0}}', '{{item.1.price}}')">+</span>
 				</div>
-				<p style="margin: 0px 15px; width: 100px;"><span>{{ item.1.all_price }}</span> ₽</p>
+				<p style="margin: 0px 15px; width: 100px; font-size: 24px; font-weight: 500; color: #00A550;"><span>{{ item.1.all_price }}</span> ₽</p>
 				<p style="font-size: 12px; color: #616161; width: 120px;"><span>{{ item.1.all_price}}</span> ₽ без TODOMARKET</p>
 			</div>
 		</div>
 	</div>
 	{% endfor %}
 	<div class="d-flex justify-content-end" style="width: 100%;">
-		<form action="{% url 'drawup' provider.0 %}" method="post" style="width: 600px; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 200px;">
+		<form action="{% url 'drawup' provider.0 %}" method="post" style="width: 600px; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 200px; background-color: #282828; padding: 10px; border-radius: 16px;">
 			{% csrf_token %}
 			<div style="width: 300px; margin-right: 20px;">
-				<p style="font-weight: 500;">Общая информация</p>
+				<p style="font-weight: 500; color: #E9E9E9;">Общая информация</p>
 				<textarea class="input-field" name="comment" rows="10" cols="30" placeholder="Комментарий к заказу"></textarea>
 			</div>
 			<div style="width: 300px; margin-top: 18px;">
@@ -72,7 +72,7 @@
 						<p class="total_price" style="color: #616161; margin-bottom: 5px;">Товары: <span>{{request.user.buyer.total_price}}</span> ₽</p>
 					</div>
 				</div>
-				<button type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%;" type="submit">Оформить</button>
+				<button type="submit" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;" type="submit">Оформить</button>
 			</div>
 		</form>
 	</div>

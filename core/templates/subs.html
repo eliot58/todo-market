@@ -8,29 +8,33 @@
 <form method="post" action="{% url 'susbscriptions' %}" class="d-flex application-form">
     <input type="text" name="application" hidden>
     {% csrf_token %}
-    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center;">
-        <div style="font-size: 20px; font-weight: 600;">Магазин</div>
-        <div>3000 р в месяц</div>
-        <div>3-10 товаров</div>
-        <button type="button" onclick="sendApplication(this, 1)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center; background-color: #282828;
+    color: #E9E9E9; padding: 20px; border-radius: 16px;">
+        <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Магазин</div>
+        <div style="color: #00A550; margin: 20px 0px;">3000р в месяц</div>
+        <div style="margin: 20px 0px;">3-10 товаров</div>
+        <button type="button" onclick="sendApplication(this, 1)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
-    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center;">
-        <div style="font-size: 20px; font-weight: 600;">Гипермаркет</div>
-        <div>10000 р в месяц</div>
-        <div>11+ товаров в месяц</div>
-        <button type="button" onclick="sendApplication(this, 2)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center; background-color: #282828;
+    color: #E9E9E9; padding: 20px; border-radius: 16px;">
+        <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Гипермаркет</div>
+        <div style="color: #00A550; margin: 20px 0px;">10000р в месяц</div>
+        <div style="margin: 20px 0px;">11+ товаров в месяц</div>
+        <button type="button" onclick="sendApplication(this, 2)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
-    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center;">
-        <div style="font-size: 20px; font-weight: 600;">Реклама</div>
-        <div>По согласованию</div>
-        <div>Бегущая строка</div>
-        <button type="button" onclick="sendApplication(this, 3)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    <div class="d-flex flex-column" style="margin-right: 20px; text-align: center; background-color: #282828;
+    color: #E9E9E9; padding: 20px; border-radius: 16px;">
+        <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Реклама</div>
+        <div style="color: #00A550; margin: 20px 0px;">По согласованию</div>
+        <div style="margin: 20px 0px;">Бегущая строка</div>
+        <button type="button" onclick="sendApplication(this, 3)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
-    <div class="d-flex flex-column" style="text-align: center;">
-        <div style="font-size: 20px; font-weight: 600;">Реклама</div>
-        <div>5000 р</div>
-        <div>Новость от партнера</div>
-        <button type="button" onclick="sendApplication(this, 4)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px;">Купить</button>
+    <div class="d-flex flex-column" style="text-align: center; background-color: #282828;
+    color: #E9E9E9; padding: 20px; border-radius: 16px;">
+        <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Реклама</div>
+        <div style="color: #00A550; margin: 20px 0px;">5000р</div>
+        <div style="margin: 20px 0px;">Новость от партнера</div>
+        <button type="button" onclick="sendApplication(this, 4)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
 </form>
              

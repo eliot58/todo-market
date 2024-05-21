@@ -146,6 +146,7 @@ def buyer(request):
     
 
 @require_POST
+@login_required(login_url="/login/")
 def create_store(request):
     store = Store()
     store.provider = request.user.provider
@@ -177,6 +178,7 @@ def create_store(request):
     return redirect(profile)
 
 @require_POST
+@login_required(login_url="/login/")
 def update_store(request, id):
     store = Store.objects.get(id=id)
     store.store_name = request.POST["store_name"]
@@ -208,6 +210,7 @@ def update_store(request, id):
     return redirect(profile)
 
 @require_GET
+@login_required(login_url="/login/")
 def delete_store(request, id):
     store = Store.objects.get(id=id)
     if request.user.provider == store.provider:
@@ -217,6 +220,7 @@ def delete_store(request, id):
 
 @require_POST
 @csrf_exempt
+@login_required(login_url="/login/")
 def create_product(request):
     if request.user.provider.status == "free":
         if len(Product.objects.filter(store_id = request.POST["store"])) == 3:
@@ -246,6 +250,7 @@ def create_product(request):
 
 @require_POST
 @csrf_exempt
+@login_required(login_url="/login/")
 def update_product(request, id):
     product = Product.objects.get(id=id)
     if request.user.provider == product.store.provider:
@@ -271,6 +276,7 @@ def update_product(request, id):
 
 @require_GET
 @csrf_exempt
+@login_required(login_url="/login/")
 def delete_product(request, id):
     product = Product.objects.get(id=id)
     if request.user.provider == product.store.provider:
@@ -278,6 +284,7 @@ def delete_product(request, id):
     return HttpResponse(id)
 
 @require_POST
+@login_required(login_url="/login/")
 def upload_files(request):
     for file in request.FILES.getlist("files"):
         ProviderFile.objects.create(provider = request.user.provider, file = file)
@@ -335,6 +342,7 @@ def addtoCart(request, id):
     
 
 @login_required(login_url='/login/')
+@login_required(login_url="/login/")
 def cart_item_delete(request, id):
     buyer = request.user.buyer
     item = Product.objects.get(id=id)
@@ -372,7 +380,7 @@ def cart_item_plus(request, id):
 def storeProducts(request, id):
     return JsonResponse({"store": serialize('json', Store.objects.filter(id = id)), "provider": serialize('json', [Store.objects.filter(id = id)[0].provider]), "products": serialize('json', Product.objects.filter(store_id = id))})
 
-
+@login_required(login_url="/login/")
 def susbscriptions(request):
     if request.method == "POST":
         application = ApplicationSubscribes()
@@ -391,7 +399,7 @@ def susbscriptions(request):
         asyncio.run(send_message(977794713, f"Добавлено заявка на подписку {application.order}"))
     return render(request, "subs.html")
 
-
+@login_required(login_url="/login/")
 def orders(request):
     try:
         orders = Order.objects.filter(provider = request.user.provider)
@@ -399,10 +407,11 @@ def orders(request):
         orders = Order.objects.filter(buyer = request.user.buyer)
     return render(request, 'orders.html', {"orders": orders})
 
+@login_required(login_url="/login/")
 def order(request, id):
     return render(request, 'order.html', {"order": Order.objects.get(id = id)})
 
-
+@login_required(login_url="/login/")
 def drawup(request, id):
     buyer = request.user.buyer
     provider = Provider.objects.get(id=id)
@@ -432,7 +441,7 @@ def drawup(request, id):
     send_mail("Новый заказ", f"Новый заказ по адресу https://market.todotodo.ru/order/{order.id}/", settings.EMAIL_HOST_USER, [store.email], fail_silently = False)
     return redirect(orders)
 
-
+@login_required(login_url="/login/")
 def accept(request, id):
     order = Order.objects.get(id = id)
     order.accept = datetime.datetime.now()
@@ -441,7 +450,7 @@ def accept(request, id):
     redirect_url = reverse('order', kwargs={'id': id}) 
     return redirect(redirect_url)
 
-
+@login_required(login_url="/login/")
 def transit(request, id):
     order = Order.objects.get(id = id)
     order.transit = datetime.datetime.now()
@@ -450,7 +459,7 @@ def transit(request, id):
     redirect_url = reverse('order', kwargs={'id': id}) 
     return redirect(redirect_url)
 
-
+@login_required(login_url="/login/")
 def send_check(request, id):
     order = Order.objects.get(id = id)
     order.checkk = request.FILES["check"]

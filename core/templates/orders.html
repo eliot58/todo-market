@@ -27,7 +27,7 @@
 			<td>{% if order.transit %}Да{% else %}Нет{% endif %}</td>
 			<td>{% if order.transit %} {{order.transit|date:'d.m.Y'}} {% else %} {% endif %}</td>
 			<td>{{order.id}}</td>
-			<td><a href="{% url 'order' order.id %}" style="display: block; text-align: center;font-weight: 600; border-radius: 8px; background-color: inherit; padding: 10px 0px;">Подробнее</a></td>
+			<td><a href="{% url 'order' order.id %}" style="display: block; text-align: center;font-weight: 600; border-radius: 8px; background-color: inherit; padding: 10px 0px; border: 1px solid #00A550; color: #00A550;">Подробнее</a></td>
 		</tr>
 		{% endfor %}
 	</tbody>
