@@ -57,7 +57,7 @@
 			<p style="color: #E9E9E9;">Дата: {{order.delivery_date|date:'d.m.Y'}}, {{order.time}}</p>
 			<a href="{% url 'accept' order.id %}" style="display: block; text-align: center; font-weight: 600; border-radius: 8px; background-color: inherit; width: 200px; padding: 10px 0px; margin-left: 10px; border: 1px solid #00A550; color: #00A550;">Принять</a>
 			{% else %}
-			<p style="color: #E9E9E9;">Заказ принят {{order.accept|date:'d.m.Y'}}</p>
+			<p style="color: #E9E9E9; margin-bottom: 10px;">Заказ принят {{order.accept|date:'d.m.Y'}}</p>
 			{% endif %}
 		</div>
 		{% if not order.accept %}

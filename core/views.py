@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseForbidden
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import *
@@ -78,7 +78,9 @@ def index(request):
             pass
 
     providers = None
+    flag = False
     if "query" in request.GET:
+        flag = True
         tags = Tag.objects.filter(name__icontains = request.GET["query"])
         products = Product.objects.filter(name__icontains = request.GET["query"]).distinct()
         providers = {}
@@ -90,7 +92,7 @@ def index(request):
 
         providers = providers.items()
 
-    return render(request, "index.html", {"providers": providers, "stores": Store.objects.all()})
+    return render(request, "index.html", {"providers": providers, "stores": Store.objects.all(), "flag": flag})
 
 def delivery(request):
     return render(request, "map.html", {"login_form": LoginForm(), "register_form": RegisterForm()})
@@ -444,6 +446,8 @@ def drawup(request, id):
 @login_required(login_url="/login/")
 def accept(request, id):
     order = Order.objects.get(id = id)
+    if order.provider.id != request.user.provider.id:
+        return HttpResponseForbidden()
     order.accept = datetime.datetime.now()
     order.save()
     send_mail(f"Заказ #{order.id} принят", f"Заказ https://market.todotodo.ru/order/{order.id}/", settings.EMAIL_HOST_USER, [order.buyer.user.email], fail_silently = False)
@@ -453,6 +457,8 @@ def accept(request, id):
 @login_required(login_url="/login/")
 def transit(request, id):
     order = Order.objects.get(id = id)
+    if order.provider.id != request.user.provider.id:
+        return HttpResponseForbidden()
     order.transit = datetime.datetime.now()
     order.save()
     send_mail(f"Заказ #{order.id} отгружен", f"Заказ https://market.todotodo.ru/order/{order.id}/", settings.EMAIL_HOST_USER, [order.buyer.user.email], fail_silently = False)
@@ -462,6 +468,8 @@ def transit(request, id):
 @login_required(login_url="/login/")
 def send_check(request, id):
     order = Order.objects.get(id = id)
+    if order.provider.id != request.user.provider.id:
+        return HttpResponseForbidden()
     order.checkk = request.FILES["check"]
     order.check_date = datetime.datetime.now()
     order.save()

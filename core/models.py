@@ -128,7 +128,7 @@ class Store(models.Model):
     delivery_conditions = models.ManyToManyField(DeliveryCondition, verbose_name = "Условия доставки")
     payment_methods = models.ManyToManyField(PaymentMethod, verbose_name = "Способ оплаты")
     map_visor = models.CharField(max_length = 256, verbose_name = "Отображение на карте")
-    contract = models.CharField(max_length = 256, null = True, blank = True, verbose_name = "Договор")
+    contract = models.CharField(max_length = 256, default = '', verbose_name = "Договор")
     address = models.CharField(max_length = 256, verbose_name = "Адрес склада для самовывоза")
     phone = models.CharField(max_length = 256, verbose_name = "Контакты для заказа")
     email = models.EmailField(verbose_name = "Email для выгрузок")

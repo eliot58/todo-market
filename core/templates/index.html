@@ -9,7 +9,7 @@
 <h1 class="title">Главная страница</h1>
 <div class="d-flex flex-column">
 	<div class="d-flex">
-		<div style="width: 700px; margin-right: 10px; margin-bottom: 300px; {% if flag %} display: block; {% else %} display: none; {% endif %}">
+		<div style="width: 700px; margin-right: 10px; margin-bottom: 300px; {% if flag %} display: block; {% else %} display: none; {% endif %} background-color: #282828; padding: 20px; border-radius: 16px;">
 			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;"></p>
 			{% if providers|length == 0 %}
 			<p style="font-size: 24px; font-weight: 600; color: #E9E9E9; margin-bottom: 40px;">По вашему запросу ничего не найдено</p>
@@ -19,26 +19,26 @@
 				<div class="d-flex" style="margin-bottom: 10px;">
 					<img class="img-provider" src="{{provider.1.logo}}" width="56" height="56" style="margin-right: 10px; border-radius: 8px;" alt="">
 					<div>
-						<div style="font-weight: 600; line-height: 16px;">{{provider.0}}</div>
-						<div style="font-size: 12px; line-height: 16px;">Адрес склада</div>
-						<div style="font-size: 12px; line-height: 16px;">{{provider.1.address}}</div>
+						<div style="font-weight: 600; line-height: 16px; color: #E9E9E9;">{{provider.0}}</div>
+						<div style="font-size: 12px; line-height: 16px; color: #E9E9E9;">Адрес склада</div>
+						<div style="font-size: 12px; line-height: 16px; color: #E9E9E9;">{{provider.1.address}}</div>
 					</div>
 				</div>
-				<a href="{% url 'provider' provider.1.provider_id %}" class="provider_link">Перейти поставщику</a>
+				<a href="{% url 'provider' provider.1.provider_id %}" style="font-size: 12px; color: #00A550;">Перейти поставщику</a>
 			</div>
 			{% for product in provider.1.products %}
-			<div class="d-flex product">
+			<div class="d-flex" style="background-color: #313131; padding: 10px; border-radius: 8px; margin: 10px 0px;">
 				<img src="{{product.image.url}}" width="136" height="136" style="border-radius: 8px;" alt="">
 				<!-- <p class="product__distance">10 км от вас</p> -->
 				<div class="d-flex flex-column justify-content-between" style="margin-left: 10px; width: 100%;">
 					<div style="margin-top: 20px;" class="d-flex justify-content-between">
-						<a href="{% url 'provider' product.store.provider.id %}" style="font-weight: 600;">{{product.store.provider.company}}</a>
-						<p>{{product.store.address}}</p>
+						<a href="{% url 'provider' product.store.provider.id %}" style="font-weight: 600; color: #E9E9E9;">{{product.store.provider.company}}</a>
+						<p style="color: #E9E9E9;">{{product.store.address}}</p>
 					</div>
-					<p>{{product.name}}, {{product.articul}} <span>{{product.amount}} {{product.unit}}</span></p>
+					<p style="color: #E9E9E9;">{{product.name}}, {{product.articul}} <span style="font-size: 12px; color: #616161;">{{product.amount}} {{product.unit}}</span></p>
 					<div class="d-flex {% if request.user.provider %} {% else %}justify-content-between{% endif %} align-items-end">
-						<p>{{product.price}} ₽</p>
-						<p {% if request.user.provider %} style="margin-left: 10px;" {% endif %}>{{product.price}} ₽ без TODOMARKET</p>
+						<p style="font-size: 24px; font-weight: 500; color: #00A550;">{{product.price}} ₽</p>
+						<p style="font-size: 12px; color: #616161; width: 100px; margin-left: 10px;">{{product.price}} ₽ без TODOMARKET</p>
 						{% if request.user.provider %}
 						{% else %}
 						<form method="post" class="store-item__data-count d-flex justify-content-between">
@@ -47,7 +47,7 @@
 							<input type="text" name="count" value="1">
 							<span onclick="plus(this)">+</span>
 						</form>
-						<button type="button" onclick="addToCart('{{product.id}}', this.previousElementSibling)" style="padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600;">В корзину</button>
+						<button type="button" onclick="addToCart('{{product.id}}', this.previousElementSibling)" style="padding: 12px 0px; border-radius: 8px; width: 160px; font-weight: 600; background-color: #00A550; color: #E9E9E9;">В корзину</button>
 						{% endif %}
 					</div>
 				</div>
@@ -58,7 +58,7 @@
 			{% endif %}
 			
 		</div>
-		<div id="map" style="width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
+		<div id="map" style="{% if flag %} display: none; {% else %} display: block; {% endif %}width: 700px; height: 480px; margin-right: 10px; margin-bottom: 300px;">
 			
 		</div>
 		<form method="get" action="{% url 'index' %}" class="d-flex flex-column" style="width: 275px; max-height: 220px; background-color: #282828; border-radius: 16px; padding: 0px 10px;">
