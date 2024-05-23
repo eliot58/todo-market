@@ -76,7 +76,10 @@ class SignupSerializer(serializers.Serializer):
 
         return user, password
 
-
+class ProviderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Provider
+        fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
@@ -84,6 +87,7 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class StoreSerializer(serializers.ModelSerializer):
+    provider = ProviderSerializer(read_only=True)
     products = ProductSerializer(many=True, read_only=True, source='product_set')
 
     class Meta:
