@@ -19,9 +19,6 @@ import asyncio
 import uuid
 from yookassa import Configuration, Payment
 
-Configuration.account_id = settings.YOOKASSA_SHOP_ID
-Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
-
 
 async def send_message(chat_id, text):
     bot = Bot(token=settings.BOT_TOKEN)
@@ -432,9 +429,8 @@ def storeProducts(request, id):
 @login_required(login_url="/login/")
 def susbscriptions(request):
     if request.method == "POST":
-
-        Configuration.account_id = settings.KASSA_ID
-        Configuration.secret_key = settings.KASSA_SECRET
+        Configuration.account_id = settings.YOOKASSA_SHOP_ID
+        Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 
         base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
 
