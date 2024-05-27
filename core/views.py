@@ -605,11 +605,11 @@ def payment_webhook(request):
                 return HttpResponseForbidden()
             if description == "Магазин 3000":
                 application.provider.status = "store"
-                application.provider.status_time = timezone.now() + datetime.timedelta(weeks=3)
+                application.provider.status_time = timezone.now() + datetime.timedelta(days=30)
                 application.provider.save()
             elif description == "Гипермаркет 10000":
                 application.provider.status = "hyper"
-                application.provider.status_time = timezone.now() + datetime.timedelta(weeks=3)
+                application.provider.status_time = timezone.now() + datetime.timedelta(days=30)
                 application.provider.save()
             application.checked = True
             application.save()
