@@ -595,7 +595,6 @@ def send_check(request, id):
 @csrf_exempt
 def payment_webhook(request):
     if request.method == 'POST':
-        provider = request.user.provider
         event_json = json.loads(request.body)
         if 'event' in event_json and event_json['event'] == 'payment.succeeded':
             payment_id = event_json['object']['id']
@@ -604,13 +603,13 @@ def payment_webhook(request):
             if application.checked != False:
                 return HttpResponseForbidden()
             if description == "Магазин 3000":
-                provider.status = "store"
-                provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
-                provider.save()
+                application.provider.status = "store"
+                application.provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
+                application.provider.save()
             elif description == "Гипермаркет 10000":
-                provider.status = "hyper"
-                provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
-                provider.save()
+                application.provider.status = "hyper"
+                application.provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
+                application.provider.save()
             application.checked = True
             application.save()
             return JsonResponse({'status': 'success'})
