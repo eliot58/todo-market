@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import *
 import datetime
+from django.utils import timezone
 from django.core.serializers import serialize
 from aiogram import Bot
 from django.db import IntegrityError
@@ -531,7 +532,7 @@ def accept(request, id):
     if order.provider.id != request.user.provider.id:
         return HttpResponseForbidden()
 
-    order.accept = datetime.timezone.now()
+    order.accept = timezone.now()
     order.save()
 
     base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
@@ -553,7 +554,7 @@ def transit(request, id):
     if order.provider.id != request.user.provider.id:
         return HttpResponseForbidden()
 
-    order.transit = datetime.timezone.now()
+    order.transit = timezone.now()
     order.save()
 
     base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
@@ -576,7 +577,7 @@ def send_check(request, id):
         return HttpResponseForbidden()
 
     order.checkk = request.FILES["check"]
-    order.check_date = datetime.timezone.now()
+    order.check_date = timezone.now()
     order.save()
 
     base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
@@ -604,11 +605,11 @@ def payment_webhook(request):
                 return HttpResponseForbidden()
             if description == "Магазин 3000":
                 application.provider.status = "store"
-                application.provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
+                application.provider.status_time = timezone.now() + datetime.timedelta(weeks=3)
                 application.provider.save()
             elif description == "Гипермаркет 10000":
                 application.provider.status = "hyper"
-                application.provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
+                application.provider.status_time = timezone.now() + datetime.timedelta(weeks=3)
                 application.provider.save()
             application.checked = True
             application.save()
