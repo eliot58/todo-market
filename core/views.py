@@ -490,7 +490,7 @@ def order(request, id):
 @login_required(login_url="/login/")
 def payment(request, id):
     provider = request.user.provider
-    payment = get_object_or_404(Payment, id=id)
+    payment = get_object_or_404(Payment, payment_id=id)
     if payment.checked != False:
         return HttpResponseForbidden()
 
