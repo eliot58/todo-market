@@ -444,7 +444,7 @@ def susbscriptions(request):
                 },
                 "confirmation": {
                     "type": "redirect",
-                    "return_url": base_url + "/payment/" + payment.payment_id + "/"
+                    "return_url": base_url + f"/payment/{payment.payment_id }/"
                 },
                 "capture": True,
                 "description": "Магазин 3000",
@@ -458,7 +458,7 @@ def susbscriptions(request):
                 },
                 "confirmation": {
                     "type": "redirect",
-                    "return_url": base_url + "/payment/" + payment.payment_id + "/"
+                    "return_url": base_url + f"/payment/{payment.payment_id }/"
                 },
                 "capture": True,
                 "description": "Гипермаркет 10000",
