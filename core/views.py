@@ -497,7 +497,7 @@ def payment(request, id):
     Configuration.account_id = settings.KASSA_ID
     Configuration.secret_key = settings.KASSA_SECRET
 
-    payment_response = PaymentR.find_one(payment.payment_id)
+    payment_response = PaymentR.find_one(str(payment.payment_id))
 
     if payment_response.status == "succeeded":
         if payment_response.description == "Магазин 3000":
