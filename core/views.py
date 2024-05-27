@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse, HttpResponseForbidden
+from django.http import JsonResponse, HttpResponse, HttpResponseForbidden
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import *
@@ -16,7 +16,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 import asyncio
 import uuid
-from yookassa import Configuration, Payment
+from yookassa import Configuration, Payment as PaymentR
 
 
 async def send_message(chat_id, text):
@@ -437,7 +437,7 @@ def susbscriptions(request):
         base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
 
         if request.POST["application"] == "1":
-            payment_response = Payment.create({
+            payment_response = PaymentR.create({
                 "amount": {
                     "value": "3000.00",
                     "currency": "RUB"
@@ -449,8 +449,9 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Магазин 3000",
             }, payment.payment_id)
+            return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
         elif request.POST["application"] == "2":
-            payment_response = Payment.create({
+            payment_response = PaymentR.create({
                 "amount": {
                     "value": "10000.00",
                     "currency": "RUB"
@@ -462,13 +463,13 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Гипермаркет 10000",
             }, payment.payment_id)
-        
+            return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
         elif request.POST["application"] == "3":
             asyncio.run(send_message(222189723, f"Добавлено заявка на бегущую строку от {base_url}/admin/core/provider/{request.user.provider.id}/change/"))
         elif request.POST["application"] == "4":
             asyncio.run(send_message(222189723, f"Добавлено заявка на новость от {base_url}/admin/core/provider/{request.user.provider.id}/change/"))
 
-        return HttpResponseRedirect(payment_response.confirmation._ConfirmationRedirect__confirmation_url)
+        return JsonResponse({})
     return render(request, 'subs.html')
 
 
@@ -496,7 +497,7 @@ def payment(request, id):
     Configuration.account_id = settings.KASSA_ID
     Configuration.secret_key = settings.KASSA_SECRET
 
-    payment_response = Payment.find_one(payment.payment_id)
+    payment_response = PaymentR.find_one(payment.payment_id)
 
     if payment_response.status == "succeeded":
         if payment_response.description == "Магазин 3000":

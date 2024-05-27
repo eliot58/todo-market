@@ -52,9 +52,11 @@
         xhr.responseType = 'json';
         xhr.onload = function () {
         if (xhr.status == 200) {
-            
-
-            document.querySelector(".application-popup").style.display = "block"
+            if (xhr.response["confirmation_url"] != undefined) {
+                window.location.href = xhr.response["confirmation_url"]
+            } else {
+                document.querySelector(".application-popup").style.display = "block"
+            }
         }
         };
         xhr.send(formData);
