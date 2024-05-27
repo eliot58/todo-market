@@ -488,29 +488,26 @@ def order(request, id):
 
 
 @login_required(login_url="/login/")
-def payment(request, id):
+def payment(request):
+    print(request.POST)
+    print(request.GET)
     provider = request.user.provider
-    payment = get_object_or_404(Payment, payment_id=id)
-    if payment.checked != False:
-        return HttpResponseForbidden()
 
     Configuration.account_id = settings.KASSA_ID
     Configuration.secret_key = settings.KASSA_SECRET
 
-    payment_response = PaymentR.find_one(str(payment.payment_id))
+    # payment_response = PaymentR.find_one(str(payment.payment_id))
 
-    if payment_response.status == "succeeded":
-        if payment_response.description == "Магазин 3000":
-            provider.status = "store"
-            provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
-            provider.save()
-        elif payment_response.description == "Гипермаркет 10000":
-            provider.status = "hyper"
-            provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
-            provider.save()
+    # if payment_response.status == "succeeded":
+    #     if payment_response.description == "Магазин 3000":
+    #         provider.status = "store"
+    #         provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
+    #         provider.save()
+    #     elif payment_response.description == "Гипермаркет 10000":
+    #         provider.status = "hyper"
+    #         provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
+    #         provider.save()
 
-    payment.checked = True
-    payment.save()
 
     return redirect(profile)
 

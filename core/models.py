@@ -72,19 +72,6 @@ class Provider(models.Model):
         return self.fullName
     
 
-class Payment(models.Model):
-    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null=True, blank=True)
-    payment_id = models.UUIDField(primary_key=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    checked = models.BooleanField(default=False)
-
-    class Meta:
-        verbose_name = "Платеж"
-        verbose_name_plural = "Платежи"
-
-    def __str__(self):
-        return self.payment_id
-
 
 class ProviderFile(models.Model):
     provider = models.ForeignKey(Provider, on_delete = models.CASCADE, verbose_name = "Поставщик")

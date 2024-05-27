@@ -33,5 +33,5 @@ urlpatterns = [
     path("accept/<int:id>/", accept, name="accept"),
     path("send_check/<int:id>/", send_check, name="send_check"),
     path("transit/<int:id>/", transit, name="transit"),
-    path('payment/<uuid:id>/', payment, name='payment'),
+    path('payment/', payment, name='payment'),
 ]
