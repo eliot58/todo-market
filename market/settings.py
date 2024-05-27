@@ -27,6 +27,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+KASSA_ID = os.getenv('KASSA_ID')
+KASSA_SECRET = os.getenv('KASSA_SECRET')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -72,7 +75,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'core.context_processors.ads',
+                'core.context_processors.ticker',
                 'core.context_processors.news',
                 'core.context_processors.category',
             ],
@@ -86,12 +89,24 @@ WSGI_APPLICATION = 'market.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('DBUSER'),
+            'USER': os.getenv('DBUSER'),
+            'PASSWORD': os.getenv('DBPASSWORD'),
+            'HOST': os.getenv('DBHOST'),
+            'PORT': '5432',
+        },
+    }
 
 
 # Password validation
@@ -157,10 +172,6 @@ else:
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-CORS_ALLOWED_ORIGINS = [
-    "https://getgems.io",
-]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [

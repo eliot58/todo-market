@@ -68,11 +68,6 @@ class TagAdmin(admin.ModelAdmin):
 class QueryAdmin(admin.ModelAdmin):
     list_display = ['user', "query", "date"]
 
-@admin.register(ApplicationSubscribes)
-class ApplicationSubscribesAdmin(admin.ModelAdmin):
-    list_display = ['provider', "order"]
-
-
-admin.site.register(Ads)
+admin.site.register(Ticker)
 
 admin.site.register(Order)

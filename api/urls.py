@@ -13,6 +13,7 @@ urlpatterns = [
     path('category/', CategoryViewSet.as_view()),
     path('payment/', PaymentViewSet.as_view()),
     path('news/', NewsViewSet.as_view()),
-    path('ads/', AdsViewSet.as_view()),
     path('store/', StoreViewSet.as_view()),
+    path('buyer/', BuyerViewSet.as_view()),
+    path('order/', OrderViewSet.as_view()),
 ]

@@ -32,12 +32,6 @@ class PaymentMethodSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class AdsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ads
-        fields = '__all__'
-
-
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
@@ -81,6 +75,11 @@ class ProviderSerializer(serializers.ModelSerializer):
         model = Provider
         fields = '__all__'
 
+class BuyerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Buyer
+        fields = '__all__'
+
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -92,4 +91,10 @@ class StoreSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Store
+        fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
         fields = '__all__'

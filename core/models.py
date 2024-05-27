@@ -35,17 +35,16 @@ class DeliveryCondition(models.Model):
     def __str__(self):
         return self.name
     
-class Ads(models.Model):
-    img = models.ImageField(upload_to="ads", default = "ads/market.png", verbose_name="Фото")
-    title = models.CharField(max_length = 256, default = "Todotodo Market", verbose_name="Заголовок")
-    text = models.TextField(default = "Здесь может быть ваша релама",verbose_name="Текст")
+class Ticker(models.Model):
+    text = models.TextField(default = "Здесь может быть ваша релама", verbose_name="Текст")
 
     class Meta:
         verbose_name = "Бегущая строка"
         verbose_name_plural = "Бегущая строка"
 
     def __str__(self):
-        return self.title
+        return self.text
+    
 
 class Provider(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE, verbose_name = "Аккаунт")
@@ -56,6 +55,7 @@ class Provider(models.Model):
         ("hyper", "Гипермаркет")
     ]
     status = models.CharField(max_length = 256, choices = status_ch, default = "free", verbose_name = "Статус")
+    status_time = models.DateTimeField(null = True, blank = True)
     company = models.CharField(max_length = 256, default = "", verbose_name = "Название компании")
     fullName = models.CharField(max_length = 256, verbose_name = "Контактное лицо")
     phone = models.CharField(max_length = 256, unique = True, verbose_name = "Номер телефона")
@@ -70,6 +70,20 @@ class Provider(models.Model):
 
     def __str__(self):
         return self.fullName
+    
+
+class Payment(models.Model):
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null=True, blank=True)
+    payment_id = models.UUIDField(primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    checked = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Платеж"
+        verbose_name_plural = "Платежи"
+
+    def __str__(self):
+        return self.payment_id
 
 
 class ProviderFile(models.Model):
@@ -229,16 +243,3 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
-    
-
-class ApplicationSubscribes(models.Model):
-    provider = models.ForeignKey(Provider, on_delete = models.DO_NOTHING)
-    order = models.TextField()
-
-
-    class Meta:
-        verbose_name = "Заявка на подписку"
-        verbose_name_plural = "Заявки на подписку"
-
-    def __str__(self):
-        return self.order

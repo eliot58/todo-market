@@ -384,10 +384,10 @@
 		<footer class="footer">
 			<p class="footer__title" style="padding-left: 5px;">Реклама</p>
 			<div class="d-flex footer__content">
-				<img src="{{ads.img.url}}" width="56" height="56" alt="">
+				<img src="{% static 'img/market.png' %}" width="56" height="56" alt="">
 				<div class="d-flex flex-column justify-content-around marquee">
-					<p class="footer__content-title">{{ads.title}}</p>
-					<p id="marqueeText">{{ads.text}}</p>
+					<p class="footer__content-title">Todotodo Market</p>
+					<p id="marqueeText">{{ticker.text}}</p>
 				</div>
 			</div>
 		</footer>

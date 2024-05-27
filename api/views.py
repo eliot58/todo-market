@@ -75,16 +75,6 @@ class NewsViewSet(generics.ListAPIView):
             data = News.objects.all()
         return data
     
-class AdsViewSet(generics.ListAPIView):
-    serializer_class = AdsSerializer
-
-    def get_queryset(self, *args, **kwargs):
-        id = self.request.query_params.get('id')
-        if id is not None:
-            data = Ads.objects.filter(id=id)
-        else:
-            data = Ads.objects.all()
-        return data
     
 class SignUpView(generics.CreateAPIView):
     serializer_class = SignupSerializer
@@ -120,3 +110,27 @@ class SignUpView(generics.CreateAPIView):
 class StoreViewSet(generics.ListAPIView):
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
+
+
+class BuyerViewSet(generics.ListAPIView):
+    serializer_class = BuyerSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        id = self.request.query_params.get('id')
+        if id is not None:
+            data = Buyer.objects.filter(id=id)
+        else:
+            data = Buyer.objects.all()
+        return data
+    
+
+class OrderViewSet(generics.ListAPIView):
+    serializer_class = OrderSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        id = self.request.query_params.get('id')
+        if id is not None:
+            data = Order.objects.filter(id=id)
+        else:
+            data = Order.objects.all()
+        return data

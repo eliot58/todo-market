@@ -1,11 +1,11 @@
-from .models import Ads, News, Category
+from .models import Ticker, News, Category
 
-def ads(_):
+def ticker(_):
     try:
-        return {"ads": Ads.objects.get(id=1)}
-    except Ads.DoesNotExist:
-        ads = Ads.objects.create()
-        return {"ads": ads}
+        return {"ticker": Ticker.objects.get(id=1)}
+    except Ticker.DoesNotExist:
+        ticker = Ticker.objects.create()
+        return {"ticker": ticker}
     
 
 def news(_):
