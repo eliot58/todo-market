@@ -428,8 +428,6 @@ def storeProducts(request, id):
 @login_required(login_url="/login/")
 def susbscriptions(request):
     if request.method == "POST":
-        payment = Payment.objects.create(
-            provider=request.user.provider, payment_id=uuid.uuid4())
 
         Configuration.account_id = settings.KASSA_ID
         Configuration.secret_key = settings.KASSA_SECRET
@@ -448,7 +446,7 @@ def susbscriptions(request):
                 },
                 "capture": True,
                 "description": "Магазин 3000",
-            }, payment.payment_id)
+            }, uuid.uuid4())
             return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
         elif request.POST["application"] == "2":
             payment_response = PaymentR.create({
@@ -462,7 +460,7 @@ def susbscriptions(request):
                 },
                 "capture": True,
                 "description": "Гипермаркет 10000",
-            }, payment.payment_id)
+            }, uuid.uuid4())
             return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
         elif request.POST["application"] == "3":
             asyncio.run(send_message(222189723, f"Добавлено заявка на бегущую строку от {base_url}/admin/core/provider/{request.user.provider.id}/change/"))
