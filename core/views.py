@@ -446,7 +446,7 @@ def susbscriptions(request):
                     "return_url": base_url + "/susbscriptions/"
                 },
                 "capture": True,
-                "description": "Магазин 3000",
+                "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
             Application.objects.create(provider=request.user.provider, payment_id = payment_response.id)
             return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
@@ -461,7 +461,7 @@ def susbscriptions(request):
                     "return_url": base_url + "/susbscriptions/"
                 },
                 "capture": True,
-                "description": "Гипермаркет 10000",
+                "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
             Application.objects.create(provider=request.user.provider, payment_id = payment_response.id)
             return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
