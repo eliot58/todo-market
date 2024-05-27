@@ -468,7 +468,8 @@ def susbscriptions(request):
         elif request.POST["application"] == "4":
             asyncio.run(send_message(222189723, f"Добавлено заявка на новость от {base_url}/admin/core/provider/{request.user.provider.id}/change/"))
 
-    return HttpResponseRedirect(payment_response.confirmation._ConfirmationRedirect__confirmation_url)
+        return HttpResponseRedirect(payment_response.confirmation._ConfirmationRedirect__confirmation_url)
+    return render(request, 'subs.html')
 
 
 @login_required(login_url="/login/")
