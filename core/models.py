@@ -70,7 +70,19 @@ class Provider(models.Model):
 
     def __str__(self):
         return self.fullName
-    
+
+class Application(models.Model):
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null=True, blank=True)
+    payment_id = models.UUIDField(primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    checked = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Заявка"
+        verbose_name_plural = "Заявки"
+
+    def __str__(self):
+        return self.payment_id
 
 
 class ProviderFile(models.Model):

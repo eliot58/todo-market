@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import get_object_or_404, render, redirect
 from .forms import *
 from django.contrib.auth import authenticate, login, logout
@@ -16,7 +17,10 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 import asyncio
 import uuid
-from yookassa import Configuration, Payment as PaymentR
+from yookassa import Configuration, Payment
+
+Configuration.account_id = settings.YOOKASSA_SHOP_ID
+Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 
 
 async def send_message(chat_id, text):
@@ -435,32 +439,34 @@ def susbscriptions(request):
         base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
 
         if request.POST["application"] == "1":
-            payment_response = PaymentR.create({
+            payment_response = Payment.create({
                 "amount": {
                     "value": "3000.00",
                     "currency": "RUB"
                 },
                 "confirmation": {
                     "type": "redirect",
-                    "return_url": base_url + "/payment/"
+                    "return_url": base_url + "/susbscriptions/"
                 },
                 "capture": True,
                 "description": "Магазин 3000",
             }, uuid.uuid4())
+            Application.objects.create(provider=request.user.provider, payment_id = payment_response.id)
             return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
         elif request.POST["application"] == "2":
-            payment_response = PaymentR.create({
+            payment_response = Payment.create({
                 "amount": {
                     "value": "10000.00",
                     "currency": "RUB"
                 },
                 "confirmation": {
                     "type": "redirect",
-                    "return_url": base_url + "/payment/"
+                    "return_url": base_url + "/susbscriptions/"
                 },
                 "capture": True,
                 "description": "Гипермаркет 10000",
             }, uuid.uuid4())
+            Application.objects.create(provider=request.user.provider, payment_id = payment_response.id)
             return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
         elif request.POST["application"] == "3":
             asyncio.run(send_message(222189723, f"Добавлено заявка на бегущую строку от {base_url}/admin/core/provider/{request.user.provider.id}/change/"))
@@ -468,7 +474,7 @@ def susbscriptions(request):
             asyncio.run(send_message(222189723, f"Добавлено заявка на новость от {base_url}/admin/core/provider/{request.user.provider.id}/change/"))
 
         return JsonResponse({})
-    return render(request, 'subs.html')
+    return render(request, 'susbscriptions.html')
 
 
 @login_required(login_url="/login/")
@@ -484,30 +490,6 @@ def orders(request):
 def order(request, id):
     return render(request, 'order.html', {"order": Order.objects.get(id=id)})
 
-
-@login_required(login_url="/login/")
-def payment(request):
-    print(request.POST)
-    print(request.GET)
-    provider = request.user.provider
-
-    Configuration.account_id = settings.KASSA_ID
-    Configuration.secret_key = settings.KASSA_SECRET
-
-    # payment_response = PaymentR.find_one(str(payment.payment_id))
-
-    # if payment_response.status == "succeeded":
-    #     if payment_response.description == "Магазин 3000":
-    #         provider.status = "store"
-    #         provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
-    #         provider.save()
-    #     elif payment_response.description == "Гипермаркет 10000":
-    #         provider.status = "hyper"
-    #         provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
-    #         provider.save()
-
-
-    return redirect(profile)
 
 
 @login_required(login_url="/login/")
@@ -612,3 +594,29 @@ def send_check(request, id):
     )
 
     return redirect('order', id=order.id)
+
+
+@csrf_exempt
+def payment_webhook(request):
+    if request.method == 'POST':
+        provider = request.user.provider
+        event_json = json.loads(request.body)
+        if 'event' in event_json and event_json['event'] == 'payment.succeeded':
+            payment_id = event_json['object']['id']
+            description = event_json['object']['description']
+            application = get_object_or_404(Application, payment_id=payment_id)
+            if application.checked != False:
+                return HttpResponseForbidden()
+            if description == "Магазин 3000":
+                provider.status = "store"
+                provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
+                provider.save()
+            elif description == "Гипермаркет 10000":
+                provider.status = "hyper"
+                provider.status_time = datetime.timezone.now() + datetime.timedelta(weeks=3)
+                provider.save()
+            application.checked = True
+            application.save()
+            return JsonResponse({'status': 'success'})
+        return JsonResponse({'status': 'failed'})
+    return JsonResponse({'status': 'invalid method'}, status=405)
