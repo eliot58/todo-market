@@ -9,10 +9,15 @@
 {% for new in news %}
     <div class="d-flex flex-column" style="border-radius: 16px; padding: 20px; margin: 10px 0px; background-color: #282828; color: #E9E9E9;">
         <div class="d-flex align-items-center">
-            <img src="{{new.logo.url}}" style="border-radius: 8px;" width="48" height="48" alt="">
-            <p style="font-size: 24px; font-weight: 500; margin-left: 10px;">{{new.author}}</p>
+            {% if new.provider %}
+            <img src="{{new.provider.logo.url}}" style="border-radius: 8px;" width="48" height="48" alt="">
+            <p style="font-size: 24px; font-weight: 500; margin-left: 10px;">{{new.provider.company}}</p>
+            {% else %}
+            <img src="{% static 'img/market.png' %}" style="border-radius: 8px;" width="48" height="48" alt="">
+            <p style="font-size: 24px; font-weight: 500; margin-left: 10px;">TodoTodo market</p>
+            {% endif %}
         </div>
-        <p style="margin-top: 10px; line-height: 24px;">{{new.text}}</p>
+        <p style="margin-top: 10px; line-height: 24px;">{{new.text|safe}}</p>
     </div>
 {% endfor %}
 

@@ -39,7 +39,7 @@ class StoreAdmin(admin.ModelAdmin):
 
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ['author', 'text']
+    list_display = ['provider', 'text']
 
 
 @admin.register(Category)

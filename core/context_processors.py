@@ -2,10 +2,10 @@ from .models import Ticker, News, Category
 
 def ticker(_):
     try:
-        return {"ticker": Ticker.objects.get(id=1)}
+        return {"tickers": Ticker.objects.all()}
     except Ticker.DoesNotExist:
-        ticker = Ticker.objects.create()
-        return {"ticker": ticker}
+        Ticker.objects.create()
+        return {"tickers": Ticker.objects.all()}
     
 
 def news(_):

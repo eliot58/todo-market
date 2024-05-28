@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.conf import settings
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 class Region(models.Model):
@@ -34,16 +35,6 @@ class DeliveryCondition(models.Model):
 
     def __str__(self):
         return self.name
-    
-class Ticker(models.Model):
-    text = models.TextField(default = "Здесь может быть ваша релама", verbose_name="Текст")
-
-    class Meta:
-        verbose_name = "Бегущая строка"
-        verbose_name_plural = "Бегущая строка"
-
-    def __str__(self):
-        return self.text
     
 
 class Provider(models.Model):
@@ -83,6 +74,19 @@ class Application(models.Model):
 
     def __str__(self):
         return self.payment_id
+    
+
+class Ticker(models.Model):
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null = True, blank = True)
+    text = models.TextField(default = "Здесь может быть ваша релама",verbose_name="Текст")
+    visible_date = models.DateField(null = True, blank = True, verbose_name="Срок")
+
+    class Meta:
+        verbose_name = "Бегущая строка"
+        verbose_name_plural = "Бегущая строка"
+
+    def __str__(self):
+        return self.text
 
 
 class ProviderFile(models.Model):
@@ -206,9 +210,8 @@ class Query(models.Model):
 
 
 class News(models.Model):
-    logo = models.ImageField(upload_to="logo", verbose_name="Лого")
-    author = models.CharField(max_length = 256, verbose_name = "Автор")
-    text = models.TextField()
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null = True, blank = True)
+    text = CKEditor5Field(verbose_name="Текст", config_name='extends')
 
 
     class Meta:

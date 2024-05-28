@@ -1,5 +1,12 @@
 from django.urls import path
-from .views import *
+from .handlers.common import index, partner, delivery, news, providers, provider
+from .handlers.auth import login_view, logout_view, signup
+from .handlers.profile import provider_profile, buyer_profile, upload_files
+from .handlers.store import create_store, update_store, delete_store, storeProducts
+from .handlers.product import create_product, update_product, delete_product
+from .handlers.cart import cart, cart_item_delete, cart_item_minus, cart_item_plus, addtoCart
+from .handlers.order import orders, order, drawup, accept, send_check, transit
+from .handlers.subscriptions import susbscriptions, payment_webhook
 
 urlpatterns = [
     path("", index, name="index"),
@@ -11,7 +18,7 @@ urlpatterns = [
     path("news/", news, name="news"),
     path("providers/", providers, name="providers"),
     path("provider/<int:id>/", provider, name="provider"),
-    path("profile/", profile, name="profile"),
+    path("provider_profile/", provider_profile, name="provider_profile"),
     path("create_store/", create_store, name="create_store"),
     path("delete_store/<int:id>/", delete_store, name="delete_store"),
     path("update_store/<int:id>/", update_store, name="update_store"),
@@ -29,7 +36,7 @@ urlpatterns = [
     path("drawup/<int:id>/", drawup, name="drawup"),
     path("orders/", orders, name="orders"),
     path("order/<int:id>/", order, name="order"),
-    path("buyer/", buyer, name="buyer"),
+    path("buyer_profile/", buyer_profile, name="buyer_profile"),
     path("accept/<int:id>/", accept, name="accept"),
     path("send_check/<int:id>/", send_check, name="send_check"),
     path("transit/<int:id>/", transit, name="transit"),

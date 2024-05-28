@@ -329,8 +329,8 @@
 			<ul class="sidebar__links">
 				<li class="sidebar__link {% if request.path == '/profile/' %} sidebar__link-active {% endif %}">
 					<div>
-						<img src="{% if request.path == '/profile/' %} {% static 'img/profile-active.svg' %} {% else %} {% static 'img/profile.svg' %} {% endif %}" alt="">
-						<a href="{% if request.user.provider %}{% url 'profile' %}{% else %}{% url 'buyer' %}{% endif %}">Мой профиль</a>
+						<img src="{% if request.path == '/provider_profile/' %} {% static 'img/profile-active.svg' %} {% else %} {% static 'img/profile.svg' %} {% endif %}" alt="">
+						<a href="{% if request.user.provider %}{% url 'provider_profile' %}{% else %}{% url 'buyer_profile' %}{% endif %}">Мой профиль</a>
 					</div>
 				</li>
 	
@@ -382,13 +382,25 @@
 		</div>
 
 		<footer class="footer">
-			<p class="footer__title" style="padding-left: 5px;">Реклама</p>
-			<div class="d-flex footer__content">
-				<img src="{% static 'img/market.png' %}" width="56" height="56" alt="">
-				<div class="d-flex flex-column justify-content-around marquee">
-					<p class="footer__content-title">Todotodo Market</p>
-					<p id="marqueeText">{{ticker.text}}</p>
+			<p class="footer__title" style="padding-left: 5px; background-color: #00A550;">Реклама</p>
+			<div class="d-flex footer__content marquee">
+				{% for ticker in tickers %}
+				<div class="marqueeBlock">
+					{% if ticker.provider %}
+					<img src="{{ticker.provider.logo.url}}" width="56" height="56" alt="">
+					{% else %}
+					<img src="{% static 'img/market.png' %}" width="56" height="56" alt="">
+					{% endif %}
+					<div class="d-flex flex-column justify-content-around" style="margin-left: 20px;">
+						{% if ticker.provider %}
+						<p style="font-size: 20px;">{{ticker.provider.company}}</p>
+						{% else %}
+						<p style="font-size: 20px;">TodoTodo market</p>
+						{% endif %}
+						<p>{{ticker.text}}</p>
+					</div>
 				</div>
+				{% endfor %}
 			</div>
 		</footer>
 		<div id="snackbar">Товар добавлен в корзину</div>
