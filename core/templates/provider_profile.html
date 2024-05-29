@@ -69,9 +69,9 @@
 	<h1 class="title">Профиль компании</h1>
 	<button type="button" onclick="createStore(this)" style="{% if request.user.provider.company == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == '' or stores|length >= 1 %}display: none;{% endif %}background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550; color: #00A550;">Добавить магазин</button>
 </div>
-<p style="font-weight: 500; margin: 10px 0px; color: #E9E9E9;">Общая информация</p>
+<p style="font-weight: 500; margin: 10px; color: #E9E9E9;">Общая информация</p>
 <div>
-	<form class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px;" method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
+	<form class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px;" method="post" action="{% url 'provider_profile' %}" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="d-flex">
 			<div class="logo_preview" style="min-width: 270px; min-height: 270px; text-align: center; border-radius: 16px; margin-right: 20px; position: relative; cursor: pointer; background-color: #313131; border: 1px solid #00A550; {% if request.user.provider.logo %} background: url('{{ request.user.provider.logo.url }}') 0 0/100% 100%; {% endif %}" onclick="this.querySelector('input').click()">
@@ -294,7 +294,7 @@
 		</form>
 	</div>
 {% endfor %}
-<form method="post" action="{% url 'upload_files' %}" enctype="multipart/form-data" class="d-flex align-items-end justify-content-between upload_files">
+<form method="post" action="{% url 'upload_files' %}" enctype="multipart/form-data" class="d-flex align-items-end justify-content-between upload_files" style="margin-top: 10px;">
 	{% csrf_token %}
 	<p style="color: #00A550; font-weight: 500; line-height: 24px;">Для модерации, и заключении договора нам потребуется следующие документы: <br> Карта партнеров, ИНН, ОГРН, Карточка банка. <br> Приложите их копии, и нажмите отправить.</p>
 	<button type="button" onclick="this.nextElementSibling.click()" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 150px; color: #00A550; border: 1px solid #00A550;">Приложить</button>

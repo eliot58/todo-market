@@ -559,10 +559,9 @@ td {
 .category-item{
 	background-color: #313131;
 	color: #E9E9E9;
-	padding: 10px 20px;
+	padding: 10px 0px;
 	font-weight: 500;
 	border-radius: 8px;
-	margin-right: 10px;
 	border: 1px solid #686868;
 	cursor: pointer;
 }

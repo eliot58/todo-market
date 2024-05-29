@@ -46,7 +46,7 @@
 	</div>
 	{% endfor %}
 	<div class="d-flex justify-content-end" style="width: 100%;">
-		<form action="{% url 'drawup' provider.0 %}" method="post" style="width: 600px; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 200px; background-color: #282828; padding: 10px; border-radius: 16px;">
+		<form action="{% url 'drawup' provider.0 %}" method="post" style="width: 600px; padding: 10px 15px; border-radius: 16px; display: flex; justify-content: space-between; margin-bottom: 50px; background-color: #282828; padding: 10px; border-radius: 16px;">
 			{% csrf_token %}
 			<div style="width: 300px; margin-right: 20px;">
 				<p style="font-weight: 500; color: #E9E9E9;">Общая информация</p>

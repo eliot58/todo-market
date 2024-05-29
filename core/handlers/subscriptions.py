@@ -7,15 +7,9 @@ from django.conf import settings
 from core.models import *
 import datetime
 from django.utils import timezone
-from aiogram import Bot
-import asyncio
 import uuid
 from yookassa import Configuration, Payment
 
-
-async def send_message(chat_id, text):
-    bot = Bot(token=settings.BOT_TOKEN)
-    await bot.send_message(chat_id=chat_id, text=text)
 
 
 
@@ -40,7 +34,7 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
-            Application.objects.create(provider=request.user.provider, payment_id = payment_response.id)
+            ProviderOrder.objects.create(provider=request.user.provider, order_type="status", payment_id = payment_response.id, status = "store")
             return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
         elif request.POST["application"] == "2":
             payment_response = Payment.create({
@@ -55,14 +49,39 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
-            Application.objects.create(provider=request.user.provider, payment_id = payment_response.id)
-            return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
+            ProviderOrder.objects.create(provider=request.user.provider, order_type="status", payment_id = payment_response.id, status = "hyper")
+            return JsonResponse({"confirmation_url": payment_response.confirmation.confirmation_url})
         elif request.POST["application"] == "3":
-            asyncio.run(send_message(222189723, f"Добавлено заявка на бегущую строку от {base_url}/admin/core/provider/{request.user.provider.id}/change/"))
+            payment_response = Payment.create({
+                "amount": {
+                    "value": str(float(request.POST["days"]) * 1000),
+                    "currency": "RUB"
+                },
+                "confirmation": {
+                    "type": "redirect",
+                    "return_url": base_url + "/susbscriptions/"
+                },
+                "capture": True,
+                "description": "Оплата за услугу информационной подписки",
+            }, uuid.uuid4())
+            ProviderOrder.objects.create(provider=request.user.provider, order_type="ticker", payment_id = payment_response.id, ticker = request.POST["ticker"], ticker_days = request.POST["days"])
+            return JsonResponse({"confirmation_url": payment_response.confirmation.confirmation_url})
         elif request.POST["application"] == "4":
-            asyncio.run(send_message(222189723, f"Добавлено заявка на новость от {base_url}/admin/core/provider/{request.user.provider.id}/change/"))
+            payment_response = Payment.create({
+                "amount": {
+                    "value": "5000.00",
+                    "currency": "RUB"
+                },
+                "confirmation": {
+                    "type": "redirect",
+                    "return_url": base_url + "/susbscriptions/"
+                },
+                "capture": True,
+                "description": "Оплата за услугу информационной подписки",
+            }, uuid.uuid4())
+            ProviderOrder.objects.create(provider=request.user.provider, order_type="news", payment_id = payment_response.id, news = request.POST["news"])
+            return JsonResponse({"confirmation_url": payment_response.confirmation.confirmation_url})
 
-        return JsonResponse({})
     return render(request, 'susbscriptions.html')
 
 
@@ -72,20 +91,19 @@ def payment_webhook(request):
         event_json = json.loads(request.body)
         if 'event' in event_json and event_json['event'] == 'payment.succeeded':
             payment_id = event_json['object']['id']
-            description = event_json['object']['description']
-            application = get_object_or_404(Application, payment_id=payment_id)
-            if application.checked != False:
+            order = get_object_or_404(ProviderOrder, payment_id=payment_id)
+            if order.paid != False:
                 return HttpResponseForbidden()
-            if description == "Магазин 3000":
-                application.provider.status = "store"
-                application.provider.status_time = timezone.now() + datetime.timedelta(days=30)
-                application.provider.save()
-            elif description == "Гипермаркет 10000":
-                application.provider.status = "hyper"
-                application.provider.status_time = timezone.now() + datetime.timedelta(days=30)
-                application.provider.save()
-            application.checked = True
-            application.save()
+            if order.type == "status":
+                order.provider.status = order.status
+                order.provider.status_time = timezone.now() + datetime.timedelta(days=30)
+                order.provider.save()
+            elif order.type == "ticker":
+                Ticker.objects.create(provider=order.provider, text=order.ticker, visible_date=timezone.now() + datetime.timedelta(days=order.ticker_days))
+            elif order.type == "news":
+                News.objects.create(provider=order.provider, text=order.news)
+            order.paid = True
+            order.save()
             return JsonResponse({'status': 'success'})
         return JsonResponse({'status': 'failed'})
     return JsonResponse({'status': 'invalid method'}, status=405)

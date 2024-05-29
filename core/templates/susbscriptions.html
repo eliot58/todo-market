@@ -6,35 +6,38 @@
 
 {% block content %}
 <form method="post" action="{% url 'susbscriptions' %}" class="d-flex application-form">
-    <input type="text" name="application" hidden>
     {% csrf_token %}
+    <input type="text" name="application" hidden>
+    <input type="text" name="news" hidden>
+    <input type="text" name="days" hidden>
+    <input type="text" name="ticker" hidden>
     <div class="d-flex flex-column" style="margin-right: 20px; text-align: center; background-color: #282828;
     color: #E9E9E9; padding: 20px; border-radius: 16px;">
         <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Магазин</div>
         <div style="color: #00A550; margin: 20px 0px;">3000р в месяц</div>
         <div style="margin: 20px 0px;">3-10 товаров</div>
-        <button type="button" onclick="sendApplication(this, 1)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
+        <button type="button" onclick="sendApplication(1)" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
     <div class="d-flex flex-column" style="margin-right: 20px; text-align: center; background-color: #282828;
     color: #E9E9E9; padding: 20px; border-radius: 16px;">
         <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Гипермаркет</div>
         <div style="color: #00A550; margin: 20px 0px;">10000р в месяц</div>
         <div style="margin: 20px 0px;">11+ товаров в месяц</div>
-        <button type="button" onclick="sendApplication(this, 2)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
+        <button type="button" onclick="sendApplication(2)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
     <div class="d-flex flex-column" style="margin-right: 20px; text-align: center; background-color: #282828;
     color: #E9E9E9; padding: 20px; border-radius: 16px;">
         <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Реклама</div>
-        <div style="color: #00A550; margin: 20px 0px;">По согласованию</div>
+        <div style="color: #00A550; margin: 20px 0px;">1000р в день</div>
         <div style="margin: 20px 0px;">Бегущая строка</div>
-        <button type="button" onclick="sendApplication(this, 3)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
+        <button type="button" onclick="document.querySelector('.create_ticker-popup').style.display = 'block';"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
     <div class="d-flex flex-column" style="text-align: center; background-color: #282828;
     color: #E9E9E9; padding: 20px; border-radius: 16px;">
         <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Реклама</div>
         <div style="color: #00A550; margin: 20px 0px;">5000р</div>
         <div style="margin: 20px 0px;">Новость от партнера</div>
-        <button type="button" onclick="sendApplication(this, 4)"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
+        <button type="button" onclick="document.querySelector('.create_news-popup').style.display = 'block';"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
 </form>
              
@@ -43,8 +46,112 @@
 
 {% block script %}
 <script>
-	function sendApplication(elem, n){
-        elem.parentNode.parentNode.querySelector('input').value = n; 
+    function createTicker(days, news){
+        document.querySelector('input[name="ticker"]').value = news; 
+        document.querySelector('input[name="days"]').value = days; 
+        sendApplication(3)
+    }
+
+    function createNews(news){
+        document.querySelector('input[name="news"]').value = news; 
+        sendApplication(4)
+    }
+
+    const customColorPalette = [
+        {
+            'color': 'hsl(4, 90%, 58%)',
+            'label': 'Red'
+        },
+        {
+            'color': 'hsl(340, 82%, 52%)',
+            'label': 'Pink'
+        },
+        {
+            'color': 'hsl(291, 64%, 42%)',
+            'label': 'Purple'
+        },
+        {
+            'color': 'hsl(262, 52%, 47%)',
+            'label': 'Deep Purple'
+        },
+        {
+            'color': 'hsl(231, 48%, 48%)',
+            'label': 'Indigo'
+        },
+        {
+            'color': 'hsl(207, 90%, 54%)',
+            'label': 'Blue'
+        },
+    ]
+
+    const CKEDITOR_5_CONFIGS = {
+        'extends': {
+            'blockToolbar': [
+                'paragraph', 'heading1', 'heading2', 'heading3',
+                '|',
+                'bulletedList', 'numberedList',
+                '|',
+                'blockQuote',
+            ],
+            'toolbar': ['heading', '|', 'outdent', 'indent', '|', 'bold', 'italic', 'link', 'underline', 'strikethrough',
+            'code','subscript', 'superscript', 'highlight', '|', 'codeBlock', 'sourceEditing', 'insertImage',
+                        'bulletedList', 'numberedList', 'todoList', '|',  'blockQuote', 'imageUpload', '|',
+                        'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'mediaEmbed', 'removeFormat',
+                        'insertTable',],
+            'image': {
+                'toolbar': ['imageTextAlternative', '|', 'imageStyle:alignLeft',
+                            'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side',  '|'],
+                'styles': [
+                    'full',
+                    'side',
+                    'alignLeft',
+                    'alignRight',
+                    'alignCenter',
+                ]
+
+            },
+            'table': {
+                'contentToolbar': [ 'tableColumn', 'tableRow', 'mergeTableCells',
+                'tableProperties', 'tableCellProperties' ],
+                'tableProperties': {
+                    'borderColors': customColorPalette,
+                    'backgroundColors': customColorPalette
+                },
+                'tableCellProperties': {
+                    'borderColors': customColorPalette,
+                    'backgroundColors': customColorPalette
+                }
+            },
+            'heading' : {
+                'options': [
+                    { 'model': 'paragraph', 'title': 'Paragraph', 'class': 'ck-heading_paragraph' },
+                    { 'model': 'heading1', 'view': 'h1', 'title': 'Heading 1', 'class': 'ck-heading_heading1' },
+                    { 'model': 'heading2', 'view': 'h2', 'title': 'Heading 2', 'class': 'ck-heading_heading2' },
+                    { 'model': 'heading3', 'view': 'h3', 'title': 'Heading 3', 'class': 'ck-heading_heading3' }
+                ]
+            }
+        },
+        'list': {
+            'properties': {
+                'styles': 'true',
+                'startIndex': 'true',
+                'reversed': 'true',
+            }
+        }
+    }
+
+    ClassicEditor
+    .create( document.querySelector( '#editor' ), CKEDITOR_5_CONFIGS["extends"])
+    .then(editor => {
+        window.editor = editor;
+    })
+    .catch( error => {
+        console.error( error );
+    } );
+
+
+	function sendApplication(n){
+        document.querySelector('input[name="application"]').value = n; 
         const application_form = document.querySelector('.application-form')
         let formData = new FormData(application_form);
         let xhr = new XMLHttpRequest();
@@ -52,11 +159,7 @@
         xhr.responseType = 'json';
         xhr.onload = function () {
         if (xhr.status == 200) {
-            if (xhr.response["confirmation_url"] != undefined) {
-                window.location.href = xhr.response["confirmation_url"]
-            } else {
-                document.querySelector(".application-popup").style.display = "block"
-            }
+            window.location.href = xhr.response["confirmation_url"]
         }
         };
         xhr.send(formData);

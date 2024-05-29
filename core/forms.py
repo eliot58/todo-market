@@ -1,7 +1,7 @@
 import re
 from django import forms
 from django.contrib.auth.models import User
-from .models import *
+from .models import Provider, Buyer
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import check_password
 
@@ -68,15 +68,3 @@ class LoginForm(forms.Form):
             if not(check_password(password, user.password)):
                 raise ValidationError("Неверный email или пароль")
             
-
-class NewsForm(forms.Form):
-    class Meta:
-        model = News
-        fields = ('text', )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control','autocomplete': 'off'})
-        
-        self.fields['text'].widget.attrs.update({'class': 'form-control django_ckeditor_5'})

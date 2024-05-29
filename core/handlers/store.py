@@ -43,7 +43,7 @@ def create_store(request):
         store.payment_methods.clear()
 
     asyncio.run(send_message(
-        222189723, f"Создан магазин {request.POST['store_name']}"))
+        -4231343211, f"Создан магазин {request.POST['store_name']}"))
 
     return redirect(provider_profile)
 
@@ -78,7 +78,7 @@ def update_store(request, id):
         store.payment_methods.clear()
 
     asyncio.run(send_message(
-        "222189723", f"Изменен магазин {request.POST['store_name']}"))
+        "-4231343211", f"Изменен магазин {request.POST['store_name']}"))
     return redirect(provider_profile)
 
 

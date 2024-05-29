@@ -62,23 +62,11 @@ class Provider(models.Model):
     def __str__(self):
         return self.fullName
 
-class Application(models.Model):
-    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null=True, blank=True)
-    payment_id = models.UUIDField(primary_key=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    checked = models.BooleanField(default=False)
-
-    class Meta:
-        verbose_name = "Заявка"
-        verbose_name_plural = "Заявки"
-
-    def __str__(self):
-        return self.payment_id
     
 
 class Ticker(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null = True, blank = True)
-    text = models.TextField(default = "Здесь может быть ваша релама",verbose_name="Текст")
+    text = models.TextField(verbose_name="Текст")
     visible_date = models.DateField(null = True, blank = True, verbose_name="Срок")
 
     class Meta:
@@ -87,6 +75,39 @@ class Ticker(models.Model):
 
     def __str__(self):
         return self.text
+    
+
+class News(models.Model):
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null = True, blank = True)
+    text = CKEditor5Field(verbose_name="Текст", config_name='extends')
+    created = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        verbose_name = "Новость"
+        verbose_name_plural = "Новости"
+
+    def __str__(self):
+        return str(self.id)
+    
+    
+class ProviderOrder(models.Model):
+    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null=True, blank=True)
+    type = models.CharField(max_length=256)
+    status = models.CharField(max_length=256, null=True, blank=True)
+    ticker = models.TextField(null=True, blank=True)
+    ticker_days = models.PositiveIntegerField(null=True, blank=True)
+    news = models.TextField(null=True, blank=True)
+    payment_id = models.UUIDField(primary_key=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "Заказы поставщика"
+        verbose_name_plural = "Заказы поставщика"
+
+    def __str__(self):
+        return self.payment_id
 
 
 class ProviderFile(models.Model):
@@ -208,20 +229,6 @@ class Query(models.Model):
     def __str__(self):
         return self.query
 
-
-class News(models.Model):
-    provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null = True, blank = True)
-    text = CKEditor5Field(verbose_name="Текст", config_name='extends')
-    created = models.DateTimeField(auto_now_add=True)
-
-
-    class Meta:
-        verbose_name = "Новость"
-        verbose_name_plural = "Новости"
-
-    def __str__(self):
-        return str(self.id)
-    
 
 class Order(models.Model):
     provider = models.ForeignKey(Provider, on_delete = models.DO_NOTHING)
