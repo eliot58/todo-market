@@ -212,6 +212,7 @@ class Query(models.Model):
 class News(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null = True, blank = True)
     text = CKEditor5Field(verbose_name="Текст", config_name='extends')
+    created = models.DateTimeField(auto_now_add=True)
 
 
     class Meta:

@@ -152,6 +152,21 @@
 
 		</div>
 
+
+		<div id="popup" class="popup create_news-popup">
+			<div class="popup-content d-flex flex-column" style="width: 1200px;">
+				<p>Новость от партнера</p>
+				
+			</div>
+		</div>
+
+		<div id="popup" class="popup create_ticker-popup">
+			<div class="popup-content d-flex flex-column" style="width: 1200px;">
+				<p>Бегущая строка</p>
+
+			</div>
+		</div>
+
 		<div id="popup" class="popup success_deal-popup">
 			<div class="popup-content" style="width: 750px; height: 170px;">
 				<div class="d-flex" style="position: relative; height: 100%;">
@@ -192,7 +207,7 @@
 						<p style="font-weight: 500; line-height: 24px; color: #E9E9E9;">Ваш пароль был
 							отправлен на почту: {{request.user.email}}</p>
 						<button
-							onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% else %}document.querySelector('.success_reg3-popup').style.display = 'block'; {% endif %}"
+							onclick="document.querySelector('.success_reg-popup').style.display = 'none'; {% if request.user.provider %} document.querySelector('.success_reg2-popup').style.display = 'block'; {% else %} document.querySelector('.success_reg3-popup').style.display = 'block'; {% endif %}"
 							style="font-weight: 600; border-radius: 8px; width: 200px; padding: 10px 0px; background-color: #00A550; color: #E9E9E9;">Отлично!</button>
 					</div>
 					<img src="{% static 'img/success_deal.png' %}"
@@ -407,22 +422,22 @@
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- Yandex.Metrika counter -->
-    <script type="text/javascript" >
-        (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-        m[i].l=1*new Date();
-        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
-        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-    
-        ym(91905902, "init", {
-            clickmap:true,
-            trackLinks:true,
-            accurateTrackBounce:true,
-            webvisor:true
-        });
-    </script>
-    <noscript><div><img src="https://mc.yandex.ru/watch/97301221" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
+	<script type="text/javascript" >
+		(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+		m[i].l=1*new Date();
+		for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+		k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+		(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+	
+		ym(97301221, "init", {
+			clickmap:true,
+			trackLinks:true,
+			accurateTrackBounce:true,
+			webvisor:true
+		});
+	</script>
+	<noscript><div><img src="https://mc.yandex.ru/watch/97301221" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+	<!-- /Yandex.Metrika counter -->
 	<script>
 
 		window.addEventListener('click', function (event) {

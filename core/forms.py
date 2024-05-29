@@ -67,3 +67,16 @@ class LoginForm(forms.Form):
         else:
             if not(check_password(password, user.password)):
                 raise ValidationError("Неверный email или пароль")
+            
+
+class NewsForm(forms.Form):
+    class Meta:
+        model = News
+        fields = ('text', )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control','autocomplete': 'off'})
+        
+        self.fields['text'].widget.attrs.update({'class': 'form-control django_ckeditor_5'})
