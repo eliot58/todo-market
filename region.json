@@ -1,0 +1,9 @@
+[
+{
+  "model": "core.region",
+  "pk": 1,
+  "fields": {
+    "name": "Москва"
+  }
+}
+]

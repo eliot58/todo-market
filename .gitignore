@@ -159,8 +159,3 @@ cython_debug/
 #.idea/
 /media
 /.vscode
-
-category.json
-delivery.json
-payment.json
-region.json

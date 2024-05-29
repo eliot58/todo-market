@@ -1,0 +1,23 @@
+[
+{
+  "model": "core.paymentmethod",
+  "pk": 1,
+  "fields": {
+    "name": "Карта"
+  }
+},
+{
+  "model": "core.paymentmethod",
+  "pk": 2,
+  "fields": {
+    "name": "Оплата курьеру"
+  }
+},
+{
+  "model": "core.paymentmethod",
+  "pk": 3,
+  "fields": {
+    "name": "Счет с ндс"
+  }
+}
+]
