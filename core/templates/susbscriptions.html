@@ -46,9 +46,18 @@
 
 {% block script %}
 <script>
+    function dateDifferenceInDays(date1, date2) {
+        const diffTime = Math.abs(date2 - date1);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
+    }
+
     function createTicker(days, news){
+        const currentDate = new Date();
+        const selectedDate = new Date(days);
+        const diffDays = dateDifferenceInDays(currentDate, selectedDate);
         document.querySelector('input[name="ticker"]').value = news; 
-        document.querySelector('input[name="days"]').value = days; 
+        document.querySelector('input[name="days"]').value = diffDays; 
         sendApplication(3)
     }
 

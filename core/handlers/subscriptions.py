@@ -34,7 +34,7 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
-            ProviderOrder.objects.create(provider=request.user.provider, order_type="status", payment_id = payment_response.id, status = "store")
+            ProviderOrder.objects.create(provider=request.user.provider, type="status", payment_id = payment_response.id, status = "store")
             return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
         elif request.POST["application"] == "2":
             payment_response = Payment.create({
@@ -49,7 +49,7 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
-            ProviderOrder.objects.create(provider=request.user.provider, order_type="status", payment_id = payment_response.id, status = "hyper")
+            ProviderOrder.objects.create(provider=request.user.provider, type="status", payment_id = payment_response.id, status = "hyper")
             return JsonResponse({"confirmation_url": payment_response.confirmation.confirmation_url})
         elif request.POST["application"] == "3":
             payment_response = Payment.create({
@@ -64,7 +64,7 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
-            ProviderOrder.objects.create(provider=request.user.provider, order_type="ticker", payment_id = payment_response.id, ticker = request.POST["ticker"], ticker_days = request.POST["days"])
+            ProviderOrder.objects.create(provider=request.user.provider, type="ticker", payment_id = payment_response.id, ticker = request.POST["ticker"], ticker_days = request.POST["days"])
             return JsonResponse({"confirmation_url": payment_response.confirmation.confirmation_url})
         elif request.POST["application"] == "4":
             payment_response = Payment.create({
@@ -79,7 +79,7 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
-            ProviderOrder.objects.create(provider=request.user.provider, order_type="news", payment_id = payment_response.id, news = request.POST["news"])
+            ProviderOrder.objects.create(provider=request.user.provider, type="news", payment_id = payment_response.id, news = request.POST["news"])
             return JsonResponse({"confirmation_url": payment_response.confirmation.confirmation_url})
 
     return render(request, 'susbscriptions.html')
