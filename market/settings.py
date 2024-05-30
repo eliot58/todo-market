@@ -223,7 +223,7 @@ if not DEBUG:
         },
         'handlers': {
             'file': {
-                'level': 'WARNING',
+                'level': 'INFO',
                 'class': 'logging.FileHandler',
                 'filename': log_filename,
                 'formatter': 'verbose',
@@ -232,7 +232,7 @@ if not DEBUG:
         'loggers': {
             'django': {
                 'handlers': ['file'],
-                'level': 'WARNING',
+                'level': 'INFO',
                 'propagate': True,
             },
         },
