@@ -3,7 +3,7 @@ from .handlers.common import index, partner, delivery, news, providers, provider
 from .handlers.auth import login_view, logout_view, signup
 from .handlers.profile import provider_profile, buyer_profile, upload_files
 from .handlers.store import create_store, update_store, delete_store, storeProducts
-from .handlers.product import create_product, update_product, delete_product
+from .handlers.product import create_product, update_product, delete_product, check_status
 from .handlers.cart import cart, cart_item_delete, cart_item_minus, cart_item_plus, addtoCart
 from .handlers.order import orders, order, drawup, accept, send_check, transit
 from .handlers.subscriptions import susbscriptions, payment_webhook
@@ -41,4 +41,5 @@ urlpatterns = [
     path("send_check/<int:id>/", send_check, name="send_check"),
     path("transit/<int:id>/", transit, name="transit"),
     path('webhook/', payment_webhook, name='payment_webhook'),
+    path('check_status/', check_status, name='check_status'),
 ]

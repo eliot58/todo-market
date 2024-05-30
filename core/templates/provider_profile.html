@@ -67,7 +67,21 @@
 {% block content %}
 <div class="d-flex justify-content-between">
 	<h1 class="title">Профиль компании</h1>
-	<button type="button" onclick="createStore(this)" style="{% if request.user.provider.company == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == '' or stores|length >= 1 %}display: none;{% endif %}background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550; color: #00A550;">Добавить магазин</button>
+	{% if request.user.provider.company != '' or request.user.provider.logo or request.user.provider.site != '' or request.user.provider.description != '' %}
+		{% if request.user.provider.status == 'free' %}
+			{% if stores|length < 1 %}
+			<button type="button" onclick="createStore(this)" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550; color: #00A550;">Добавить магазин</button>
+			{% endif %}
+		{% elif request.user.provider.status == 'store' %}
+			{% if stores|length < 3 %}
+			<button type="button" onclick="createStore(this)" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550; color: #00A550;">Добавить магазин</button>
+			{% endif %}
+		{% else %}
+			{% if stores|length < 5 %}
+			<button type="button" onclick="createStore(this)" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550; color: #00A550;">Добавить магазин</button>
+			{% endif %}
+		{% endif %}
+	{% endif %}
 </div>
 <p style="font-weight: 500; margin: 10px; color: #E9E9E9;">Общая информация</p>
 <div>
@@ -380,6 +394,155 @@
 
 		productPreview.querySelector("img").style.display = 'none';
 	};
+
+	function openProduct(element, store, isCreate, category, name, articul, amount, unit, remainder, image, description, tags, id, price, is_first) {
+		const popup_product = document.querySelector(".product-popup")
+		const button_parent = popup_product.querySelector(".button-parent")
+		for (const button of button_parent.querySelectorAll("button")) {
+			button.remove()
+		}
+		if (isCreate) {
+			const formData = new FormData()
+			formData.append("store", store)
+			let xhr = new XMLHttpRequest();
+			xhr.open('POST', '/check_status/');
+			xhr.responseType = 'json';
+			xhr.onload = function () {
+				if (xhr.status == 200) {
+					if (xhr.response["status"] != undefined) {
+						document.querySelector(".product-popup").style.display = "none"
+						document.querySelector(".status-popup span").textContent = xhr.response["amount"]
+						document.querySelector(".status-popup").style.display = "block"
+						return null;
+					}
+				}
+			};
+			xhr.send(formData);
+			for (const input of popup_product.querySelectorAll("input")) {
+				if (input.name == "category") {
+					input.value = category
+				} else if (input.name == "store") {
+					input.value = store
+				} else {
+					input.value = ""
+				}
+			}
+
+			productPreview.style.background = `none`;
+			productPreview.style.backgroundColor = `#313131`;
+
+			productPreview.querySelector("img").style.display = 'block';
+
+			popup_product.querySelector("select").value = ""
+			const textarea = popup_product.querySelectorAll("textarea")
+
+			textarea[0].value = ""
+			textarea[1].value = ""
+
+			button_parent.insertAdjacentHTML("afterbegin", `<button type="button" onclick="createProduct(${category}, ${store}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px;background-color: #00A550; color: #E9E9E9;">Создать</button>`)
+		} else {
+			const name_input = popup_product.querySelector("input[name='name']")
+			const articul_input = popup_product.querySelector("input[name='articul']")
+			const amount_input = popup_product.querySelector("input[name='amount']")
+			const remainder_input = popup_product.querySelector("input[name='remainder']")
+			const price_input = popup_product.querySelector("input[name='price']")
+			const description_input = popup_product.querySelectorAll("textarea")[0]
+			const tags_input = popup_product.querySelectorAll("textarea")[1]
+			const select_unit = popup_product.querySelector("select")
+
+			productPreview.style.background = `url("${image}") 0 0/100% 100% no-repeat`;
+			productPreview.querySelector("img").style.display = 'none';
+
+
+			name_input.value = name
+			articul_input.value = articul
+			amount_input.value = amount
+			remainder_input.value = remainder
+			description_input.value = description
+			select_unit.value = unit
+			price_input.value = price
+			tags_input.value = tags
+
+			button_parent.insertAdjacentHTML("afterbegin", `<button type="button" onclick="updateProduct(${store}, ${category}, ${id}, ${is_first})" style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 25%; position: absolute; right: 0px; background-color: #00A550; color: #E9E9E9;">Сохранить</button>`)
+		}
+		popup_product.style.display = 'block';
+	}
+
+	function createProduct(category_id, store_id, is_first) {
+		const product_form = document.querySelector('.product-form')
+		if (product_form.checkValidity()) {
+			let formData = new FormData(product_form);
+			let xhr = new XMLHttpRequest();
+			xhr.open('POST', '/create_product/');
+			xhr.responseType = 'json';
+			xhr.onload = function () {
+				if (xhr.status == 200) {
+					if (is_first) {
+						const target_element = document.querySelector(`#template category_${category_id}`)
+						target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+						<div style="position: relative;">
+							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', true)" alt="">
+							<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
+							<p style="line-height: 24px; color: #E9E9E9;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+						</div>
+					</div>`)
+					} else {
+						const target_element = document.querySelector(`.store_${store_id}_${category_id}`)
+						target_element.insertAdjacentHTML("afterbegin", `<div class="d-flex flex-column swiper-slide" style="width: 256px; margin-right: 20px;">
+						<div style="position: relative;">
+							<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
+							<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
+							<p style="line-height: 24px; color: #E9E9E9;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+						</div>
+					</div>`)
+					}
+
+					document.querySelector(".product-popup").style.display = "none"
+				}
+			};
+			xhr.send(formData);
+		} else {
+			product_form.reportValidity();
+		}
+	}
+
+	function updateProduct(store_id, category_id, id, is_first) {
+		const product_form = document.querySelector('.product-form')
+		if (product_form.checkValidity()) {
+			let formData = new FormData(product_form);
+			let xhr = new XMLHttpRequest();
+			xhr.open('POST', `/update_product/${id}/`);
+			xhr.responseType = 'json';
+			xhr.onload = function () {
+				if (xhr.status == 200) {
+					const target_element = document.querySelector(`.store_${store_id}_${category_id} .product_${id}`)
+					for (const div of target_element.querySelectorAll("div")) {
+						div.remove()
+					}
+					target_element.insertAdjacentHTML("afterbegin", `<div style="position: relative;">
+						<img src="${xhr.response["image"]}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '${xhr.response["store"]}', false, '${xhr.response["category"]}', '${xhr.response["name"]}', '${xhr.response["articul"]}', '${xhr.response["amount"]}', '${xhr.response["unit"]}', '${xhr.response["remainder"]}', '${xhr.response["image"]}', '${xhr.response["description"]}', '${xhr.response["tags"]}', '${xhr.response["id"]}', '${xhr.response["price"]}', false)" alt="">
+						<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '${xhr.response["id"]}')" style="position: absolute; top: 10px; right: 10px;" alt="">
+						<p style="line-height: 24px; color: #E9E9E9;">${xhr.response["name"]}, ${xhr.response["articul"]} <span style="font-size: 12px; color: #616161;">${xhr.response["amount"]} ${xhr.response["unit"]}</span></p>
+					</div>`)
+					document.querySelector(".product-popup").style.display = "none"
+				}
+			};
+			xhr.send(formData);
+		} else {
+			product_form.reportValidity();
+		}
+	}
+
+	function deleteProduct(element, id) {
+		let xhr = new XMLHttpRequest();
+		xhr.open('GET', `/delete_product/${id}/`);
+		xhr.onload = function () {
+			if (xhr.status == 200) {
+				element.parentNode.parentNode.remove()
+			}
+		};
+		xhr.send();
+	}
 
 	var swiper = new Swiper('.swiper-container', {
         slidesPerView: 3,

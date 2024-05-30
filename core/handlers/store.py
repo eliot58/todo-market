@@ -17,6 +17,7 @@ async def send_message(chat_id, text):
 @require_POST
 @login_required(login_url="/login/")
 def create_store(request):
+    base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
     store = Store()
     store.provider = request.user.provider
     store.store_name = request.POST["store_name"]
@@ -43,7 +44,7 @@ def create_store(request):
         store.payment_methods.clear()
 
     asyncio.run(send_message(
-        -4231343211, f"Создан магазин {request.POST['store_name']}"))
+        -4231343211, f"Создан магазин {base_url}/admin/core/store/{store.id}/change/"))
 
     return redirect(provider_profile)
 
@@ -51,6 +52,7 @@ def create_store(request):
 @require_POST
 @login_required(login_url="/login/")
 def update_store(request, id):
+    base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
     store = Store.objects.get(id=id)
     store.store_name = request.POST["store_name"]
     store.map_visor = request.POST["map_visor"]
@@ -78,7 +80,7 @@ def update_store(request, id):
         store.payment_methods.clear()
 
     asyncio.run(send_message(
-        "-4231343211", f"Изменен магазин {request.POST['store_name']}"))
+        "-4231343211", f"Изменен магазин {base_url}/admin/core/store/{id}/change/"))
     return redirect(provider_profile)
 
 

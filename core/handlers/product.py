@@ -1,3 +1,5 @@
+import asyncio
+from aiogram import Bot
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST, require_GET
 from django.views.decorators.csrf import csrf_exempt
@@ -5,18 +7,15 @@ from django.http import HttpResponseForbidden, JsonResponse, HttpResponse
 from core.models import *
 
 
-
+async def send_message(chat_id, text):
+    bot = Bot(token=settings.BOT_TOKEN)
+    await bot.send_message(chat_id=chat_id, text=text)
 
 @require_POST
 @csrf_exempt
 @login_required(login_url="/login/")
 def create_product(request):
-    if request.user.provider.status == "free":
-        if len(Product.objects.filter(store_id=request.POST["store"])) == 3:
-            return JsonResponse({"status": "forbidden", "amount": 3})
-    elif request.user.provider.status == "store":
-        if len(Product.objects.filter(store_id=request.POST["store"])) == 10:
-            return JsonResponse({"status": "forbidden", "amount": 10})
+    base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
     store = Store.objects.get(id=request.POST["store"])
     store.approve = False
     store.save()
@@ -40,6 +39,10 @@ def create_product(request):
         except Tag.DoesNotExist:
             tag = Tag.objects.create(name=tag)
             product.tags.add(tag)
+
+    asyncio.run(send_message(
+        -4231343211, f"Создан товар {product.name}\nДля магазина {base_url}/admin/core/store/{store.id}/change/"))
+    
     return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id, "tags": request.POST["tags"]})
 
 
@@ -47,6 +50,7 @@ def create_product(request):
 @csrf_exempt
 @login_required(login_url="/login/")
 def update_product(request, id):
+    base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
     product = Product.objects.get(id=id)
     if request.user.provider == product.store.provider:
         product.articul = request.POST["articul"]
@@ -69,6 +73,10 @@ def update_product(request, id):
             except Tag.DoesNotExist:
                 tag = Tag.objects.create(name=tag)
                 product.tags.add(tag)
+
+    asyncio.run(send_message(
+        -4231343211, f"Изменен товар {product.name}\nВ магазине {base_url}/admin/core/store/{product.store.id}/change/"))
+    
     return JsonResponse({"category": product.category.id, "articul": product.articul, "name": product.name, "image": product.image.url, "unit": product.unit, "remainder": product.remainder, "description": product.description, "id": product.id, "amount": product.amount, "price": product.price, "store": product.store.id, "tags": request.POST["tags"]})
 
 
@@ -80,3 +88,18 @@ def delete_product(request, id):
     if request.user.provider == product.store.provider:
         product.delete()
     return HttpResponse(id)
+
+
+@csrf_exempt
+@login_required(login_url="/login/")
+def check_status(request):
+    if request.user.provider.status == "free":
+        if len(Product.objects.filter(store_id=request.POST["store"])) == 3:
+            return JsonResponse({"status": "forbidden", "amount": 3})
+    elif request.user.provider.status == "store":
+        if len(Product.objects.filter(store_id=request.POST["store"])) == 10:
+            return JsonResponse({"status": "forbidden", "amount": 10})
+        
+    return JsonResponse({})
+        
+    
