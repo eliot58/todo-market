@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
-from datetime import timedelta
+from datetime import timedelta, datetime
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -205,6 +205,12 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
 ]
 
+if not os.path.exists('logs'):
+    os.makedirs('logs')
+
+# Форматирование имени файла с текущей датой
+log_filename = os.path.join('logs', f'{datetime.now().strftime("%Y-%m-%d")}.log')
+
 if not DEBUG:
     LOGGING = {
         'version': 1,
@@ -219,8 +225,8 @@ if not DEBUG:
             'file': {
                 'level': 'WARNING',
                 'class': 'logging.FileHandler',
-                'filename': 'debug.log',
-                'formatter': 'verbose'
+                'filename': log_filename,
+                'formatter': 'verbose',
             },
         },
         'loggers': {
