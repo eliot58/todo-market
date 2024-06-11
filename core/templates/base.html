@@ -410,7 +410,7 @@
 			<p class="footer__title" style="padding-left: 5px; background-color: #00A550;">Реклама</p>
 			<div class="d-flex footer__content marquee">
 				{% for ticker in tickers %}
-				<div class="marqueeBlock">
+				<div class="marqueeBlock" style="cursor: pointer;" onclick="window.location.pathname = 'link/{{ticker.id}}/'">
 					{% if ticker.provider %}
 					<img src="{{ticker.provider.logo.url}}" width="56" height="56" alt="">
 					{% else %}

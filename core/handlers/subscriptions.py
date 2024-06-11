@@ -122,4 +122,6 @@ def redirect_link(request, link_id):
     link = get_object_or_404(Ticker, id=link_id)
     link.counter += 1
     link.save()
-    return redirect(link.site)
+    if link.site:
+        return redirect(link.site)
+    return redirect(susbscriptions)
