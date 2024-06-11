@@ -31,7 +31,7 @@
         <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Реклама</div>
         <div style="color: #00A550; margin: 20px 0px;">1000р в день</div>
         <div style="margin: 20px 0px;">Бегущая строка</div>
-        <button type="button" onclick="{% if request.user.provider.company == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == ''%} document.querySelector('.profile-popup').style.display = 'block'; {% else %}document.querySelector('.creeate_ticker-popup').style.display = 'block'; {% endif %}"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
+        <button type="button" onclick="{% if request.user.provider.company == '' or not request.user.provider.logo or request.user.provider.site == '' or request.user.provider.description == ''%} document.querySelector('.profile-popup').style.display = 'block'; {% else %}document.querySelector('.create_ticker-popup').style.display = 'block'; {% endif %}"  style="font-weight: 600; border-radius: 8px; padding: 10px 0px; width: 100%; background-color: #00A550; color: #E9E9E9;">Купить</button>
     </div>
     <div class="d-flex flex-column" style="text-align: center; background-color: #282828;
     color: #E9E9E9; padding: 20px; border-radius: 16px;">
