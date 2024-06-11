@@ -11,6 +11,7 @@
     <input type="text" name="news" hidden>
     <input type="text" name="days" hidden>
     <input type="text" name="ticker" hidden>
+    <input type="text" name="ticker_link" hidden>
     <div class="d-flex flex-column" style="margin-right: 20px; text-align: center; background-color: #282828;
     color: #E9E9E9; padding: 20px; border-radius: 16px;">
         <div style="font-size: 20px; font-weight: 600; margin-bottom: 20px;">Магазин</div>
@@ -52,11 +53,12 @@
         return diffDays;
     }
 
-    function createTicker(days, news){
+    function createTicker(days, link, news){
         const currentDate = new Date();
         const selectedDate = new Date(days);
         const diffDays = dateDifferenceInDays(currentDate, selectedDate);
         document.querySelector('input[name="ticker"]').value = news; 
+        document.querySelector('input[name="ticker_link"]').value = link; 
         document.querySelector('input[name="days"]').value = diffDays; 
         sendApplication(3)
     }

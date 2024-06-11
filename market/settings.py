@@ -205,11 +205,6 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
 ]
 
-if not os.path.exists('logs'):
-    os.makedirs('logs')
-
-# Форматирование имени файла с текущей датой
-log_filename = os.path.join('logs', f'{datetime.now().strftime("%Y-%m-%d")}.log')
 
 if not DEBUG:
     LOGGING = {
@@ -225,7 +220,7 @@ if not DEBUG:
             'file': {
                 'level': 'INFO',
                 'class': 'logging.FileHandler',
-                'filename': log_filename,
+                'filename': 'debug.log',
                 'formatter': 'verbose',
             },
         },

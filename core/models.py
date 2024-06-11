@@ -68,6 +68,8 @@ class Ticker(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE, null = True, blank = True)
     text = models.TextField(verbose_name="Текст")
     visible_date = models.DateField(null = True, blank = True, verbose_name="Срок")
+    site = models.URLField(null = True, blank = True)
+    counter = models.PositiveIntegerField(default=0)
 
     class Meta:
         verbose_name = "Бегущая строка"
@@ -97,6 +99,7 @@ class ProviderOrder(models.Model):
     status = models.CharField(max_length=256, null=True, blank=True)
     ticker = models.TextField(null=True, blank=True)
     ticker_days = models.PositiveIntegerField(null=True, blank=True)
+    ticker_link = models.URLField(null = True, blank = True)
     news = models.TextField(null=True, blank=True)
     payment_id = models.UUIDField(primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)

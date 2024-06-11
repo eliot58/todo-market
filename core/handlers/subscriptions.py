@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse, HttpResponseForbidden
@@ -9,6 +9,8 @@ import datetime
 from django.utils import timezone
 import uuid
 from yookassa import Configuration, Payment
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 
@@ -64,7 +66,7 @@ def susbscriptions(request):
                 "capture": True,
                 "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
-            ProviderOrder.objects.create(provider=request.user.provider, type="ticker", payment_id = payment_response.id, ticker = request.POST["ticker"], ticker_days = request.POST["days"])
+            ProviderOrder.objects.create(provider=request.user.provider, type="ticker", payment_id = payment_response.id, ticker = request.POST["ticker"], ticker_days = request.POST["days"], ticker_link = request.POST["ticker_link"])
             return JsonResponse({"confirmation_url": payment_response.confirmation.confirmation_url})
         elif request.POST["application"] == "4":
             payment_response = Payment.create({
@@ -99,11 +101,25 @@ def payment_webhook(request):
                 order.provider.status_time = timezone.now() + datetime.timedelta(days=30)
                 order.provider.save()
             elif order.type == "ticker":
-                Ticker.objects.create(provider=order.provider, text=order.ticker, visible_date=timezone.now() + datetime.timedelta(days=order.ticker_days))
+                Ticker.objects.create(provider=order.provider, text=order.ticker, site = order.ticker_link, visible_date=timezone.now() + datetime.timedelta(days=order.ticker_days))
             elif order.type == "news":
                 News.objects.create(provider=order.provider, text=order.news)
+            send_mail(
+                "Оплата",
+                f"Оплата за услугу информационной подписки принята",
+                settings.EMAIL_HOST_USER,
+                [order.provider.email],
+                fail_silently=False
+            )
             order.paid = True
             order.save()
             return JsonResponse({'status': 'success'})
         return JsonResponse({'status': 'failed'})
     return JsonResponse({'status': 'invalid method'}, status=405)
+
+
+def redirect_link(request, link_id):
+    link = get_object_or_404(Ticker, id=link_id)
+    link.counter += 1
+    link.save()
+    return redirect(link.site)

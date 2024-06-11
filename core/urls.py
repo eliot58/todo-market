@@ -6,7 +6,7 @@ from .handlers.store import create_store, update_store, delete_store, storeProdu
 from .handlers.product import create_product, update_product, delete_product, check_status
 from .handlers.cart import cart, cart_item_delete, cart_item_minus, cart_item_plus, addtoCart
 from .handlers.order import orders, order, drawup, accept, send_check, transit
-from .handlers.subscriptions import susbscriptions, payment_webhook
+from .handlers.subscriptions import susbscriptions, payment_webhook, redirect_link
 
 urlpatterns = [
     path("", index, name="index"),
@@ -42,4 +42,5 @@ urlpatterns = [
     path("transit/<int:id>/", transit, name="transit"),
     path('webhook/', payment_webhook, name='payment_webhook'),
     path('check_status/', check_status, name='check_status'),
+    path('link/<int:link_id>/', redirect_link, name='redirect_link'),
 ]
