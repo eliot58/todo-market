@@ -110,7 +110,7 @@ class ProviderOrder(models.Model):
         verbose_name_plural = "Заказы поставщика"
 
     def __str__(self):
-        return self.payment_id
+        return str(self.payment_id)
 
 
 class ProviderFile(models.Model):
