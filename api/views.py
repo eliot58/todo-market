@@ -137,8 +137,14 @@ class ProviderViewSet(generics.ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         id = self.request.query_params.get('id')
+        queryset = Provider.objects.filter(
+            logo__isnull=False,
+            company__gt='',
+            site__gt='',
+            description__gt=''
+        )
+        
         if id is not None:
-            data = Provider.objects.filter(id=id)
-        else:
-            data = Provider.objects.all()
-        return data
+            queryset = queryset.filter(id=id)
+        
+        return queryset
