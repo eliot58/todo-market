@@ -130,3 +130,15 @@ class OrderViewSet(generics.ListAPIView):
         else:
             data = Order.objects.all()
         return data
+    
+
+class ProviderViewSet(generics.ListAPIView):
+    serializer_class = ProviderSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        id = self.request.query_params.get('id')
+        if id is not None:
+            data = Provider.objects.filter(id=id)
+        else:
+            data = Provider.objects.all()
+        return data
