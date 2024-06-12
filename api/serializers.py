@@ -32,11 +32,6 @@ class PaymentMethodSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class NewsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = News
-        fields = '__all__'
-
 
 class SignupSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -78,6 +73,13 @@ class ProviderSerializer(serializers.ModelSerializer):
 class BuyerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Buyer
+        fields = '__all__'
+
+class NewsSerializer(serializers.ModelSerializer):
+    provider = ProviderSerializer(read_only=True)
+    
+    class Meta:
+        model = News
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
