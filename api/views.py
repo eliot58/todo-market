@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.core.mail import send_mail
 from django.conf import settings
-
+from rest_framework.permissions import IsAuthenticated
 
 class RegionViewSet(generics.ListAPIView):
     serializer_class = RegionSerializer
@@ -113,15 +113,11 @@ class StoreViewSet(generics.ListAPIView):
 
 
 class BuyerViewSet(generics.ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = BuyerSerializer
 
     def get_queryset(self, *args, **kwargs):
-        id = self.request.query_params.get('id')
-        if id is not None:
-            data = Buyer.objects.filter(id=id)
-        else:
-            data = Buyer.objects.all()
-        return data
+        return [self.request.user.buyer]
     
 
 class OrderViewSet(generics.ListAPIView):
