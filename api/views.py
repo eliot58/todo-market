@@ -132,8 +132,26 @@ class OrderViewSet(generics.ListAPIView):
         return data
     
 
-class ProviderViewSet(generics.ListAPIView):
+class ProvidersViewSet(generics.ListAPIView):
     serializer_class = ProviderSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        id = self.request.query_params.get('id')
+        queryset = Provider.objects.filter(
+            logo__isnull=False,
+            company__gt='',
+            site__gt='',
+            description__gt=''
+        )
+        
+        if id is not None:
+            queryset = queryset.filter(id=id)
+        
+        return queryset
+    
+
+class ProviderViewSet(generics.ListAPIView):
+    serializer_class = ProviderOnlySerializer
 
     def get_queryset(self, *args, **kwargs):
         id = self.request.query_params.get('id')

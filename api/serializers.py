@@ -100,3 +100,17 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
+
+class StoreOnlySerializer(serializers.ModelSerializer):
+    products = ProductSerializer(many=True, read_only=True, source='product_set')
+
+    class Meta:
+        model = Store
+        fields = '__all__'
+
+class ProviderOnlySerializer(serializers.ModelSerializer):
+    stores = StoreOnlySerializer(many=True, read_only=True, source='store_set')
+    class Meta:
+        model = Provider
+        fields = '__all__'
+

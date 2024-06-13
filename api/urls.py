@@ -16,5 +16,6 @@ urlpatterns = [
     path('store/', StoreViewSet.as_view()),
     path('buyer/', BuyerViewSet.as_view()),
     path('order/', OrderViewSet.as_view()),
+    path('providers/', ProvidersViewSet.as_view()),
     path('provider/', ProviderViewSet.as_view()),
 ]
