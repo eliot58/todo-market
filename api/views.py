@@ -9,6 +9,7 @@ from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from django.utils import timezone
+from django.db.models import Count
 
 class RegionViewSet(generics.ListAPIView):
     serializer_class = RegionSerializer
@@ -111,8 +112,11 @@ class SignUpView(generics.CreateAPIView):
 
 
 class StoreViewSet(generics.ListAPIView):
-    queryset = Store.objects.all()
     serializer_class = StoreSerializer
+
+    def get_queryset(self):
+        queryset = Store.objects.annotate(product_count=Count('product')).filter(product_count__gt=0)
+        return queryset
 
 
 class BuyerViewSet(generics.ListAPIView):
