@@ -6,26 +6,24 @@
 
 {% block content %}
 <div class="d-flex justify-content-between" style="margin-bottom: 10px;">
-	<h1 class="title">Поставщики</h1>
+	<h1 class="title">Магазины</h1>
 	<div class="d-flex" style="background-color: #282828; padding: 5px 15px; border-radius: 8px;">
 		<input placeholder="Поиск поставщика" type="text" style="border: 0px none;outline: 0px none; background-color: inherit; color: #616161;">
 		<img src="{% static 'img/loop.svg' %}" alt="">
 	</div>
 </div>
-{% for provider in providers %}
-	{% if provider.logo %}
-	<a href="{% url 'provider' provider.id %}" class="d-flex" style="padding: 10px; border-radius: 16px; margin-bottom: 10px; background-color: #282828;">
-		<img src="{{provider.logo.url}}" width="144" height="144" style="border-radius: 8px;" alt="">
+{% for market in markets %}
+	<a href="{% url 'market' market.id %}" class="d-flex" style="padding: 10px; border-radius: 16px; margin-bottom: 10px; background-color: #282828;">
+		<img src="{{market.provider.logo.url}}" width="144" height="144" style="border-radius: 8px;" alt="">
 		<div class="d-flex flex-column justify-content-around" style="margin-left: 10px; width: 100%;">
 			<div class="d-flex justify-content-between">
-				<p style="font-size: 20px; font-weight: 600; color: #E9E9E9;">{{provider.company}}</p>
+				<p style="font-size: 20px; font-weight: 600; color: #E9E9E9;">{{market.store_name}}</p>
 				<p style="color: #00A550; font-size: 12px;">Подробнее</p>
 			</div>
-			<p style="color: #00A550; font-weight: 500;">{{provider.store_set.all.0.region.name}}</p>
-			<p style="color: #E9E9E9; line-height: 20px; max-height: 80px; overflow: hidden; text-overflow: ellipsis;">{{provider.description}}</p>
+			<p style="color: #00A550; font-weight: 500;">{{market.region.name}}</p>
+			<p style="color: #E9E9E9; line-height: 20px; max-height: 80px; overflow: hidden; text-overflow: ellipsis;">{{market.provider.description}}</p>
 		</div>
 	</a>
-	{% endif %}
 {% endfor %}
              
 {% endblock content %}

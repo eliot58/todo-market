@@ -19,16 +19,13 @@ def index(request):
     if "query" in request.GET:
         flag = True
         tags = Tag.objects.filter(name__icontains=request.GET["query"])
-        products = Product.objects.filter(
-            name__icontains=request.GET["query"]).distinct()
+        products = Product.objects.filter(name__icontains=request.GET["query"]).distinct()
         providers = {}
         for product in products.union(Product.objects.filter(tags__in=tags).distinct()):
             if product.store.provider.company not in providers:
-                providers[product.store.provider.company] = {"provider_id": product.store.provider.id, "address": product.store.address, "products": [
-                    product], "logo": product.store.provider.logo.url}
+                providers[product.store.provider.company] = {"provider_id": product.store.provider.id, "address": product.store.address, "products": [product], "logo": product.store.provider.logo.url}
             else:
-                providers[product.store.provider.company]["products"].append(
-                    product)
+                providers[product.store.provider.company]["products"].append(product)
 
         providers = providers.items()
 
@@ -47,16 +44,9 @@ def partner(request):
     return render(request, "partner.html", {"login_form": LoginForm(), "register_form": RegisterForm()})
 
 
-def providers(request):
-    return render(request, "providers.html", {"providers": Provider.objects.all()[:6], "login_form": LoginForm(), "register_form": RegisterForm()})
+def markets(request):
+    return render(request, "markets.html", {"markets": Store.objects.all()[:6], "login_form": LoginForm(), "register_form": RegisterForm()})
 
 
-def provider(request, id):
-    items = {}
-    for product in Product.objects.filter(store__provider_id=id):
-        if product.category.name in items:
-            items[product.category.name].append(product)
-        else:
-            items[product.category.name] = []
-            items[product.category.name].append(product)
-    return render(request, "provider.html", {"provider": Provider.objects.get(id=id), "products": items.items(), "login_form": LoginForm(), "register_form": RegisterForm()})
+def market(request, id):
+    return render(request, "market.html", {"market": Store.objects.get(id=id), "login_form": LoginForm(), "register_form": RegisterForm()})

@@ -1,27 +1,27 @@
 {% extends 'base.html' %}
 
-{% block title %} Поставщики {% endblock title %}
+{% block title %} {{market.store_name}} {% endblock title %}
 
 {% load static %}
 
 {% block content %}
 <div class="d-flex flex-column" style="margin-bottom: 100px; background-color: #282828; padding: 20px; border-radius: 16px;">
     <div class="d-flex">
-        <img src="{{provider.logo.url}}" width="72" height="72" style="border-radius: 8px;" alt="">
+        <img src="{{market.provider.logo.url}}" width="72" height="72" style="border-radius: 8px;" alt="">
         <div class="d-flex flex-column justify-content-around" style="margin: 10px;"> 
-            <p style="color: #E9E9E9; font-size: 20px; font-weight: 600;">{{provider.company}}</p>
-            <p style="color: #00A550; font-weight: 500;">{{provider.store_set.all.0.region.name}}</p>
+            <p style="color: #E9E9E9; font-size: 20px; font-weight: 600;">{{market.store_name}}</p>
+            <p style="color: #00A550; font-weight: 500;">{{market.region.name}}</p>
         </div>
     </div>
     <div class="d-flex justify-content-between" style="margin-top: 20px;">
-        <p style="color: #E9E9E9;">Адрес: {{provider.address}}</p>
-        <p style="color: #E9E9E9;">Телефон: {{provider.phone}}</p>
-        <p style="color: #E9E9E9;">Сайт: {{provider.site}}</p>
+        <p style="color: #E9E9E9;">Адрес: {{market.address}}</p>
+        <p style="color: #E9E9E9;">Телефон: {{market.phone}}</p>
+        <p style="color: #E9E9E9;">Сайт: {{market.provider.site}}</p>
     </div>
     <div style="line-height: 20px; margin: 20px 0px; color: #E9E9E9;">
-        Описание: {{provider.description}}
+        Описание: {{market.provider.description}}
     </div>
-    {% for product in products %}
+    {% for product in market.product_set.all %}
     <div class="custom-accordion-item">
         <div class="custom-accordion-header" onclick="toggleAccordion(this)">
             <p style="font-size: 20px; font-weight: 500;">{{product.0}}</p>

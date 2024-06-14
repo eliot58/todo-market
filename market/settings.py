@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
-from datetime import timedelta, datetime
+from datetime import timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
     'django_ckeditor_5',
@@ -194,11 +193,6 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
     'JTI_CLAIM': 'jti',
 }
-
-CORS_ALLOWED_ORIGINS = [
-    "https://market.todotodo.ru",
-    "http://localhost:8000",
-]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://market.todotodo.ru",

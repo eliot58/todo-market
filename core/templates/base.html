@@ -321,7 +321,7 @@
 					<a {% if request.path == '/' or request.path == '/login/' %} class="active" {% endif %} href="{% url 'index' %}">Главная</a>
 					<a {% if request.path == '/partner/' %} class="active" {% endif %} href="{% url 'partner' %}">Стать партнером</a>
 					<a {% if request.path == '/delivery/' %} class="active" {% endif %} href="{% url 'delivery' %}">Доставка</a>
-					<a {% if request.path == '/providers/' %} class="active" {% endif %} href="{% url 'providers' %}">Поставщики</a>
+					<a {% if request.path == '/markets/' %} class="active" {% endif %} href="{% url 'markets' %}">Магазины</a>
 				</div>
 				{% if request.user.is_authenticated %}
 					{% if request.user.buyer %}

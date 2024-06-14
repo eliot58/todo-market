@@ -1,5 +1,5 @@
 from django.urls import path
-from .handlers.common import index, partner, delivery, news, providers, provider
+from .handlers.common import index, partner, delivery, news, markets, market
 from .handlers.auth import login_view, logout_view, signup
 from .handlers.profile import provider_profile, buyer_profile, upload_files
 from .handlers.store import create_store, update_store, delete_store, storeProducts
@@ -16,8 +16,8 @@ urlpatterns = [
     path("partner/", partner, name="partner"),
     path("delivery/", delivery, name="delivery"),
     path("news/", news, name="news"),
-    path("providers/", providers, name="providers"),
-    path("provider/<int:id>/", provider, name="provider"),
+    path("markets/", markets, name="markets"),
+    path("market/<int:id>/", market, name="market"),
     path("provider_profile/", provider_profile, name="provider_profile"),
     path("create_store/", create_store, name="create_store"),
     path("delete_store/<int:id>/", delete_store, name="delete_store"),

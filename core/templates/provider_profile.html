@@ -67,7 +67,7 @@
 {% block content %}
 <div class="d-flex justify-content-between">
 	<h1 class="title">Профиль компании</h1>
-	{% if request.user.provider.company != '' or request.user.provider.logo or request.user.provider.site != '' or request.user.provider.description != '' %}
+	{% if request.user.provider.company != '' or request.user.provider.logo or request.user.provider.site != ''  or request.user.provider.description != '' %}
 		{% if request.user.provider.status == 'free' %}
 			{% if stores|length < 1 %}
 			<button type="button" onclick="createStore(this)" style="background-color: inherit; font-weight: 600; border-radius: 8px; padding: 4px 20px; border: 1px solid #00A550; color: #00A550;">Добавить магазин</button>
@@ -270,7 +270,7 @@
 							{% if product.category == category and product.store == store %}
 								<div class="d-flex flex-column swiper-slide product_{{product.id}}" style="width: 256px; margin-right: 20px;">
 									<div style="position: relative;">
-										<img src="{{product.image.url}}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '{{store.id}}', false, '{{category.id}}', '{{product.name}}', '{{product.articul}}', '{{product.amount}}', '{{product.unit}}', '{{product.remainder}}', '{{product.image.url}}', '{{product.description}}', '{{product.tags}}', '{{product.id}}', '{{product.price}}', false)" alt="">
+										<img src="{{product.image.url}}" width="260" height="260" style="border-radius: 8px;" onclick="openProduct(this, '{{store.id}}', false, '{{category.id}}', '{{product.name}}', '{{product.articul}}', '{{product.amount}}', '{{product.unit}}', '{{product.remainder}}', '{{product.image.url}}', '{{product.description}}', '{{product.tags.all | join_tag_names}}', '{{product.id}}', '{{product.price}}', false)" alt="">
 										<img src="{% static 'img/close.svg' %}" onclick="deleteProduct(this, '{{product.id}}')" style="position: absolute; top: 10px; right: 10px;" alt="">
 										<p style="line-height: 24px; color: #E9E9E9;">{{product.name}}, {{product.articul}} <span style="font-size: 12px; color: #616161;">{{product.amount}} {{product.unit}}</span></p>
 									</div>
@@ -453,7 +453,7 @@
 			productPreview.style.background = `url("${image}") 0 0/100% 100% no-repeat`;
 			productPreview.querySelector("img").style.display = 'none';
 
-
+			productInput.required = false
 			name_input.value = name
 			articul_input.value = articul
 			amount_input.value = amount

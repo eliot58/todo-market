@@ -177,7 +177,7 @@ class Store(models.Model):
     work_time_to = models.TimeField(verbose_name = "Часы работы до")
     region = models.ForeignKey(Region, on_delete = models.DO_NOTHING, verbose_name = "Регион")
     assembly_time = models.CharField(max_length = 256, verbose_name = "Время сборки")
-    approve = models.BooleanField(default = False)
+    approve = models.BooleanField(default = True)
 
 
     class Meta:
