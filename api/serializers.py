@@ -85,6 +85,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class StoreSerializer(serializers.ModelSerializer):
     provider = ProviderSerializer(read_only=True)
+    region = RegionSerializer(read_only=True)
     products = ProductSerializer(many=True, read_only=True, source='product_set')
 
     class Meta:
