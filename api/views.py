@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import generics
 from core.models import *
 from .serializers import *
@@ -6,6 +7,8 @@ from rest_framework import status
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from django.utils import timezone
 
 class RegionViewSet(generics.ListAPIView):
     serializer_class = RegionSerializer
@@ -166,3 +169,218 @@ class ProviderViewSet(generics.ListAPIView):
             queryset = queryset.filter(id=id)
         
         return queryset
+    
+
+class AddToCartView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        buyer = request.user.buyer
+        item = get_object_or_404(Product, id=id)
+        store_id = str(item.store.provider.id)
+
+        if store_id in buyer.cart:
+            if str(item.id) in buyer.cart[store_id]["items"]:
+                buyer.cart[store_id]["items"][str(item.id)]['count'] += int(request.data['count'])
+                buyer.cart[store_id]["items"][str(item.id)]['all_price'] += item.price * int(request.data['count'])
+            else:
+                buyer.cart[store_id]["items"][str(item.id)] = {
+                    'photo': item.image.url,
+                    'title': item.name + ", " + item.articul,
+                    'description': item.description,
+                    'price': item.price,
+                    'amount': item.amount,
+                    'unit': item.unit,
+                    'count': int(request.data["count"]),
+                    'all_price': item.price * int(request.data['count'])
+                }
+        else:
+            buyer.cart[store_id] = {
+                "address": item.store.address,
+                "phone": item.store.phone,
+                "site": item.store.provider.site,
+                "photo": item.store.provider.logo.url,
+                "region": item.store.region.name,
+                "company": item.store.provider.company,
+                "store_id": item.store.id,
+                "delivery_conditions": [
+                    {"id": delivery_condition.id, "name": delivery_condition.name}
+                    for delivery_condition in item.store.delivery_conditions.all()
+                ],
+                "items": {
+                    str(item.id): {
+                        'photo': item.image.url,
+                        'title': item.name + ", " + item.articul,
+                        'description': item.description,
+                        'price': item.price,
+                        'amount': item.amount,
+                        'unit': item.unit,
+                        'count': int(request.data["count"]),
+                        'all_price': item.price * int(request.data['count'])
+                    }
+                }
+            }
+
+        buyer.total_price += item.price * int(request.data['count'])
+        buyer.save()
+
+        return Response({"success": True})
+
+class CartItemDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, id):
+        buyer = request.user.buyer
+        item = get_object_or_404(Product, id=id)
+        store_id = str(item.store.provider.id)
+
+        buyer.total_price -= buyer.cart[store_id]["items"][str(item.id)]["all_price"]
+        del buyer.cart[store_id]["items"][str(item.id)]
+
+        if not buyer.cart[store_id]["items"]:
+            del buyer.cart[store_id]
+
+        buyer.save()
+
+        return Response({"success": True})
+
+class CartItemMinusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        buyer = request.user.buyer
+        item = get_object_or_404(Product, id=id)
+        store_id = str(item.store.provider.id)
+
+        buyer.cart[store_id]["items"][str(item.id)]["all_price"] -= buyer.cart[store_id]["items"][str(item.id)]["price"]
+        buyer.cart[store_id]["items"][str(item.id)]["count"] -= 1
+        buyer.total_price -= buyer.cart[store_id]["items"][str(item.id)]["price"]
+
+        buyer.save()
+
+        return Response({"success": True})
+
+class CartItemPlusView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        buyer = request.user.buyer
+        item = get_object_or_404(Product, id=id)
+        store_id = str(item.store.provider.id)
+
+        buyer.cart[store_id]["items"][str(item.id)]["all_price"] += buyer.cart[store_id]["items"][str(item.id)]["price"]
+        buyer.cart[store_id]["items"][str(item.id)]["count"] += 1
+        buyer.total_price += buyer.cart[store_id]["items"][str(item.id)]["price"]
+
+        buyer.save()
+
+        return Response({"success": True})
+    
+
+class DrawUpOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        buyer = request.user.buyer
+        provider = get_object_or_404(Provider, id=id)
+        store = get_object_or_404(Store, id=buyer.cart[str(id)]["store_id"])
+        delivery_condition = get_object_or_404(DeliveryCondition, name=request.data["delivery"])
+        
+        order = Order.objects.create(
+            buyer=buyer,
+            provider=provider,
+            store_id=store.id,
+            items=buyer.cart[str(id)]["items"],
+            total_price=sum(item["all_price"] for item in buyer.cart[str(id)]["items"].values()),
+            delivery=delivery_condition,
+            address=request.data["address"] if request.data["delivery"] != "Самовывоз" else store.address,
+            time=request.data["time"],
+            delivery_date=request.data["delivery_date"],
+            comment=request.data["comment"]
+        )
+
+        del buyer.cart[str(id)]
+        buyer.total_price -= order.total_price
+        buyer.save()
+
+        base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
+
+        send_mail(
+            "Новый заказ",
+            f"Новый заказ по адресу {base_url}/order/{order.id}/",
+            settings.EMAIL_HOST_USER,
+            [store.email],
+            fail_silently=False
+        )
+
+        return Response({"success": True}, status=status.HTTP_201_CREATED)
+
+class AcceptOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        order = get_object_or_404(Order, id=id)
+        if order.provider.id != request.user.provider.id:
+            return Response({"detail": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+
+        order.accept = timezone.now()
+        order.save()
+
+        base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
+
+        send_mail(
+            f"Заказ #{order.id} принят",
+            f"Заказ {base_url}/order/{order.id}/",
+            settings.EMAIL_HOST_USER,
+            [order.buyer.user.email],
+            fail_silently=False
+        )
+
+        return Response({"success": True})
+
+class TransitOrderView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        order = get_object_or_404(Order, id=id)
+        if order.provider.id != request.user.provider.id:
+            return Response({"detail": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+
+        order.transit = timezone.now()
+        order.save()
+
+        base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
+
+        send_mail(
+            f"Заказ #{order.id} отгружен",
+            f"Заказ {base_url}/order/{order.id}/",
+            settings.EMAIL_HOST_USER,
+            [order.buyer.user.email],
+            fail_silently=False
+        )
+
+        return Response({"success": True})
+
+class SendCheckView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, id):
+        order = get_object_or_404(Order, id=id)
+        if order.provider.id != request.user.provider.id:
+            return Response({"detail": "Forbidden"}, status=status.HTTP_403_FORBIDDEN)
+
+        order.checkk = request.FILES["check"]
+        order.check_date = timezone.now()
+        order.save()
+
+        base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
+
+        send_mail(
+            f"Получен счет для заказа #{order.id}",
+            f"Получен счет для заказа {base_url}/order/{order.id}/",
+            settings.EMAIL_HOST_USER,
+            [order.buyer.user.email],
+            fail_silently=False
+        )
+
+        return Response({"success": True})

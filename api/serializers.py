@@ -70,10 +70,6 @@ class ProviderSerializer(serializers.ModelSerializer):
         model = Provider
         fields = '__all__'
 
-class BuyerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Buyer
-        fields = '__all__'
 
 class NewsSerializer(serializers.ModelSerializer):
     provider = ProviderSerializer(read_only=True)
@@ -99,6 +95,12 @@ class StoreSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
+        fields = '__all__'
+
+class BuyerSerializer(serializers.ModelSerializer):
+    orders = OrderSerializer(many=True, read_only=True, source='order_set')
+    class Meta:
+        model = Buyer
         fields = '__all__'
 
 class StoreOnlySerializer(serializers.ModelSerializer):
