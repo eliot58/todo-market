@@ -49,4 +49,11 @@ def markets(request):
 
 
 def market(request, id):
-    return render(request, "market.html", {"market": Store.objects.get(id=id), "login_form": LoginForm(), "register_form": RegisterForm()})
+    items = {}
+    for product in Product.objects.filter(store__id=id):
+        if product.category.name in items:
+            items[product.category.name].append(product)
+        else:
+            items[product.category.name] = []
+            items[product.category.name].append(product)
+    return render(request, "market.html", {"market": Store.objects.get(id=id), "products": items.items(), "login_form": LoginForm(), "register_form": RegisterForm()})

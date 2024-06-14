@@ -21,7 +21,7 @@
     <div style="line-height: 20px; margin: 20px 0px; color: #E9E9E9;">
         Описание: {{market.provider.description}}
     </div>
-    {% for product in market.product_set.all %}
+    {% for product in products %}
     <div class="custom-accordion-item">
         <div class="custom-accordion-header" onclick="toggleAccordion(this)">
             <p style="font-size: 20px; font-weight: 500;">{{product.0}}</p>
