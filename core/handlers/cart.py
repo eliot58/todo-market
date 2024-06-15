@@ -45,7 +45,7 @@ def addtoCart(request, id):
         buyer.cart[str(item.store.provider.id)
                    ]["region"] = item.store.region.name
         buyer.cart[str(item.store.provider.id)
-                   ]["company"] = item.store.provider.company
+                   ]["company"] = item.store.store_name
         buyer.cart[str(item.store.provider.id)]["store_id"] = item.store.id
         buyer.cart[str(item.store.provider.id)]["delivery_conditions"] = [
             {"id": delivery_condition.id, "name": delivery_condition.name} for delivery_condition in item.store.delivery_conditions.all()]

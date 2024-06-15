@@ -205,7 +205,7 @@ class AddToCartView(APIView):
                 "site": item.store.provider.site,
                 "photo": item.store.provider.logo.url,
                 "region": item.store.region.name,
-                "company": item.store.provider.company,
+                "company": item.store.store_name,
                 "store_id": item.store.id,
                 "delivery_conditions": [
                     {"id": delivery_condition.id, "name": delivery_condition.name}
