@@ -63,7 +63,6 @@ def update_store(request, id):
     store.work_time_to = request.POST["work_time_to"]
     store.assembly_time = request.POST["assembly_time"]
     store.region_id = request.POST["region"]
-    store.approve = False
     store.provider.save()
     store.save()
     try:

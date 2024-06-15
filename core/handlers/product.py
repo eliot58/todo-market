@@ -17,8 +17,6 @@ async def send_message(chat_id, text):
 def create_product(request):
     base_url = "https://market.todotodo.ru" if not settings.DEBUG else "http://localhost:8000"
     store = Store.objects.get(id=request.POST["store"])
-    store.approve = False
-    store.save()
     if store.provider != request.user.provider:
         return HttpResponseForbidden()
     product = Product()
@@ -65,8 +63,6 @@ def update_product(request, id):
         product.remainder = request.POST["remainder"]
         product.description = request.POST["description"]
         product.save()
-        product.store.approve = False
-        product.store.save()
         for tag in request.POST["tags"].split(", "):
             try:
                 product.tags.add(Tag.objects.get(name=tag))
