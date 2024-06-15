@@ -34,6 +34,7 @@ def addtoCart(request, id):
                 'count': int(request.POST["count"]),
                 'all_price': item.price * int(request.POST['count'])
             }
+        buyer.cart[str(item.store.provider.id)]["total_price"] += item.price * int(request.POST['count'])
     else:
         buyer.cart[str(item.store.provider.id)] = {}
         buyer.cart[str(item.store.provider.id)]["address"] = item.store.address
@@ -60,7 +61,7 @@ def addtoCart(request, id):
             'count': int(request.POST["count"]),
             'all_price': item.price * int(request.POST['count'])
         }
-    buyer.cart[str(item.store.provider.id)]["total_price"] += buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price']
+        buyer.cart[str(item.store.provider.id)]["total_price"] = buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price']
     buyer.save()
     return JsonResponse({"success": True})
 
