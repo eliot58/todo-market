@@ -131,7 +131,6 @@ class Buyer(models.Model):
     fullName = models.CharField(max_length = 256, verbose_name = "Контактное лицо")
     phone = models.CharField(max_length = 256, unique = True, verbose_name = "Номер телефона")
     cart = models.JSONField(default = dict(), blank = True)
-    total_price = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.fullName

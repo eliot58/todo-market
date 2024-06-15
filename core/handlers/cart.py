@@ -60,7 +60,7 @@ def addtoCart(request, id):
             'count': int(request.POST["count"]),
             'all_price': item.price * int(request.POST['count'])
         }
-    buyer.total_price += item.price * int(request.POST['count'])
+    buyer.cart[str(item.store.provider.id)]["total_price"] += buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price']
     buyer.save()
     return JsonResponse({"success": True})
 
@@ -70,8 +70,7 @@ def addtoCart(request, id):
 def cart_item_delete(request, id):
     buyer = request.user.buyer
     item = Product.objects.get(id=id)
-    buyer.total_price -= buyer.cart[str(item.store.provider.id)
-                                    ]["items"][str(item.id)]["all_price"]
+    buyer.cart[str(item.store.provider.id)]["total_price"] -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price']
     del buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]
     if len(buyer.cart[str(item.store.provider.id)]["items"].items()) == 0:
         del buyer.cart[str(item.store.provider.id)]
@@ -84,12 +83,9 @@ def cart_item_delete(request, id):
 def cart_item_minus(request, id):
     buyer = request.user.buyer
     item = Product.objects.get(id=id)
-    buyer.cart[str(item.store.provider.id)]["items"][str(
-        item.id)]["all_price"] -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["price"]
+    buyer.cart[str(item.store.provider.id)]["total_price"] -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['price']
     buyer.cart[str(item.store.provider.id)
                ]["items"][str(item.id)]["count"] -= 1
-    buyer.total_price -= buyer.cart[str(item.store.provider.id)
-                                    ]["items"][str(item.id)]["price"]
     buyer.save()
     return JsonResponse({"success": True})
 
@@ -99,11 +95,8 @@ def cart_item_minus(request, id):
 def cart_item_plus(request, id):
     buyer = request.user.buyer
     item = Product.objects.get(id=id)
-    buyer.cart[str(item.store.provider.id)]["items"][str(
-        item.id)]["all_price"] += buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["price"]
+    buyer.cart[str(item.store.provider.id)]["total_price"] += buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['price']
     buyer.cart[str(item.store.provider.id)
                ]["items"][str(item.id)]["count"] += 1
-    buyer.total_price += buyer.cart[str(item.store.provider.id)
-                                    ]["items"][str(item.id)]["price"]
     buyer.save()
     return JsonResponse({"success": True})
