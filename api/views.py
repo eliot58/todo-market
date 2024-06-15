@@ -180,15 +180,15 @@ class AddToCartView(APIView):
 
     def post(self, request, id):
         buyer = request.user.buyer
-        item = get_object_or_404(Product, id=id)
-        store_id = str(item.store.provider.id)
-
-        if store_id in buyer.cart:
-            if str(item.id) in buyer.cart[store_id]["items"]:
-                buyer.cart[store_id]["items"][str(item.id)]['count'] += int(request.data['count'])
-                buyer.cart[store_id]["items"][str(item.id)]['all_price'] += item.price * int(request.data['count'])
+        item = Product.objects.get(id=id)
+        if str(item.store.provider.id) in buyer.cart:
+            if str(item.id) in buyer.cart[str(item.store.provider.id)]["items"]:
+                buyer.cart[str(item.store.provider.id)]["items"][str(
+                    item.id)]['count'] += int(request.data['count'])
+                buyer.cart[str(item.store.provider.id)]["items"][str(
+                    item.id)]['all_price'] += item.price * int(request.data['count'])
             else:
-                buyer.cart[store_id]["items"][str(item.id)] = {
+                buyer.cart[str(item.store.provider.id)]["items"][str(item.id)] = {
                     'photo': item.image.url,
                     'title': item.name + ", " + item.articul,
                     'description': item.description,
@@ -198,36 +198,35 @@ class AddToCartView(APIView):
                     'count': int(request.data["count"]),
                     'all_price': item.price * int(request.data['count'])
                 }
+            buyer.cart[str(item.store.provider.id)]["total_price"] += item.price * int(request.data['count'])
         else:
-            buyer.cart[store_id] = {
-                "address": item.store.address,
-                "phone": item.store.phone,
-                "site": item.store.provider.site,
-                "photo": item.store.provider.logo.url,
-                "region": item.store.region.name,
-                "company": item.store.store_name,
-                "store_id": item.store.id,
-                "delivery_conditions": [
-                    {"id": delivery_condition.id, "name": delivery_condition.name}
-                    for delivery_condition in item.store.delivery_conditions.all()
-                ],
-                "items": {
-                    str(item.id): {
-                        'photo': item.image.url,
-                        'title': item.name + ", " + item.articul,
-                        'description': item.description,
-                        'price': item.price,
-                        'amount': item.amount,
-                        'unit': item.unit,
-                        'count': int(request.data["count"]),
-                        'all_price': item.price * int(request.data['count'])
-                    }
-                }
+            buyer.cart[str(item.store.provider.id)] = {}
+            buyer.cart[str(item.store.provider.id)]["address"] = item.store.address
+            buyer.cart[str(item.store.provider.id)]["phone"] = item.store.phone
+            buyer.cart[str(item.store.provider.id)
+                    ]["site"] = item.store.provider.site
+            buyer.cart[str(item.store.provider.id)
+                    ]["photo"] = item.store.provider.logo.url
+            buyer.cart[str(item.store.provider.id)
+                    ]["region"] = item.store.region.name
+            buyer.cart[str(item.store.provider.id)
+                    ]["company"] = item.store.store_name
+            buyer.cart[str(item.store.provider.id)]["store_id"] = item.store.id
+            buyer.cart[str(item.store.provider.id)]["delivery_conditions"] = [
+                {"id": delivery_condition.id, "name": delivery_condition.name} for delivery_condition in item.store.delivery_conditions.all()]
+            buyer.cart[str(item.store.provider.id)]["items"] = {}
+            buyer.cart[str(item.store.provider.id)]["items"][str(item.id)] = {
+                'photo': item.image.url,
+                'title': item.name + ", " + item.articul,
+                'description': item.description,
+                'price': item.price,
+                'amount': item.amount,
+                'unit': item.unit,
+                'count': int(request.data["count"]),
+                'all_price': item.price * int(request.data['count'])
             }
-
-        buyer.total_price += item.price * int(request.data['count'])
+            buyer.cart[str(item.store.provider.id)]["total_price"] = buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price']
         buyer.save()
-
         return Response({"success": True})
 
 class CartItemDeleteView(APIView):
@@ -235,15 +234,11 @@ class CartItemDeleteView(APIView):
 
     def delete(self, request, id):
         buyer = request.user.buyer
-        item = get_object_or_404(Product, id=id)
-        store_id = str(item.store.provider.id)
-
-        buyer.total_price -= buyer.cart[store_id]["items"][str(item.id)]["all_price"]
-        del buyer.cart[store_id]["items"][str(item.id)]
-
-        if not buyer.cart[store_id]["items"]:
-            del buyer.cart[store_id]
-
+        item = Product.objects.get(id=id)
+        buyer.cart[str(item.store.provider.id)]["total_price"] -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price']
+        del buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]
+        if len(buyer.cart[str(item.store.provider.id)]["items"].items()) == 0:
+            del buyer.cart[str(item.store.provider.id)]
         buyer.save()
 
         return Response({"success": True})
@@ -253,13 +248,10 @@ class CartItemMinusView(APIView):
 
     def post(self, request, id):
         buyer = request.user.buyer
-        item = get_object_or_404(Product, id=id)
-        store_id = str(item.store.provider.id)
-
-        buyer.cart[store_id]["items"][str(item.id)]["all_price"] -= buyer.cart[store_id]["items"][str(item.id)]["price"]
-        buyer.cart[store_id]["items"][str(item.id)]["count"] -= 1
-        buyer.total_price -= buyer.cart[store_id]["items"][str(item.id)]["price"]
-
+        item = Product.objects.get(id=id)
+        buyer.cart[str(item.store.provider.id)]["total_price"] -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['price']
+        buyer.cart[str(item.store.provider.id)
+                ]["items"][str(item.id)]["count"] -= 1
         buyer.save()
 
         return Response({"success": True})
@@ -269,13 +261,10 @@ class CartItemPlusView(APIView):
 
     def post(self, request, id):
         buyer = request.user.buyer
-        item = get_object_or_404(Product, id=id)
-        store_id = str(item.store.provider.id)
-
-        buyer.cart[store_id]["items"][str(item.id)]["all_price"] += buyer.cart[store_id]["items"][str(item.id)]["price"]
-        buyer.cart[store_id]["items"][str(item.id)]["count"] += 1
-        buyer.total_price += buyer.cart[store_id]["items"][str(item.id)]["price"]
-
+        item = Product.objects.get(id=id)
+        buyer.cart[str(item.store.provider.id)]["total_price"] += buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['price']
+        buyer.cart[str(item.store.provider.id)
+                ]["items"][str(item.id)]["count"] += 1
         buyer.save()
 
         return Response({"success": True})
