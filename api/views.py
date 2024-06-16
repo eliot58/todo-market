@@ -227,7 +227,9 @@ class AddToCartView(APIView):
             }
             buyer.cart[str(item.store.provider.id)]["total_price"] = buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['all_price']
         buyer.save()
-        return Response({"success": True})
+        serializer = BuyerSerializer(buyer)
+        
+        return Response(serializer.data)
 
 class CartItemDeleteView(APIView):
     permission_classes = [IsAuthenticated]
@@ -240,8 +242,9 @@ class CartItemDeleteView(APIView):
         if len(buyer.cart[str(item.store.provider.id)]["items"].items()) == 0:
             del buyer.cart[str(item.store.provider.id)]
         buyer.save()
-
-        return Response({"success": True})
+        serializer = BuyerSerializer(buyer)
+        
+        return Response(serializer.data)
 
 class CartItemMinusView(APIView):
     permission_classes = [IsAuthenticated]
@@ -253,7 +256,9 @@ class CartItemMinusView(APIView):
         buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["count"] -= 1
         buyer.save()
 
-        return Response({"success": True})
+        serializer = BuyerSerializer(buyer)
+        
+        return Response(serializer.data)
 
 class CartItemPlusView(APIView):
     permission_classes = [IsAuthenticated]
@@ -266,7 +271,9 @@ class CartItemPlusView(APIView):
                 ]["items"][str(item.id)]["count"] += 1
         buyer.save()
 
-        return Response({"success": True})
+        serializer = BuyerSerializer(buyer)
+        
+        return Response(serializer.data)
     
 
 class DrawUpOrderView(APIView):
