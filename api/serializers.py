@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from core.models import *
+from django.contrib.auth.models import User
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
 
 class RegionSerializer(serializers.ModelSerializer):
     class Meta:
@@ -100,6 +105,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class BuyerSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     orders = OrderSerializer(many=True, read_only=True, source='order_set')
     class Meta:
         model = Buyer
