@@ -39,8 +39,8 @@
 					<input type="text" disabled value="{{ item.1.count }}">
 					<span onclick="plus(this, '{{item.0}}', '{{item.1.price}}')">+</span>
 				</div>
-				<p style="margin: 0px 15px; width: 100px; font-size: 24px; font-weight: 500; color: #00A550;"><span>{{ item.1.all_price }}</span> ₽</p>
-				<p style="font-size: 12px; color: #616161; width: 120px;"><span>{{ item.1.all_price}}</span> ₽ без TODOMARKET</p>
+				<p style="margin: 0px 15px; width: 100px; font-size: 24px; font-weight: 500; color: #00A550;"><span>{{item.1.price|multiply:item.1.count}}</span> ₽</p>
+				<p style="font-size: 12px; color: #616161; width: 120px;"><span>{{item.1.price|multiply:item.1.count}}</span> ₽ без TODOMARKET</p>
 			</div>
 		</div>
 	</div>

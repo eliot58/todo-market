@@ -250,8 +250,7 @@ class CartItemMinusView(APIView):
         buyer = request.user.buyer
         item = Product.objects.get(id=id)
         buyer.cart[str(item.store.provider.id)]["total_price"] -= buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]['price']
-        buyer.cart[str(item.store.provider.id)
-                ]["items"][str(item.id)]["count"] -= 1
+        buyer.cart[str(item.store.provider.id)]["items"][str(item.id)]["count"] -= 1
         buyer.save()
 
         return Response({"success": True})
