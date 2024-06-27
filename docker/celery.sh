@@ -1,3 +1,3 @@
 #!/bin/bash
 
-celery -A aza worker --loglevel=info
+celery -A market worker --loglevel=info
