@@ -30,14 +30,26 @@ services:
       - db
       - redis
 
-  celery:
+  celery_worker:
     build:
       context: .
     env_file:
       - .env.prod
-    container_name: celery_app
-    command: ["./docker/celery.sh"]
+    container_name: celery_worker
+    command: ["./docker/celery_worker.sh"]
     depends_on:
+      - db
+      - redis
+
+  celery_beat:
+    build:
+      context: .
+    env_file:
+      - .env.prod
+    container_name: celery_beat
+    command: ["./docker/celery_beat.sh"]
+    depends_on:
+      - db
       - redis
 
   

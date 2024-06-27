@@ -83,7 +83,19 @@
 		{% endif %}
 	{% endif %}
 </div>
-<p style="font-weight: 500; margin: 10px; color: #E9E9E9;">Общая информация</p>
+<div class="d-flex justify-content-between">
+	<p style="font-weight: 500; color: #E9E9E9;">Общая информация</p>
+	<div class="d-flex align-items-center">
+		{% if request.user.provider.status == 'free' %}
+		<p style="font-size: 12px; color: #E9E9E9; margin-right: 5px;"></p>
+		{% else %}
+		<p style="font-size: 12px; color: #E9E9E9; margin-right: 5px;">До {{ request.user.provider.status_time|date:'d.m.Y' }}</p>
+		{% endif %}
+		<div style="background-color: #00A550; border-radius: 8px;">
+			<p style="font-weight: 600; color: #E9E9E9; margin: 5px 15px;">{{request.user.provider.get_status_display}}</p>
+		</div>
+	</div>
+</div>
 <div>
 	<form class="d-flex flex-column" style="background-color: #282828; border-radius: 16px; padding: 20px;" method="post" action="{% url 'provider_profile' %}" enctype="multipart/form-data">
 		{% csrf_token %}

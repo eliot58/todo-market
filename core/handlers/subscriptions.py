@@ -37,7 +37,7 @@ def susbscriptions(request):
                 "description": "Оплата за услугу информационной подписки",
             }, uuid.uuid4())
             ProviderOrder.objects.create(provider=request.user.provider, type="status", payment_id = payment_response.id, status = "store")
-            return JsonResponse({"confirmation_url": payment_response.confirmation._ConfirmationRedirect__confirmation_url})
+            return JsonResponse({"confirmation_url": payment_response.confirmation.confirmation_url})
         elif request.POST["application"] == "2":
             payment_response = Payment.create({
                 "amount": {
@@ -97,9 +97,13 @@ def payment_webhook(request):
             if order.paid != False:
                 return HttpResponseForbidden()
             if order.type == "status":
-                order.provider.status = order.status
-                order.provider.status_time = timezone.now() + datetime.timedelta(days=30)
-                order.provider.save()
+                if order.provider.status == order.status:
+                    order.provider.status_time = order.provider.status_time + datetime.timedelta(days=30)
+                    order.provider.save()
+                else:
+                    order.provider.status = order.status
+                    order.provider.status_time = timezone.now() + datetime.timedelta(days=30)
+                    order.provider.save()
             elif order.type == "ticker":
                 Ticker.objects.create(provider=order.provider, text=order.ticker, site = order.ticker_link, visible_date=timezone.now() + datetime.timedelta(days=order.ticker_days))
             elif order.type == "news":
