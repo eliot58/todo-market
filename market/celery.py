@@ -1,7 +1,7 @@
 import os
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tododo.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'market.settings')
 
 
 app = Celery('market')
