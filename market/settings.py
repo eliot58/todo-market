@@ -164,6 +164,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 MEDIA_URL = '/media/'  
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://market.todotodo.ru",
+    "http://localhost:8000",
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
