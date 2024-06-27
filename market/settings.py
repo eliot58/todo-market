@@ -31,7 +31,7 @@ YOOKASSA_SHOP_ID = os.getenv('YOOKASSA_SHOP_ID')
 YOOKASSA_SECRET_KEY = os.getenv('YOOKASSA_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if os.getenv("DEBUG") == "1" else False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -48,7 +48,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_ckeditor_5',
-    'core'
+    'core',
+    'channels',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -100,11 +102,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DBUSER'),
-            'USER': os.getenv('DBUSER'),
-            'PASSWORD': os.getenv('DBPASSWORD'),
-            'HOST': os.getenv('DBHOST'),
-            'PORT': '5432',
+            'NAME': os.getenv('POSTGRES_DB'),
+            'USER': os.getenv('POSTGRES_USER'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+            'HOST': os.getenv('DB_HOST'),
+            'PORT': os.getenv('DB_PORT'),
         },
     }
 
@@ -152,26 +154,31 @@ BOT_TOKEN = os.getenv('BOT_TOKEN')
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-if DEBUG:
-    STATICFILES_DIRS = [
-        os.path.join(BASE_DIR, 'core/static/'),
-    ]
-    STATIC_URL = 'static/'
-    STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'core/static/'),
+]
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
-    MEDIA_URL = '/media/'  
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-
-else:
-    MEDIA_ROOT = '/var/www/market/media'
-    MEDIA_URL = '/media/'
-    STATIC_ROOT = '/var/www/market/static'
-    STATIC_URL = '/static/'
+MEDIA_URL = '/media/'  
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ASGI_APPLICATION = 'market.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -193,39 +200,6 @@ SIMPLE_JWT = {
     'TOKEN_TYPE_CLAIM': 'token_type',
     'JTI_CLAIM': 'jti',
 }
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://market.todotodo.ru",
-    "http://localhost:8000",
-]
-
-
-if not DEBUG:
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'verbose': {
-                'format': '{asctime} {levelname} {module} {message}',
-                'style': '{',
-            }
-        },
-        'handlers': {
-            'file': {
-                'level': 'INFO',
-                'class': 'logging.FileHandler',
-                'filename': 'debug.log',
-                'formatter': 'verbose',
-            },
-        },
-        'loggers': {
-            'django': {
-                'handlers': ['file'],
-                'level': 'INFO',
-                'propagate': True,
-            },
-        },
-    }
 
 
 customColorPalette = [
@@ -310,3 +284,10 @@ CKEDITOR_5_CONFIGS = {
         }
     }
 }
+
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER")
+CELERY_RESULT_BACKEND = os.getenv("CELERY_BACKEND")
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 120}
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'

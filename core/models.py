@@ -255,3 +255,15 @@ class Order(models.Model):
 
     def __str__(self):
         return str(self.id)
+    
+
+class Message(models.Model):
+    order = models.ForeignKey(Order, on_delete = models.DO_NOTHING, null = True, blank = True)
+    is_provider = models.BooleanField()
+    image = models.ImageField(upload_to="chat", null=True, blank=True)
+    content = models.TextField(null=True, blank=True)
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.order.provider.company if self.is_provider else self.order.buyer.fullName}: {self.content[:20]}"
